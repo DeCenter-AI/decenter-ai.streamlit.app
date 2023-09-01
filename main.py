@@ -1,87 +1,53 @@
 import datetime
 import os
 import random
+import uuid
 from dataclasses import dataclass
 from pprint import pprint
 from typing import Final
+import joblib
 
 import cachetools
+import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
 
 load_dotenv()
 
-
-
 # Review = namedtuple('Review', ['text', 'date', 'sentiment', 'votes'])
 
-c = cachetools.Cache(maxsize=100)
+# c = cachetools.Cache(maxsize=100)
+#
+# if 'history' not in st.session_state:
+#     print('history not found')
+#     st.session_state.history = c
+#     c['models'] = []
+# else:
+#     c = st.session_state.history
 
-if 'history' not in st.session_state:
-    print('history not found')
-    st.session_state.history = c
-    c['models'] = []
-else:
-    c = st.session_state.history
+# models = c['models']
+st.title("Decenter- Decentralized AI Infrastructure for Model training")
 
-models = c['models']
-
-st.title("Movie Review Sentiment Analyzer")
-
-sample_review = random.choice(sample_models)
-
-new_review_text = st.text_input("Enter a movie review: ", value=sample_review["text"])
-if st.button("Add Review") and new_review_text.strip() != "":
-    r = Review(text=new_review_text, date=str(datetime.datetime.now()), sentiment='', votes=0)
-    models.append(r)
-
-for review in models:
-    # ic(review)
-
-    if review.sentiment == "":
-        w1 = Workflow('sentiment-analysis')
-
-        res = w1.run(review.text)
-
-        outputs = res.results[0].outputs
-
-        pprint(outputs)
-
-        o = outputs[1]
-        possible_sentiments = ["Positive", "Negative", "Neutral"]
-
-        # print(o)
-
-        sentiment = o.data.text.raw
-
-        for s in possible_sentiments:
-            if s.lower() in sentiment.lower():
-                sentiment = s
-                break
-
-        if sentiment not in possible_sentiments:
-            raise ValueError('invalid sentiment')
-        # sentiment = sentiment.replace("My answer:","").strip()
-
-        print(f"sentiment is {sentiment}")
-        print(f"review is {review}")
-        # Update the review's sentiment
-        # review._replace(sentiment=sentiment)
-        review.sentiment = sentiment
-
-# st.write(models)
-for i, review in enumerate(models):
-    st.write(f"Review: {review.text}")
-    st.write(f"Date: {review.date}")
-    st.write(f"Sentiment: {review.sentiment}")
-    st.write(f"Votes: {review.votes}")
+new_review_text = st.text_input("Enter a model name: ", value=f"new-{uuid.uuid1()}")
+# if st.button("Add Model") and new_review_text.strip() != "":
+# models.append(r)
 
 
-    def onclick(inc):
-        review.votes += inc
+python_code = st.file_uploader("Upload Python Code", type=["py"])
+pretrained_model = st.file_uploader("Upload Pretrained Model", type=["sav"])
+dataset = st.file_uploader("Upload Dataset", type=["csv"])
 
+if python_code is not None and pretrained_model is not None and dataset is not None:
+    exec(python_code.getvalue())
+    model = joblib.load(pretrained_model)
+    data = pd.read_csv(dataset)
 
-    st.button("Upvote", key=f"up-{i}", on_click=lambda: onclick(1))
-    # review = review._replace(votes=review.votes + 1)
-    st.button("Downvote", key=f"down-{i}", on_click=lambda: onclick(-1))
-    # review = review._replace(votes=review.votes - 1)
+    # save the model to disk
+    joblib.dump(model, "trained_model.sav")
+
+    # create download button
+    st.download_button(
+        label="Download trained model",
+        data="trained_model.sav",
+        file_name="trained_model.sav",
+    )
