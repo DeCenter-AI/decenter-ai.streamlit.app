@@ -63,3 +63,5 @@ You can modify this file as per your specific requirements.
 *.mp3
 
 .env.*
+
+*.sav

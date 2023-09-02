@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from pprint import pprint
 from typing import Final
 import joblib
+import concurrent.futures
 
 import cachetools
 import pandas as pd
@@ -47,9 +48,16 @@ if st.button('Train'):
     if requirements_txt:
         requirements = requirements_txt.getvalue().decode().split('\n')
 
-        for package in requirements:
+
+        def install(package):
             subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-        # subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", requirements_txt])
+
+        # Use a ThreadPoolExecutor to install the packages in parallel
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            executor.map(install, requirements)
+
+        # for package in requirements:
+        #     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
     # Load dataset
     if dataset:
