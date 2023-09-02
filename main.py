@@ -2,6 +2,8 @@ import datetime
 import io
 import os
 import random
+import subprocess
+import sys
 import uuid
 from dataclasses import dataclass
 from pprint import pprint
@@ -35,11 +37,20 @@ python_code: str
 python_code = st.file_uploader("Upload Python Code", type=["py"])
 pretrained_model = st.file_uploader("Upload Pretrained Model", type=["sav"])
 dataset = st.file_uploader("Upload Dataset", type=["csv"])
+requirements_txt = st.file_uploader("Upload requirements.txt", type=["txt"])
 
 # dataset: str = dataset or 'examples/canada_per_capita_income.csv'
 
 
 if st.button('Train'):
+
+    if requirements_txt:
+        requirements = requirements_txt.getvalue().decode().split('\n')
+
+        for package in requirements:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+        # subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", requirements_txt])
+
     # Load dataset
     if dataset:
 
