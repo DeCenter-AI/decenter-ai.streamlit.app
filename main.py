@@ -73,32 +73,16 @@ if st.button('Train'):
         exec(python_code.getvalue())
         # exec(python_code) #FIXME:
         model = train_model(dataset, loaded_model)
-        joblib.dump(model, f"trained-{model_name}-{str(datetime.datetime.now())}.sav")
+        fName = f"trained-{model_name}-{str(datetime.datetime.now())}.sav"
+        joblib.dump(model, fName)
 
         st.write("Trained a new model.")
 
         st.download_button(
             label="Download trained model",
             data="trained_model.sav",
-            file_name="trained_model.sav",
+            file_name=fName,
         )
     else:
         st.write("Please upload Python code to train the model.")
 
-# if python_code is not None and pretrained_model is not None and dataset is not None:
-#     exec(python_code.getvalue())
-#     model = joblib.load(pretrained_model)
-#     data = pd.read_csv(dataset)
-#
-#     # save the model to disk
-#     joblib.dump(model, "trained_model.sav")
-#
-#     # create download button
-#     st.download_button(
-#         label="Download trained model",
-#         data="trained_model.sav",
-#         file_name="trained_model.sav",
-#
-#
-#
-#     )

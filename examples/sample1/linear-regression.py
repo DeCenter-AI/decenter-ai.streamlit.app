@@ -17,11 +17,12 @@ def train_model(dataset,pretrained_model=None):
     return model
 
 
-# if __name__=="__main__":
-#     import joblib
-#     dataset="canada_per_capita_income.csv"
-#     m1 = train_model(dataset)
-#     joblib.dump(m1, 'test-model.sav')
-#
-#     m2 = joblib.load('test-model.sav')
-#     train_model(dataset,m2)
+
+if __name__=="__main__":
+    import joblib
+    dataset="canada_per_capita_income.csv"
+    m1 = train_model(dataset)
+    joblib.dump(m1, 'test-model.sav')
+
+    m2 = joblib.load('test-model.sav')
+    train_model(dataset,m2)
