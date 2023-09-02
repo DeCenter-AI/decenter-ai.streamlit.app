@@ -61,14 +61,17 @@ if st.button('Train'):
     # Load dataset
     if dataset:
 
+        loaded_model = None
+
         if pretrained_model:
-            model = load_model(pretrained_model)
+            loaded_model = load_model(pretrained_model)
             st.write("Loaded pretrained model.")
+
         elif python_code:
-            train_model = lambda dataset: {}
+            train_model = lambda dataset,pretrained_model: {}
             exec(python_code.getvalue())
             # exec(python_code) #FIXME:
-            model = train_model(dataset)
+            model = train_model(dataset,loaded_model)
             joblib.dump(model, f"trained-{model_name}-{str(datetime.datetime.now())}.sav")
 
             st.download_button(
