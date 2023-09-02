@@ -17,6 +17,6 @@ def train_model(dataset):
     return model
 
 
-# if __name__=="__main__":
-#     dataset="canada_per_capita_income.csv"
-#     train_model(dataset)
+if __name__=="__main__":
+    dataset="canada_per_capita_income.csv"
+    train_model(dataset)
