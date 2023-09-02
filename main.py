@@ -58,32 +58,32 @@ if st.button('Train'):
         # for package in requirements:
         #     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
+
+    loaded_model = None
+
+    if pretrained_model:
+        loaded_model = load_model(pretrained_model)
+        st.write("Loaded pretrained model.")
     # Load dataset
-    if dataset:
-
-        loaded_model = None
-
-        if pretrained_model:
-            loaded_model = load_model(pretrained_model)
-            st.write("Loaded pretrained model.")
-
-        elif python_code:
-            train_model = lambda dataset,pretrained_model: {}
-            exec(python_code.getvalue())
-            # exec(python_code) #FIXME:
-            model = train_model(dataset,loaded_model)
-            joblib.dump(model, f"trained-{model_name}-{str(datetime.datetime.now())}.sav")
-
-            st.download_button(
-                label="Download trained model",
-                data="trained_model.sav",
-                file_name="trained_model.sav",
-            )
-            st.write("Trained a new model.")
-        else:
-            st.write("Please upload a pretrained model or Python code to train a new model.")
-    else:
+    if not dataset:
         st.write("Please upload a dataset.")
+
+    if python_code and dataset:
+        train_model = lambda dataset, pretrained_model: {}
+        exec(python_code.getvalue())
+        # exec(python_code) #FIXME:
+        model = train_model(dataset, loaded_model)
+        joblib.dump(model, f"trained-{model_name}-{str(datetime.datetime.now())}.sav")
+
+        st.write("Trained a new model.")
+
+        st.download_button(
+            label="Download trained model",
+            data="trained_model.sav",
+            file_name="trained_model.sav",
+        )
+    else:
+        st.write("Please upload Python code to train the model.")
 
 # if python_code is not None and pretrained_model is not None and dataset is not None:
 #     exec(python_code.getvalue())
