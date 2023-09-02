@@ -25,14 +25,13 @@ def load_model(model_file):
 
 st.title("Decenter- Decentralized AI Infrastructure for Model training")
 
-new_review_text = st.text_input("Enter a model name: ", value=f"new-{uuid.uuid1()}")
+model_name = st.text_input("Enter a model name: ", value=f"model-{uuid.uuid1()}")
 
 python_code: str
 
 
 # with open('examples/linear-regression.py', 'r') as f1:
 #     python_code = f1.read()
-
 
 
 python_code = st.file_uploader("Upload Python Code", type=["py"])
@@ -70,7 +69,7 @@ if st.button('Train'):
             exec(python_code.getvalue())
             # exec(python_code) #FIXME:
             model = train_model(dataset)
-            joblib.dump(model, f"trained_model-{uuid.uuid1()}.sav")
+            joblib.dump(model, f"trained-{model_name}-{str(datetime.datetime.now())}.sav")
 
             st.download_button(
                 label="Download trained model",
