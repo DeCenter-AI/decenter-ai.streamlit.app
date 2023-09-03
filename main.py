@@ -15,15 +15,21 @@ import cachetools
 import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
-
+ 
 load_dotenv()
+
+with open('static/style.css') as f:
+    st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
 
 @st.cache(allow_output_mutation=True)
 def load_model(model_file):
     return joblib.load(model_file)
+col1,col2,col3 = st.columns([1,2,1])
+col2.image("https://gnfd-testnet-sp1.bnbchain.org/view/decenter-ai/Decenter%20Logo.png", width=300)
 
 
-st.title("Decenter- Decentralized AI Infrastructure for Model training")
+# st.image("static/stand.png")
+st.title("AI Infrastructure for Model training")
 
 model_name = st.text_input("Enter a model name: ", value=f"model-{uuid.uuid1()}")
 
