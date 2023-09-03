@@ -25,7 +25,7 @@ with open('static/style.css') as f:
 def load_model(model_file):
     return joblib.load(model_file)
 col1,col2,col3 = st.columns([1,2,1])
-col2.image("https://gnfd-testnet-sp1.bnbchain.org/view/decenter-ai/Decenter%20Logo.png", width=300)
+col2.image("static/logo.png", width=300)
 
 
 # st.image("static/stand.png")

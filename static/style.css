@@ -1,10 +1,17 @@
-.st-bd.st-b3.st-be.st-bf.st-bg.st-bh.st-bi.st-bj.st-bk.st-bl.st-bm.st-bn.st-bo
-  button {
-  color: green;
+button.css-4lu1hd.ef3psqc11:hover {
+  border: none;
+
+  color: white;
 }
 
-.st-bd.st-b3.st-be.st-bf.st-bg.st-bh.st-bi.st-bj.st-bk.st-bl.st-bm.st-bn.st-bo {
-  display: flex;
-  justify-items: center;
-  align-items: center;
+button.css-4lu1hd.ef3psqc11:active {
+  border: none;
+  background-color: #000000;
+  color: white;
+}
+
+button.css-4lu1hd.ef3psqc11:focus {
+  border: none;
+  background-color: #000000;
+  color: white;
 }
