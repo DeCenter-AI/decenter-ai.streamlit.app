@@ -92,17 +92,14 @@ View our [Customer profile](https://www.canva.com/design/DAFri_nB4wo/eI4WrI2aQGy
 For the hackathon, we built the PoC for project which is a distributed parallel training platform leveraging hyperledger fabric to train a single type of ML model. We also worked on the website, waitlist for erly access to generate EOI, Pitch deck, Customer profiles, Demo videos, Tokenomics, Go-to-market strategy, product pricing, token economy/usecase, market research, competitive analysis and advantage among others.
 
 ## How to use the demo
-- User visits landing page 
-- User views the Landing Page Opens
-- User Clicks “Get Started”
-- User is taken to the Sign up page
-- Inputs email, username, password and Clicks “Sign Up”
-- User is taken to the Dashboard page
-- User Clicks on Train Model
-- User is taken to the Model Upload and Configuration page
-- User names the model, Uploads data sets and clicks on “Start Training”
-- User is taken to Node Selection and Configuration page
-- User selects a Node Package, 
+- Visit: https://decenter.streamlit.app
+- Enter a model name
+- Upload python code (model training code)
+- Upload pre-trained model
+- Upload dataset
+- Upload requirement texts
+- click on train
+- Download your trained model once the model training process  
 
 
 
@@ -138,7 +135,7 @@ We would like to thank the following individuals and organizations for their con
 
 ## Support
 
-For any inquiries or assistance, please contact our support team at decenterai.com@gmail.com or visit our [website](https://decenterai.com/).
+For any inquiries or assistance, please contact our support team at admin@decenterai.com or visit our [website](https://decenterai.com/).
 
 
 ## Links
