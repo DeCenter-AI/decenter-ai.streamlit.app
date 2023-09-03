@@ -11,10 +11,10 @@ DeCenter AI is a PaaS infrastructure that empowers machine learning engineers to
 ## Table of Contents
 - [Prerequisites](#prerequisites)
 - [How-to-run-with-python3](#How-to-run-with-python3)
--  [How-to-run-with-docker](#How-to-run-with-docker)
+-  [How-to-run-via-docker](#How-to-run-via-docker)
 - [Overview](#overview)
 - [Hackathon](#hackathon)
-- [How-to](#how-to)
+- [How-to-use-the-demo](#how-to-use-the-demo)
 - [Contributing](#contributing)
 - [License](#license)
 - [Authors](#authors)
@@ -65,24 +65,21 @@ I hope this helps! Raise issues to clarify your doubts and notify bugs.
 ## Overview
 DeCenter AI functions as a PaaS infrastructure, empowering machine learning engineers to expedite and make the training of AI models more cost-effective through decentralized parallel training methods.
 
-The core objective of DeCenter AI is to democratize and decentralize AI model training. By offering a distributed training platform, it allows data scientists, machine learning engineers, researchers, and AI specialists to collaboratively contribute to the training of AI models.
-
-Structured around a distributed parallel training mechanism, DeCenter AI has been designed to facilitate the training of various ML and DL models in a significantly reduced time frame and cost compared to the current norms.
-
+The core objective of DeCenter AI is to democratize and decentralize AI model training. By offering a distributed training platform, it allows data scientists, machine learning engineers, researchers, and AI specialists to collaboratively contribute to the training of AI models. Structured around a distributed parallel training mechanism, DeCenter AI has been designed to facilitate the training of various ML and DL models in a significantly reduced time frame and cost compared to the current norms.
 Our platform incorporates a built-in incentive system, fueled by DCEN Tokens. This system not only rewards contributors and participants but also encourages them to undertake tasks such as reviewing, testing, and rating AI models.
 
 ### Features
-
 - Intuitive AI model deployment UI
 - Customizable node configuration
 - Private decentralized infrastructure
 - Scheduled model training
 
  ### Target Customers
-- Machine learning engineers and data scientists
-- Businesses and enterprises 
-- Tech start-ups and scale-ups 
-
+- Data scientists
+- Machine learning engineers
+- AI Engineers
+View our [Customer profile](https://www.canva.com/design/DAFri_nB4wo/eI4WrI2aQGyfy6T1bx4ZTQ/view?utm_content=DAFri_nB4wo&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink).
+ 
   
  ### Benefits 
 - Rapid iteration
