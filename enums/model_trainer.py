@@ -29,5 +29,5 @@ class ModelTrainer(ABC):
         pass
 
     @abstractmethod
-    def calculate_score(self) -> float:
+    def calculate_score(self, model=None, X=None, y=None) -> float:
         pass

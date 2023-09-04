@@ -28,10 +28,9 @@ load_dotenv()
 with open('static/style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-
-@st.cache(allow_output_mutation=True)
-def load_model(model_object: str | io.BytesIO):
-    return joblib.load(model_object)
+# @st.cache(allow_output_mutation=True)
+# def load_model(model_object: str | io.BytesIO):
+#     return joblib.load(model_object)
 
 
 # @dataclass
@@ -46,6 +45,7 @@ if 'models' not in st.session_state:
     print('models not found')
     st.session_state.models = c
 else:
+    print("models found")
     c = st.session_state.models
 
 col1, col2, col3 = st.columns([1, 2, 1])
@@ -65,7 +65,7 @@ python_code: str
 # dataset: str = dataset or 'examples/canada_per_capita_income.csv'
 
 python_code = st.file_uploader("Upload Python Code", type=["py"])
-pretrained_model = st.file_uploader("Upload Pretrained Model", type=["sav"])
+
 dataset = st.file_uploader("Upload Dataset", type=["csv"])
 requirements_txt = st.file_uploader("Upload requirements.txt", type=["txt"])
 
@@ -88,9 +88,7 @@ def install_dependencies(requirements_txt):
 
 install_dependencies(requirements_txt)
 
-if pretrained_model:
-    loaded_model = load_model(pretrained_model)
-    st.write("Loaded pretrained model.")
+loaded_model = None
 
 if python_code and dataset:
     module_name = '__temp_module__'
@@ -105,11 +103,15 @@ if python_code and dataset:
     c[model_name] = m1
     # train_model: Callable[[UploadedFile, UploadedFile], any] = module.__dict__["train_model"]
 
-    if st.button('Score: Model on entire dataset'):
-        # m1.split_dataset(1)
-        m1.trained_model = m1.pretrained_model
-        score = m1.calculate_score()
-        st.write(f"Model Score: {score * 100:0.3f}")
+    pretrained_model = st.file_uploader("Upload Pretrained Model", type=["sav"])
+
+    if pretrained_model:
+        loaded_model = joblib.load(pretrained_model)
+        st.write("Loaded pretrained model.")
+
+        if st.button('Score: Pretrained Model'):
+            score = m1.calculate_score(loaded_model, m1.X, m1.y)
+            st.write(f"Pretrained-Model Score: {score * 100:0.3f}")
 
 if st.button('Train'):
     loaded_model = None
@@ -145,3 +147,7 @@ if st.button('Train'):
             data=model_bytes,
             file_name=fName,
         )
+
+        if st.button('Score: Trained Model'):
+            score = m1.calculate_score(m1.trained_model, m1.X, m1.y)
+            st.write(f"Trained Model Score: {score * 100:0.3f}")
