@@ -21,8 +21,8 @@ def train_model(dataset,pretrained_model=None):
 if __name__=="__main__":
     import joblib
     dataset="canada_per_capita_income.csv"
-    m1 = train_model(dataset)
-    joblib.dump(m1, 'test-model.sav')
+    # m1 = train_model(dataset)
+    # joblib.dump(m1, 'test-model.sav')
 
-    m2 = joblib.load('test-model.sav')
+    m2 = joblib.load('trained-model-5f6042ce-4af4-11ee-9feb-a6a3d6f9860d-2023-09-04 12_56_33.569479 0.018210s.sav')
     train_model(dataset,m2)

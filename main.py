@@ -1,4 +1,5 @@
 import datetime
+import importlib
 import io
 import os
 import random
@@ -11,6 +12,7 @@ from pprint import pprint
 from typing import Final
 import joblib
 import concurrent.futures
+import importlib.util
 
 import cachetools
 import pandas as pd
@@ -78,8 +80,16 @@ if st.button('Train'):
 
     if python_code and dataset:
         train_model = lambda dataset, pretrained_model: {}
-        exec(python_code.getvalue())
+        # exec(python_code.getvalue())
         # exec(python_code)
+        module_name = '__temp_module__'
+        spec = importlib.util.spec_from_loader(module_name, loader=None)
+        module = importlib.util.module_from_spec(spec)
+        # Compile and execute the code within the module
+        exec(python_code.getvalue(), module.__dict__)
+
+        train_model = module.__dict__["train_model"]
+
         start_time = time.time()
         model = train_model(dataset, loaded_model)
         end_time = time.time()
