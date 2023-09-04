@@ -28,7 +28,7 @@ with open('static/style.css') as f:
 
 
 @st.cache(allow_output_mutation=True)
-def load_model(model_object):
+def load_model(model_object: str | io.BytesIO):
     return joblib.load(model_object)
 
 
@@ -81,13 +81,11 @@ if st.button('Train'):
         st.write("Please upload a dataset.")
 
     if python_code and dataset:
-        # train_model = lambda dataset, pretrained_model: {}
-        # exec(python_code.getvalue())
-        # exec(python_code)
+
         module_name = '__temp_module__'
         spec = importlib.util.spec_from_loader(module_name, loader=None)
         module = importlib.util.module_from_spec(spec)
-        # spec.loader.load_module()
+        # spec.loader.load_module() #FIXME: install and inject deps to the module only
         # Compile and execute the code within the module
         exec(python_code.getvalue(), module.__dict__)
 
