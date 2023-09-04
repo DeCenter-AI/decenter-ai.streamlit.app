@@ -10,7 +10,7 @@ from utils.format_display_code import format_python_code
 from utils.install_deps import install_dependencies
 from views.head import head
 from views.train import train
-
+import base64
 load_dotenv()
 
 head()
@@ -39,9 +39,21 @@ if python_code and st.checkbox("Show Code"):
 dataset = st.file_uploader("Upload Dataset", type=["csv"])
 requirements_txt = st.file_uploader("Upload requirements.txt", type=["txt"])
 
+
 train_split_ratio = st.number_input("Train Split Ratio (%)", min_value=0, max_value=100, value=80)
 
-install_dependencies(requirements_txt)
+if requirements_txt:
+    install_dependencies(requirements_txt)
+
+    # FIXME: add icon william
+    # st.download_button(
+    # label="download", #FIXME: add icon instead
+    # data=requirements_txt,
+    # file_name="requirements.txt",
+    # )
+    # st.markdown("<a href='data:application/octet-stream;base64," + base64.b64encode(requirements_txt.read()).decode() +
+    #             "' download='requirements.txt'><img src='data:image/png;base64,iVBORw0KG...'></a>", 
+    #             unsafe_allow_html=True)
 
 loaded_model = None
 
