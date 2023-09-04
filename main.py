@@ -1,27 +1,16 @@
 import datetime
-import importlib
 import io
-import os
-import random
-import subprocess
-import sys
 import time
-import uuid
-from dataclasses import dataclass
-from pprint import pprint
-from typing import Final, TextIO, Callable
 import joblib
-import concurrent.futures
 import importlib.util
 
 import cachetools
-import pandas as pd
 import streamlit as st
 from colorama import Fore
 from dotenv import load_dotenv
-from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 from enums.model_trainer import ModelTrainer
+from utils.install_deps import install_dependencies
 
 load_dotenv()
 
@@ -58,8 +47,6 @@ model_name = st.text_input("Enter a model name: ", value=f"model")
 
 m1: ModelTrainer = c.get(model_name)
 
-python_code: str
-
 # with open('examples/linear-regression.py', 'r') as f1:
 #     python_code = f1.read()
 # dataset: str = dataset or 'examples/canada_per_capita_income.csv'
@@ -68,23 +55,6 @@ python_code = st.file_uploader("Upload Python Code", type=["py"])
 
 dataset = st.file_uploader("Upload Dataset", type=["csv"])
 requirements_txt = st.file_uploader("Upload requirements.txt", type=["txt"])
-
-
-def install_dependencies(requirements_txt):
-    if not requirements_txt:
-        return
-    requirements = requirements_txt.getvalue().decode().split('\n')
-
-    def install(package):
-        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
-    # Use a ThreadPoolExecutor to install the packages in parallel
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        executor.map(install, requirements)
-
-    # for package in requirements:
-    #     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
 
 install_dependencies(requirements_txt)
 
@@ -114,40 +84,38 @@ if python_code and dataset:
             st.write(f"Pretrained-Model Score: {score * 100:0.3f}")
 
 if st.button('Train'):
-    loaded_model = None
+    # if not dataset:
+    #     st.write("Please upload a dataset.")
+    #
+    # if not python_code:
+    #     st.write("Please upload Python code to train the model.")
 
-    if not dataset:
-        st.write("Please upload a dataset.")
+    # if python_code and dataset:
+    start_time = time.time()
+    model = m1.train_model()
+    end_time = time.time()
 
-    if not python_code:
-        st.write("Please upload Python code to train the model.")
+    elapsed_time = end_time - start_time
 
-    if python_code and dataset:
-        start_time = time.time()
-        model = m1.train_model()
-        end_time = time.time()
+    print(f"{Fore.GREEN} Elapsed time: {elapsed_time:.6f} seconds")
 
-        elapsed_time = end_time - start_time
+    fName = f"trained-{model_name}-{str(datetime.datetime.now())}-{elapsed_time:.6f}s.sav"
 
-        print(f"{Fore.GREEN} Elapsed time: {elapsed_time:.6f} seconds")
+    model_bytes = io.BytesIO()
+    joblib.dump(m1.trained_model, model_bytes)
+    model_bytes.seek(0)
 
-        fName = f"trained-{model_name}-{str(datetime.datetime.now())}-{elapsed_time:.6f}s.sav"
+    # st.write("Trained a new model")
 
-        model_bytes = io.BytesIO()
-        joblib.dump(m1.trained_model, model_bytes)
-        model_bytes.seek(0)
+    score = m1.calculate_score()
+    st.write(f"Trained Model Score: {score * 100:0.3f}")
 
-        st.write("Trained a new model")
+    # if st.button('Score: Trained Model'):
+    #     score = m1.calculate_score(m1.trained_model, m1.X, m1.y)
+    #     st.write(f"Trained Model Score: {score * 100:0.3f}")
 
-        score = m1.calculate_score()
-        st.write(f"Model Score: {score * 100:0.3f}")
-
-        st.download_button(
-            label="Download trained model",
-            data=model_bytes,
-            file_name=fName,
-        )
-
-        if st.button('Score: Trained Model'):
-            score = m1.calculate_score(m1.trained_model, m1.X, m1.y)
-            st.write(f"Trained Model Score: {score * 100:0.3f}")
+    st.download_button(
+        label="Download trained model",
+        data=model_bytes,
+        file_name=fName,
+    )
