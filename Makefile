@@ -11,7 +11,8 @@ install:
 	@ pip install -r requirements.txt
 
 run:
-	@python -m streamlit run main.py
+  # @source venv/bin/activate     
+	@venv/bin/python -m streamlit run main.py
 
 install-tests:
 	@ python -m pip install -r requirements-test.txt
