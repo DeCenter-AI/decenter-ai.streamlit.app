@@ -21,6 +21,8 @@ from colorama import Fore
 from dotenv import load_dotenv
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
+from enums.model_trainer import ModelTrainer
+
 load_dotenv()
 
 with open('static/style.css') as f:
@@ -81,7 +83,6 @@ if st.button('Train'):
         st.write("Please upload a dataset.")
 
     if python_code and dataset:
-
         module_name = '__temp_module__'
         spec = importlib.util.spec_from_loader(module_name, loader=None)
         module = importlib.util.module_from_spec(spec)
@@ -89,10 +90,11 @@ if st.button('Train'):
         # Compile and execute the code within the module
         exec(python_code.getvalue(), module.__dict__)
 
-        train_model: Callable[[UploadedFile, UploadedFile], any] = module.__dict__["train_model"]
+        m1: ModelTrainer = module.__dict__["ModelTrainer"](dataset, pretrained_model)
+        # train_model: Callable[[UploadedFile, UploadedFile], any] = module.__dict__["train_model"]
 
         start_time = time.time()
-        model = train_model(dataset, loaded_model)
+        model = m1.train_model()
         end_time = time.time()
 
         elapsed_time = end_time - start_time
@@ -102,10 +104,13 @@ if st.button('Train'):
         fName = f"trained-{model_name}-{str(datetime.datetime.now())}-{elapsed_time:.6f}s.sav"
 
         model_bytes = io.BytesIO()
-        joblib.dump(model, model_bytes)
+        joblib.dump(m1.trained_model, model_bytes)
         model_bytes.seek(0)
 
         st.write("Trained a new model")
+
+        score = m1.calculate_score()
+        st.write(f"Model Score: {score * 100:0.3f}")
 
         st.download_button(
             label="Download trained model",
