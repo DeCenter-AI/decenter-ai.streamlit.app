@@ -20,10 +20,14 @@ class ModelTrainer:
 
     def __post_init__(self):
         self.load_dataset()
+        self.split_dataset()
+
+    def split_dataset(self, test_size=0.2, random_state=42, **kwargs):
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X,
                                                                                 self.y,
                                                                                 test_size=0.2,
-                                                                                random_state=42)  # use rand state for consistency
+                                                                                random_state=42,
+                                                                                **kwargs)  # use rand state for consistency
 
     def load_dataset(self):
         df = pd.read_csv(self.dataset)
