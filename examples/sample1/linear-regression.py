@@ -1,29 +1,70 @@
+import time
+from dataclasses import dataclass
+from io import BytesIO
+from typing import Union
+
 import pandas as pd
 from sklearn.linear_model import LogisticRegression, LinearRegression
+from sklearn.metrics import r2_score
 from sklearn.model_selection import train_test_split
 
 
-def train_model(dataset, pretrained_model=None):
-    df = pd.read_csv(dataset)
+@dataclass
+class ModelTrainer:
+    dataset: Union[BytesIO, 'str']
+    pretrained_model: BytesIO = LinearRegression()
 
-    y = df['per_capita_income_in_usd']
-    X = df[['year']]
+    X, y = None, None
+    X_train, X_test, y_tain, y_test = [None] * 4
+    trained_model = None
 
-    print(X, y)
-    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    model = pretrained_model or LinearRegression()
-    # model.fit(X_train, y_train)
-    model.fit(X, y)
-    return model
+    def __post_init__(self):
+        self.load_dataset()
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X,
+                                                                                self.y,
+                                                                                test_size=0.2,
+                                                                                random_state=42)  # use rand state for consistency
+
+    def load_dataset(self):
+        df = pd.read_csv(self.dataset)
+        self.y = df['per_capita_income_in_usd']
+        self.X = df[['year']]
+
+    def train_model(self) -> 'model':
+        if self.X is None or self.y is None:
+            raise ValueError("Dataset has not been loaded yet.")
+        model = self.pretrained_model or LinearRegression()
+        model.fit(self.X, self.y)
+        self.trained_model = model
+        return model
+
+    def calculate_score(self) -> float:
+        if self.trained_model is None or self.X_test is None or self.y_test is None:
+            raise ValueError("Model or testing data is missing.")
+        _score = self.trained_model.score(self.X_test, self.y_test)
+        return _score
 
 
 if __name__ == "__main__":
-    import joblib
+    # import joblib
+    #
+    # dataset = "canada_per_capita_income.csv"
+    # # m1 = train_model(dataset)
+    # # joblib.dump(m1, 'test-model.sav')
+    # loaded_model = 'trained-model-2023-09-04 13_31_04.603032 0.010925s.sav'
+    #
+    # m2 = joblib.load(loaded_model)
+    # train_model(dataset, m2)
 
     dataset = "canada_per_capita_income.csv"
-    # m1 = train_model(dataset)
-    # joblib.dump(m1, 'test-model.sav')
-    loaded_model = 'trained-model-2023-09-04 13_31_04.603032 0.010925s.sav'
 
-    m2 = joblib.load(loaded_model)
-    train_model(dataset, m2)
+    m1 = ModelTrainer(dataset)
+    start_time = time.time()
+    model = m1.train_model()
+    end_time = time.time()
+
+    elapsed_time = end_time - start_time
+    print(f"Elapsed time: {elapsed_time:.6f} seconds")
+
+    score = m1.calculate_score()
+    print(f"Model Score: {score * 100:0.3f}")
