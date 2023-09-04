@@ -2,6 +2,8 @@ import importlib.util
 
 import joblib
 import streamlit as st
+import pandas as pd
+import plotly.express as px
 from dotenv import load_dotenv
 
 from enums.model_trainer import ModelTrainer
@@ -11,6 +13,12 @@ from utils.install_deps import install_dependencies
 from views.head import head
 from views.train import train
 import base64
+
+st.set_page_config(
+    page_title="Decenter AI",
+    page_icon="static/favicon.ico",
+)
+
 load_dotenv()
 
 head()
@@ -40,7 +48,9 @@ dataset = st.file_uploader("Upload Dataset", type=["csv"])
 requirements_txt = st.file_uploader("Upload requirements.txt", type=["txt"])
 
 
-train_split_ratio = st.number_input("Train Split Ratio (%)", min_value=0, max_value=100, value=80)
+train_split_ratio = st.number_input(
+    "Train Split Ratio (%)", min_value=0, max_value=100, value=80
+)
 
 if requirements_txt:
     install_dependencies(requirements_txt)
@@ -52,20 +62,22 @@ if requirements_txt:
     # file_name="requirements.txt",
     # )
     # st.markdown("<a href='data:application/octet-stream;base64," + base64.b64encode(requirements_txt.read()).decode() +
-    #             "' download='requirements.txt'><img src='data:image/png;base64,iVBORw0KG...'></a>", 
+    #             "' download='requirements.txt'><img src='data:image/png;base64,iVBORw0KG...'></a>",
     #             unsafe_allow_html=True)
 
 loaded_model = None
 
 if python_code and dataset:
-    module_name = '__temp_module__'
+    module_name = "__temp_module__"
     spec = importlib.util.spec_from_loader(module_name, loader=None)
     module = importlib.util.module_from_spec(spec)
     # spec.loader.load_module() #FIXME: install and inject deps to the module only
     # Compile and execute the code within the module
     exec(python_code.getvalue(), module.__dict__)
 
-    m1: ModelTrainer = module.__dict__["ModelTrainer"](dataset, loaded_model, train_test_split=train_split_ratio / 100)
+    m1: ModelTrainer = module.__dict__["ModelTrainer"](
+        dataset, loaded_model, train_test_split=train_split_ratio / 100
+    )
 
     c[model_name] = m1
 
@@ -75,11 +87,22 @@ if python_code and dataset:
         loaded_model = joblib.load(pretrained_model)
         st.write("Loaded pretrained model.")
 
-        if st.button('Score: Pretrained Model'):
+        if st.button("Score: Pretrained Model"):
             score_placeholder = m1.calculate_score(loaded_model)  # m1.X, m1.y
-            st.write(f"Pretrained-Model Score: {score_placeholder * 100:0.3f}%")
+            display_score = score_placeholder * 100
+            diff = 100 - display_score
+            data = pd.DataFrame(
+                {
+                    "Category": ["Pretrained-Model Score", "Remaining"],
+                    "Value": [display_score, diff],
+                }
+            )
+            fig = px.pie(data, names="Category", values="Value", hole=0.5)
+            st.plotly_chart(fig)
 
-if st.button('Train'):
+            # st.write(f"Pretrained-Model Score: {score_placeholder * 100:0.3f}%")
+
+if st.button("Train"):
     if not python_code:
         st.error("Please upload Python code to train the model.")
 
