@@ -1,12 +1,8 @@
-import datetime
+import importlib.util
 import io
 import time
 
-import colorama
 import joblib
-import importlib.util
-
-import cachetools
 import streamlit as st
 from colorama import Fore
 from dotenv import load_dotenv
@@ -29,7 +25,6 @@ m1: ModelTrainer = getModelTrainer(model_name)
 # dataset: str = dataset or 'examples/canada_per_capita_income.csv'
 
 python_code = st.file_uploader("Upload Python Code", type=["py"])
-
 dataset = st.file_uploader("Upload Dataset", type=["csv"])
 requirements_txt = st.file_uploader("Upload requirements.txt", type=["txt"])
 
@@ -76,7 +71,7 @@ if st.button('Train'):
 
     print(f"{Fore.CYAN} Elapsed time: {elapsed_time:.6f} sec {Fore.RESET}")
 
-    fName = f"trained-{model_name}-{str(datetime.datetime.now())}-{elapsed_time:.6f}s.sav"
+    fName = f"trained-{model_name}-{elapsed_time:.6f}s.sav"
 
     model_bytes = io.BytesIO()
     joblib.dump(m1.trained_model, model_bytes)
