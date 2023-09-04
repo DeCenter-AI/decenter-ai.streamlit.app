@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 
 from enums.model_trainer import ModelTrainer
 from models.model import c, getModelTrainer
+from utils.format_display_code import format_python_code
 from utils.install_deps import install_dependencies
 from views.head import head
 
@@ -25,6 +26,14 @@ m1: ModelTrainer = getModelTrainer(model_name)
 # dataset: str = dataset or 'examples/canada_per_capita_income.csv'
 
 python_code = st.file_uploader("Upload Python Code", type=["py"])
+
+# with st.echo():
+#     st.write('This code will be printed')
+if python_code and st.checkbox("Show Code"):
+    display_code = format_python_code(python_code.getvalue().decode())
+    st.markdown(f'<style>.css-1aumxhk{{max-height: 400px;}}</style>', unsafe_allow_html=True)
+    st.code(display_code, language="python")
+
 dataset = st.file_uploader("Upload Dataset", type=["csv"])
 requirements_txt = st.file_uploader("Upload requirements.txt", type=["txt"])
 
@@ -93,7 +102,7 @@ if st.button('Train'):
     bar.progress(100)
 
     status_placeholder.text(f"Training Duration: {elapsed_time:.6f}s")
-    score_placeholder.text(f"Trained Model Score: {score* 100:0.3f}%")
+    score_placeholder.text(f"Trained Model Score: {score * 100:0.3f}%")
 
     # if st.button('Score: Trained Model'):
     #     score = m1.calculate_score(m1.trained_model, m1.X, m1.y)

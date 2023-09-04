@@ -2,7 +2,10 @@ import concurrent.futures
 import subprocess
 import sys
 
+import streamlit as st
 
+
+@st.cache_resource
 def install_dependencies(requirements_txt):
     if not requirements_txt:
         return
