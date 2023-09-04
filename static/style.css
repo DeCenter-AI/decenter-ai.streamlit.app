@@ -15,3 +15,16 @@ button.css-4lu1hd.ef3psqc11:focus {
   background-color: #000000;
   color: white;
 }
+
+.w3-light-grey {
+  height: 50px;
+  width: 100%;
+  background-color: #ccc;
+}
+
+.w3-green {
+  background-color: rgb(12, 61, 12);
+  height: 100%;
+  text-align: center;
+  padding-top: 10px;
+}

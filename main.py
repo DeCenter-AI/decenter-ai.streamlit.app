@@ -90,15 +90,11 @@ if python_code and dataset:
         if st.button("Score: Pretrained Model"):
             score_placeholder = m1.calculate_score(loaded_model)  # m1.X, m1.y
             display_score = score_placeholder * 100
-            diff = 100 - display_score
-            data = pd.DataFrame(
-                {
-                    "Category": ["Pretrained-Model Score", "Remaining"],
-                    "Value": [display_score, diff],
-                }
+            html_string = "<div class=w3-light-grey><div class=w3-green  style=width:{percentage_complete}%>{percentage_complete}%</div></div><br>".format(
+                percentage_complete=display_score
             )
-            fig = px.pie(data, names="Category", values="Value", hole=0.5)
-            st.plotly_chart(fig)
+            st.write(f"Pretrained-Model Score")
+            st.markdown(html_string, unsafe_allow_html=True)
 
             # st.write(f"Pretrained-Model Score: {score_placeholder * 100:0.3f}%")
 
