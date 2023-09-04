@@ -99,7 +99,7 @@ For the hackathon, we built the PoC for project which is a distributed parallel 
 - Upload dataset
 - Upload requirement texts
 - click on train
-- Download your trained model once the model training process  
+- Download your trained model once the model training process is complete
 
 
 
