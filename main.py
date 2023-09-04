@@ -24,51 +24,52 @@ from streamlit.runtime.uploaded_file_manager import UploadedFile
 load_dotenv()
 
 with open('static/style.css') as f:
-    st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
+    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
 
 @st.cache(allow_output_mutation=True)
-def load_model(model_file):
-    return joblib.load(model_file)
-col1,col2,col3 = st.columns([1,2,1])
-col2.image("static/logo.png", width=300)
+def load_model(model_object):
+    return joblib.load(model_object)
 
+
+col1, col2, col3 = st.columns([1, 2, 1])
+col2.image("static/logo.png", width=300)
 
 # st.image("static/stand.png")
 st.title("AI Infrastructure for Model training")
 
-model_name = st.text_input("Enter a model name: ", value=f"model-{uuid.uuid1()}")
+model_name = st.text_input("Enter a model name: ", value=f"model")
 
 python_code: str
 
-
 # with open('examples/linear-regression.py', 'r') as f1:
 #     python_code = f1.read()
-
+# dataset: str = dataset or 'examples/canada_per_capita_income.csv'
 
 python_code = st.file_uploader("Upload Python Code", type=["py"])
 pretrained_model = st.file_uploader("Upload Pretrained Model", type=["sav"])
 dataset = st.file_uploader("Upload Dataset", type=["csv"])
 requirements_txt = st.file_uploader("Upload requirements.txt", type=["txt"])
 
-# dataset: str = dataset or 'examples/canada_per_capita_income.csv'
+
+def install_dependencies(requirements_txt):
+    if not requirements_txt:
+        return
+    requirements = requirements_txt.getvalue().decode().split('\n')
+
+    def install(package):
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+
+    # Use a ThreadPoolExecutor to install the packages in parallel
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        executor.map(install, requirements)
+
+    # for package in requirements:
+    #     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 
 if st.button('Train'):
-
-    if requirements_txt:
-        requirements = requirements_txt.getvalue().decode().split('\n')
-
-
-        def install(package):
-            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
-        # Use a ThreadPoolExecutor to install the packages in parallel
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            executor.map(install, requirements)
-
-        # for package in requirements:
-        #     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
+    install_dependencies(requirements_txt)
 
     loaded_model = None
 
@@ -88,19 +89,19 @@ if st.button('Train'):
         module = importlib.util.module_from_spec(spec)
         # spec.loader.load_module()
         # Compile and execute the code within the module
-        exec(python_code.getvalue(), module.__dict__,None)
+        exec(python_code.getvalue(), module.__dict__)
 
-        train_model: Callable[[UploadedFile,UploadedFile], any] = module.__dict__["train_model"]
+        train_model: Callable[[UploadedFile, UploadedFile], any] = module.__dict__["train_model"]
 
         start_time = time.time()
         model = train_model(dataset, loaded_model)
         end_time = time.time()
 
-        elapsed_time = end_time-start_time
+        elapsed_time = end_time - start_time
 
         print(f"{Fore.GREEN} Elapsed time: {elapsed_time:.6f} seconds")
 
-        fName = f"trained-{model_name}-{str(datetime.datetime.now())} {elapsed_time:.6f}s.sav"
+        fName = f"trained-{model_name}-{str(datetime.datetime.now())}-{elapsed_time:.6f}s.sav"
 
         model_bytes = io.BytesIO()
         joblib.dump(model, model_bytes)
@@ -115,4 +116,3 @@ if st.button('Train'):
         )
     else:
         st.write("Please upload Python code to train the model.")
-
