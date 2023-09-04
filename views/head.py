@@ -8,5 +8,7 @@ def head():
     col1, col2, col3 = st.columns([1, 2, 1])
     col2.image("static/logo.png", width=300)
 
+    st.toast("Welcome to Decenter", icon='🙏')
+
     # st.image("static/stand.png")
     st.title("AI Infrastructure for Model training")
