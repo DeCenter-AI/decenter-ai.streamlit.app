@@ -12,42 +12,17 @@ from colorama import Fore
 from dotenv import load_dotenv
 
 from enums.model_trainer import ModelTrainer
+from models.model import c, getModelTrainer
 from utils.install_deps import install_dependencies
+from views.head import head
 
 load_dotenv()
 
-with open('static/style.css') as f:
-    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-
-# @st.cache(allow_output_mutation=True)
-# def load_model(model_object: str | io.BytesIO):
-#     return joblib.load(model_object)
-
-
-# @dataclass
-# class Model:
-#     modelTrainer: ModelTrainer
-#
-
-
-c = cachetools.Cache(maxsize=100)
-
-if 'models' not in st.session_state:
-    print('models not found')
-    st.session_state.models = c
-else:
-    print("models found")
-    c = st.session_state.models
-
-col1, col2, col3 = st.columns([1, 2, 1])
-col2.image("static/logo.png", width=300)
-
-# st.image("static/stand.png")
-st.title("AI Infrastructure for Model training")
+head()
 
 model_name = st.text_input("Enter a model name: ", value=f"model")
 
-m1: ModelTrainer = c.get(model_name)
+m1: ModelTrainer = getModelTrainer(model_name)
 
 # with open('examples/linear-regression.py', 'r') as f1:
 #     python_code = f1.read()
@@ -110,6 +85,7 @@ if st.button('Train'):
     # st.write("Trained a new model")
 
     score = m1.calculate_score()
+
     st.write(f"Training Duration: {elapsed_time:.6f}s")
     st.write(f"Trained Model Score: {score * 100:0.3f}%")
 
