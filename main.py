@@ -28,6 +28,8 @@ python_code = st.file_uploader("Upload Python Code", type=["py"])
 dataset = st.file_uploader("Upload Dataset", type=["csv"])
 requirements_txt = st.file_uploader("Upload requirements.txt", type=["txt"])
 
+train_split_ratio = st.number_input("Train Split Ratio (%)", min_value=0, max_value=100, value=80)
+
 install_dependencies(requirements_txt)
 
 loaded_model = None
@@ -40,10 +42,9 @@ if python_code and dataset:
     # Compile and execute the code within the module
     exec(python_code.getvalue(), module.__dict__)
 
-    m1: ModelTrainer = module.__dict__["ModelTrainer"](dataset, loaded_model)
+    m1: ModelTrainer = module.__dict__["ModelTrainer"](dataset, loaded_model, train_test_split=train_split_ratio / 100)
 
     c[model_name] = m1
-    # train_model: Callable[[UploadedFile, UploadedFile], any] = module.__dict__["train_model"]
 
     pretrained_model = st.file_uploader("Upload Pretrained Model", type=["sav"])
 
@@ -52,7 +53,7 @@ if python_code and dataset:
         st.write("Loaded pretrained model.")
 
         if st.button('Score: Pretrained Model'):
-            score = m1.calculate_score(loaded_model, m1.X, m1.y)
+            score = m1.calculate_score(loaded_model)  # m1.X, m1.y
             st.write(f"Pretrained-Model Score: {score * 100:0.3f}%")
 
 if st.button('Train'):

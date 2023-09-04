@@ -4,8 +4,7 @@ from io import BytesIO
 from typing import Union
 
 import pandas as pd
-from sklearn.linear_model import LogisticRegression, LinearRegression
-from sklearn.metrics import r2_score
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 
 
@@ -14,18 +13,20 @@ class ModelTrainer:
     dataset: Union[BytesIO, 'str']
     pretrained_model: BytesIO = LinearRegression()
 
+    train_test_split: int = 0.8
+
     X, y = None, None
     X_train, X_test, y_tain, y_test = [None] * 4
     trained_model = None
 
     def __post_init__(self):
         self.load_dataset()
-        self.split_dataset()
+        self.split_dataset(1 - self.train_test_split)
 
     def split_dataset(self, test_size=0.2, random_state=42, **kwargs):
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X,
                                                                                 self.y,
-                                                                                test_size=0.2,
+                                                                                test_size=test_size,
                                                                                 random_state=42,
                                                                                 **kwargs)  # use rand state for consistency
 

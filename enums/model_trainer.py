@@ -1,12 +1,13 @@
-from io import BytesIO
-from typing import Type, Union
-from sklearn.linear_model import LinearRegression
 from abc import ABC, abstractmethod
+from io import BytesIO
+from typing import Union
 
 
 class ModelTrainer(ABC):
     dataset: Union[BytesIO, 'str']
     pretrained_model: BytesIO
+
+    train_test_split: int = 0.8
 
     X, y = None, None
     X_train, X_test, y_tain, y_test = [None] * 4
