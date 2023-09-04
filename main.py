@@ -4,6 +4,7 @@ import os
 import random
 import subprocess
 import sys
+import time
 import uuid
 from dataclasses import dataclass
 from pprint import pprint
@@ -14,6 +15,7 @@ import concurrent.futures
 import cachetools
 import pandas as pd
 import streamlit as st
+from colorama import Fore
 from dotenv import load_dotenv
  
 load_dotenv()
@@ -77,16 +79,26 @@ if st.button('Train'):
     if python_code and dataset:
         train_model = lambda dataset, pretrained_model: {}
         exec(python_code.getvalue())
-        # exec(python_code) #FIXME:
+        # exec(python_code)
+        start_time = time.time()
         model = train_model(dataset, loaded_model)
-        fName = f"trained-{model_name}-{str(datetime.datetime.now())}.sav"
-        joblib.dump(model, fName)
+        end_time = time.time()
 
-        st.write("Trained a new model.")
+        elapsed_time = end_time-start_time
+
+        print(f"{Fore.GREEN} Elapsed time: {elapsed_time:.6f} seconds")
+
+        fName = f"trained-{model_name}-{str(datetime.datetime.now())} {elapsed_time:.6f}s.sav"
+
+        model_bytes = io.BytesIO()
+        joblib.dump(model, model_bytes)
+        model_bytes.seek(0)
+
+        st.write("Trained a new model")
 
         st.download_button(
             label="Download trained model",
-            data="trained_model.sav",
+            data=model_bytes,
             file_name=fName,
         )
     else:
