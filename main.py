@@ -1,6 +1,8 @@
 import datetime
 import io
 import time
+
+import colorama
 import joblib
 import importlib.util
 
@@ -81,7 +83,7 @@ if python_code and dataset:
 
         if st.button('Score: Pretrained Model'):
             score = m1.calculate_score(loaded_model, m1.X, m1.y)
-            st.write(f"Pretrained-Model Score: {score * 100:0.3f}")
+            st.write(f"Pretrained-Model Score: {score * 100:0.3f}%")
 
 if st.button('Train'):
     # if not dataset:
@@ -97,7 +99,7 @@ if st.button('Train'):
 
     elapsed_time = end_time - start_time
 
-    print(f"{Fore.GREEN} Elapsed time: {elapsed_time:.6f} seconds")
+    print(f"{Fore.CYAN} Elapsed time: {elapsed_time:.6f} sec {Fore.RESET}")
 
     fName = f"trained-{model_name}-{str(datetime.datetime.now())}-{elapsed_time:.6f}s.sav"
 
@@ -108,7 +110,8 @@ if st.button('Train'):
     # st.write("Trained a new model")
 
     score = m1.calculate_score()
-    st.write(f"Trained Model Score: {score * 100:0.3f}")
+    st.write(f"Training Duration: {elapsed_time:.6f}s")
+    st.write(f"Trained Model Score: {score * 100:0.3f}%")
 
     # if st.button('Score: Trained Model'):
     #     score = m1.calculate_score(m1.trained_model, m1.X, m1.y)
