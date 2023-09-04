@@ -34,6 +34,20 @@ def load_model(model_object: str | io.BytesIO):
     return joblib.load(model_object)
 
 
+# @dataclass
+# class Model:
+#     modelTrainer: ModelTrainer
+#
+
+
+c = cachetools.Cache(maxsize=100)
+
+if 'models' not in st.session_state:
+    print('models not found')
+    st.session_state.models = c
+else:
+    c = st.session_state.models
+
 col1, col2, col3 = st.columns([1, 2, 1])
 col2.image("static/logo.png", width=300)
 
@@ -41,6 +55,8 @@ col2.image("static/logo.png", width=300)
 st.title("AI Infrastructure for Model training")
 
 model_name = st.text_input("Enter a model name: ", value=f"model")
+
+m1: ModelTrainer = c.get(model_name)
 
 python_code: str
 
@@ -70,29 +86,41 @@ def install_dependencies(requirements_txt):
     #     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 
-if st.button('Train'):
-    install_dependencies(requirements_txt)
+install_dependencies(requirements_txt)
 
+if pretrained_model:
+    loaded_model = load_model(pretrained_model)
+    st.write("Loaded pretrained model.")
+
+if python_code and dataset:
+    module_name = '__temp_module__'
+    spec = importlib.util.spec_from_loader(module_name, loader=None)
+    module = importlib.util.module_from_spec(spec)
+    # spec.loader.load_module() #FIXME: install and inject deps to the module only
+    # Compile and execute the code within the module
+    exec(python_code.getvalue(), module.__dict__)
+
+    m1: ModelTrainer = module.__dict__["ModelTrainer"](dataset, loaded_model)
+
+    c[model_name] = m1
+    # train_model: Callable[[UploadedFile, UploadedFile], any] = module.__dict__["train_model"]
+
+    if st.button('Score: Model on entire dataset'):
+        # m1.split_dataset(1)
+        m1.trained_model = m1.pretrained_model
+        score = m1.calculate_score()
+        st.write(f"Model Score: {score * 100:0.3f}")
+
+if st.button('Train'):
     loaded_model = None
 
-    if pretrained_model:
-        loaded_model = load_model(pretrained_model)
-        st.write("Loaded pretrained model.")
-    # Load dataset
     if not dataset:
         st.write("Please upload a dataset.")
 
+    if not python_code:
+        st.write("Please upload Python code to train the model.")
+
     if python_code and dataset:
-        module_name = '__temp_module__'
-        spec = importlib.util.spec_from_loader(module_name, loader=None)
-        module = importlib.util.module_from_spec(spec)
-        # spec.loader.load_module() #FIXME: install and inject deps to the module only
-        # Compile and execute the code within the module
-        exec(python_code.getvalue(), module.__dict__)
-
-        m1: ModelTrainer = module.__dict__["ModelTrainer"](dataset, pretrained_model)
-        # train_model: Callable[[UploadedFile, UploadedFile], any] = module.__dict__["train_model"]
-
         start_time = time.time()
         model = m1.train_model()
         end_time = time.time()
@@ -117,5 +145,3 @@ if st.button('Train'):
             data=model_bytes,
             file_name=fName,
         )
-    else:
-        st.write("Please upload Python code to train the model.")

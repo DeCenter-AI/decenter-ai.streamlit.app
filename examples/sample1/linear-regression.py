@@ -43,8 +43,10 @@ class ModelTrainer:
         return model
 
     def calculate_score(self) -> float:
-        if self.trained_model is None or self.X_test is None or self.y_test is None:
-            raise ValueError("Model or testing data is missing.")
+        if self.X_test is None or self.y_test is None:
+            raise ValueError("Test data missing")
+        if self.trained_model is None:
+            raise ValueError("Model missing")
         _score = self.trained_model.score(self.X_test, self.y_test)
         return _score
 
