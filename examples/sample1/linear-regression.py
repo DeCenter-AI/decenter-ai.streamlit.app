@@ -43,7 +43,8 @@ class ModelTrainer:
         return model
 
     def calculate_score(self, model=None, X=None, y=None) -> float:
-        model = model or self.trained_model
+        if model is None:
+            model = self.trained_model
 
         if model is None:
             raise ValueError("Model missing")
