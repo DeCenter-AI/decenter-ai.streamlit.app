@@ -1,3 +1,5 @@
+import logging
+
 import black
 
 
@@ -5,11 +7,11 @@ def format_python_code(code) -> str:
     output: str
     try:
         output = black.format_str(code, mode=black.FileMode())
-        print(output)
+        # print(output)
 
     except Exception as e:
         output = f"Error formatting code: {str(e)}"
-        print(output)
+        logging.error(output)
 
     return output
 

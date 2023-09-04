@@ -1,10 +1,7 @@
 import importlib.util
-import io
-import time
 
 import joblib
 import streamlit as st
-from colorama import Fore
 from dotenv import load_dotenv
 
 from enums.model_trainer import ModelTrainer
@@ -12,10 +9,16 @@ from models.model import c, getModelTrainer
 from utils.format_display_code import format_python_code
 from utils.install_deps import install_dependencies
 from views.head import head
+from views.train import train
 
 load_dotenv()
 
 head()
+
+# @st.cache_data
+# def get_python_code(filename: str, label: str):
+#     return
+
 
 model_name = st.text_input("Enter a model name: ", value=f"model")
 
@@ -31,7 +34,6 @@ python_code = st.file_uploader("Upload Python Code", type=["py"])
 #     st.write('This code will be printed')
 if python_code and st.checkbox("Show Code"):
     display_code = format_python_code(python_code.getvalue().decode())
-    st.markdown(f'<style>.css-1aumxhk{{max-height: 400px;}}</style>', unsafe_allow_html=True)
     st.code(display_code, language="python")
 
 dataset = st.file_uploader("Upload Dataset", type=["csv"])
@@ -66,50 +68,11 @@ if python_code and dataset:
             st.write(f"Pretrained-Model Score: {score_placeholder * 100:0.3f}%")
 
 if st.button('Train'):
-    # if not dataset:
-    #     st.write("Please upload a dataset.")
-    #
-    # if not python_code:
-    #     st.write("Please upload Python code to train the model.")
+    if not python_code:
+        st.error("Please upload Python code to train the model.")
 
-    # if python_code and dataset:
-    status_placeholder = st.empty()
-    score_placeholder = st.empty()
-    bar = st.progress(20)
+    if not dataset:
+        st.warning("Please upload the dataset to train or test the model")
 
-    start_time = time.time()
-    model = m1.train_model()
-    end_time = time.time()
-
-    elapsed_time = end_time - start_time
-
-    status_placeholder.text(f'Training complete, took {elapsed_time:.6f}s')
-
-    bar.progress(80)
-
-    print(f"{Fore.CYAN} Elapsed time: {elapsed_time:.6f} sec {Fore.RESET}")
-
-    fName = f"trained-{model_name}-{elapsed_time:.6f}s.sav"
-
-    model_bytes = io.BytesIO()
-    joblib.dump(m1.trained_model, model_bytes)
-    model_bytes.seek(0)
-
-    # st.write("Trained a new model")
-
-    score = m1.calculate_score()
-
-    bar.progress(100)
-
-    status_placeholder.text(f"Training Duration: {elapsed_time:.6f}s")
-    score_placeholder.text(f"Trained Model Score: {score * 100:0.3f}%")
-
-    # if st.button('Score: Trained Model'):
-    #     score = m1.calculate_score(m1.trained_model, m1.X, m1.y)
-    #     st.write(f"Trained Model Score: {score * 100:0.3f}")
-
-    st.download_button(
-        label="Download trained model",
-        data=model_bytes,
-        file_name=fName,
-    )
+    if python_code and dataset:
+        train(model_name)
