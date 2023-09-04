@@ -53,8 +53,8 @@ if python_code and dataset:
         st.write("Loaded pretrained model.")
 
         if st.button('Score: Pretrained Model'):
-            score = m1.calculate_score(loaded_model)  # m1.X, m1.y
-            st.write(f"Pretrained-Model Score: {score * 100:0.3f}%")
+            score_placeholder = m1.calculate_score(loaded_model)  # m1.X, m1.y
+            st.write(f"Pretrained-Model Score: {score_placeholder * 100:0.3f}%")
 
 if st.button('Train'):
     # if not dataset:
@@ -64,11 +64,19 @@ if st.button('Train'):
     #     st.write("Please upload Python code to train the model.")
 
     # if python_code and dataset:
+    status_placeholder = st.empty()
+    score_placeholder = st.empty()
+    bar = st.progress(20)
+
     start_time = time.time()
     model = m1.train_model()
     end_time = time.time()
 
     elapsed_time = end_time - start_time
+
+    status_placeholder.text(f'Training complete, took {elapsed_time:.6f}s')
+
+    bar.progress(80)
 
     print(f"{Fore.CYAN} Elapsed time: {elapsed_time:.6f} sec {Fore.RESET}")
 
@@ -82,8 +90,10 @@ if st.button('Train'):
 
     score = m1.calculate_score()
 
-    st.write(f"Training Duration: {elapsed_time:.6f}s")
-    st.write(f"Trained Model Score: {score * 100:0.3f}%")
+    bar.progress(100)
+
+    status_placeholder.text(f"Training Duration: {elapsed_time:.6f}s")
+    score_placeholder.text(f"Trained Model Score: {score* 100:0.3f}%")
 
     # if st.button('Score: Trained Model'):
     #     score = m1.calculate_score(m1.trained_model, m1.X, m1.y)
