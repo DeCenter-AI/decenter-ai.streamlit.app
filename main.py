@@ -9,7 +9,7 @@ import time
 import uuid
 from dataclasses import dataclass
 from pprint import pprint
-from typing import Final
+from typing import Final, TextIO, Callable
 import joblib
 import concurrent.futures
 import importlib.util
@@ -19,7 +19,8 @@ import pandas as pd
 import streamlit as st
 from colorama import Fore
 from dotenv import load_dotenv
- 
+from streamlit.runtime.uploaded_file_manager import UploadedFile
+
 load_dotenv()
 
 with open('static/style.css') as f:
@@ -79,16 +80,17 @@ if st.button('Train'):
         st.write("Please upload a dataset.")
 
     if python_code and dataset:
-        train_model = lambda dataset, pretrained_model: {}
+        # train_model = lambda dataset, pretrained_model: {}
         # exec(python_code.getvalue())
         # exec(python_code)
         module_name = '__temp_module__'
         spec = importlib.util.spec_from_loader(module_name, loader=None)
         module = importlib.util.module_from_spec(spec)
+        # spec.loader.load_module()
         # Compile and execute the code within the module
-        exec(python_code.getvalue(), module.__dict__)
+        exec(python_code.getvalue(), module.__dict__,None)
 
-        train_model = module.__dict__["train_model"]
+        train_model: Callable[[UploadedFile,UploadedFile], any] = module.__dict__["train_model"]
 
         start_time = time.time()
         model = train_model(dataset, loaded_model)
