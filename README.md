@@ -105,6 +105,54 @@ For the hackathon, we built the PoC for project which is a distributed parallel 
 
 ## Backend Workflow
 ![Decenter Ai Deck (4)](https://github.com/Nasfame/decenter.streamlit.app/assets/131058062/d233ea0c-e09e-4787-a9f5-997bde5902a7)
+# DeCenter AI Model Training Workflow
+
+This provides an overview of the DeCenter AI model training workflow, outlining the interactions between various components and actors involved in the process.
+
+### Organization (Data Scientists, ML Engineers, AI Engineers, Model Trainers)
+
+1. Initiates model training on the DeCenter AI platform.
+2. Provides model name, uploads datasets, pre-trained models, and requirements.
+3. Model-related data, including metadata in `metadata.json`, is stored in a folder within the DeCenter AI bucket on BNB Greenfield.
+4. If datasets or models exceed 2GB, they are sharded and stored on DeCenter for efficient handling.
+5. Access to the folder in the DeCenter AI bucket is granted only to the wallet that initiated the training.
+
+### NFTs Certifications
+
+- NFTs (Non-Fungible Tokens) certifications are generated and issued to trainers and contributors as a form of recognition for their contributions to the model training process.
+
+### Hyperledger
+
+1. Retrieves model-related data, including model name, datasets, models, pre-trained models, and `metadata.json`.
+2. Sends this data through the model training nodes (Execution Nodes) for model training.
+
+### Execution Nodes
+
+1. Receive the model-related data from Hyperledger.
+2. Train the models using the provided data.
+3. Once training is complete, all trained models are sent to the DeCenter AI validator Node for evaluation.
+
+### DeCenter AI Validator Node
+
+1. Receives trained models from the Execution Nodes.
+2. Evaluates and scores each model.
+3. Selects the best-performing model based on the evaluation results.
+4. Sends the selected model back to Hyperledger Fabric.
+
+### Hyperledger Fabric
+
+1. Records and maintains the selected trained model.
+2. Sends the trained model to BNB Greenfield for storage.
+
+### BNB Greenfield
+
+- Receives the trained model from Hyperledger Fabric and securely stores it.
+
+### User
+
+- Retrieves the trained model from BNB Greenfield for downloading and testing.
+
+This workflow outlines how DeCenter AI manages the training, evaluation, and storage of AI models, ensuring that the best-performing model is selected and made available for users. NFTs certifications add an additional layer of recognition for contributors and trainers.
 
 
 
