@@ -1,17 +1,17 @@
 button.css-4lu1hd.ef3psqc11:hover {
-  border: none;
+  border: 1px solid white;
 
   color: white;
 }
 
 button.css-4lu1hd.ef3psqc11:active {
-  border: none;
+  border: 1px solid white;
   background-color: #000000;
   color: white;
 }
 
 button.css-4lu1hd.ef3psqc11:focus {
-  border: none;
+  border: 1px solid white;
   background-color: #000000;
   color: white;
 }
@@ -22,9 +22,16 @@ button.css-4lu1hd.ef3psqc11:focus {
   background-color: #ccc;
 }
 
-.w3-green {
-  background-color: rgb(12, 61, 12);
+.w3-pro {
   height: 100%;
   text-align: center;
   padding-top: 10px;
+}
+
+#trained {
+  background-color: rgb(9, 121, 106);
+}
+
+#pretrained {
+  background-color: rgb(7, 85, 85);
 }

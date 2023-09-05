@@ -89,8 +89,8 @@ if python_code and dataset:
 
         if st.button("Score: Pretrained Model"):
             score_placeholder = m1.calculate_score(loaded_model)  # m1.X, m1.y
-            display_score = score_placeholder * 100
-            html_string = "<div class=w3-light-grey><div class=w3-green  style=width:{percentage_complete}%>{percentage_complete}%</div></div><br>".format(
+            display_score = round(score_placeholder * 100, 2)
+            html_string = "<div class=w3-light-grey><div class=w3-pro id=pretrained  style=width:{percentage_complete}%>{percentage_complete}%</div></div><br>".format(
                 percentage_complete=display_score
             )
             st.write(f"Pretrained-Model Score")
