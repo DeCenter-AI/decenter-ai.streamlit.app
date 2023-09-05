@@ -15,6 +15,7 @@ DeCenter AI is a PaaS infrastructure that empowers machine learning engineers to
 - [Overview](#overview)
 - [Hackathon](#hackathon)
 - [How-to-use-the-demo](#how-to-use-the-demo)
+- [Backend-workflow](#backend-workflow)
 - [How-to-contribute](#how-to-contribute)
 - [License](#license)
 - [Authors](#authors)
@@ -101,6 +102,9 @@ For the hackathon, we built the PoC for project which is a distributed parallel 
 - Upload pre-trained model
 - click on train
 - Download your trained model once the model training process is complete
+
+## Backend Workflow
+![Decenter Ai Deck (4)](https://github.com/Nasfame/decenter.streamlit.app/assets/131058062/d233ea0c-e09e-4787-a9f5-997bde5902a7)
 
 
 
