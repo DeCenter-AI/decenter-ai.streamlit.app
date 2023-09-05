@@ -21,6 +21,10 @@ button.css-4lu1hd.ef3psqc11:focus {
   width: 100%;
   background-color: #ccc;
 }
+input[inputmode="text"]:focus {
+  outline: none;
+  border: none;
+}
 
 .w3-pro {
   height: 100%;
