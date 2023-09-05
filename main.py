@@ -110,4 +110,6 @@ if st.button('Train'):
         st.warning('Please upload the dataset to train or test the model')
 
     if python_code and dataset:
+        st.snow()
         train(model_name)
+        st.balloons()
