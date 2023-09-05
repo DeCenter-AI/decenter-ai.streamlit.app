@@ -10,17 +10,17 @@ def format_python_code(code) -> str:
         # print(output)
 
     except Exception as e:
-        output = f"Error formatting code: {str(e)}"
+        output = f'Error formatting code: {str(e)}'
         logging.error(output)
 
     return output
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     python_code = """
 def hello_world():
     print("Hello, World!")
 hello_world()
     """
 
-    format_and_display_code(python_code)
+    format_python_code(python_code)

@@ -11,7 +11,8 @@ streamlit==1.26.0
 
 black
 
-
-pandas
 colorama
 joblib
+
+scikit-learn
+pandas
