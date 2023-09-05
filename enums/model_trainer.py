@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from io import BytesIO
-from typing import Union
+from typing import Union, TypeVar
+
+Model = TypeVar('Model')
 
 
 class ModelTrainer(ABC):
@@ -26,7 +28,7 @@ class ModelTrainer(ABC):
         pass
 
     @abstractmethod
-    def train_model(self) -> 'Model':
+    def train_model(self) -> Model:
         pass
 
     @abstractmethod
