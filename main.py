@@ -3,7 +3,6 @@ import importlib.util
 import joblib
 import streamlit as st
 import pandas as pd
-import plotly.express as px
 from dotenv import load_dotenv
 
 from enums.model_trainer import ModelTrainer
@@ -81,7 +80,8 @@ if python_code and dataset:
 
     c[model_name] = m1
 
-    pretrained_model = st.file_uploader("Upload Pretrained Model", type=["sav"])
+    pretrained_model = st.file_uploader(
+        "Upload Pretrained Model", type=["sav"])
 
     if pretrained_model:
         loaded_model = joblib.load(pretrained_model)
