@@ -11,11 +11,11 @@ DeCenter AI is a PaaS infrastructure that empowers machine learning engineers to
 ## Table of Contents
 - [Prerequisites](#prerequisites)
 - [How-to-run-with-python3](#How-to-run-with-python3)
--  [How-to-run-via-docker](#How-to-run-via-docker)
+- [How-to-run-via-docker](#How-to-run-via-docker)
 - [Overview](#overview)
 - [Hackathon](#hackathon)
 - [How-to-use-the-demo](#how-to-use-the-demo)
-- [Contributing](#contributing)
+- [How-to-contribute](#how-to-contribute)
 - [License](#license)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgments)
@@ -29,6 +29,7 @@ To run  project, you need to have the following prerequisites:
 - Python (version 3.10 or higher) installed on your machine.
 - The necessary Python packages and dependencies installed. You can find the required packages in the `requirements.txt`
   file of the project repository.
+- Dowload and extract the sample python code (model training code), Dataset, requirement text and pre-trained model for the demo [sample1.zip](https://github.com/Nasfame/decenter.streamlit.app/files/12517829/sample1.zip)
 
 
 ## How to Run with Python3
@@ -95,9 +96,9 @@ For the hackathon, we built the PoC for project which is a distributed parallel 
 - Visit: https://decenter.streamlit.app
 - Enter a model name
 - Upload python code (model training code)
-- Upload pre-trained model
 - Upload dataset
 - Upload requirement texts
+- Upload pre-trained model
 - click on train
 - Download your trained model once the model training process is complete
 
