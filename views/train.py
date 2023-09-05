@@ -21,7 +21,7 @@ def train(model_name: str):  # if python_code and dataset:
 
     elapsed_time = end_time - start_time
 
-    status_placeholder.text(f'Training complete, took {elapsed_time:.6f}s')
+    status_placeholder.text(f"Training complete, took {elapsed_time:.6f}s")
 
     bar.progress(80)
 
@@ -40,7 +40,13 @@ def train(model_name: str):  # if python_code and dataset:
     bar.progress(100)
 
     status_placeholder.text(f"Training Duration: {elapsed_time:.6f}s")
-    score_placeholder.text(f"Trained Model Score: {score * 100:0.3f}%")
+    # score_placeholder.text(f"Trained Model Score: {score * 100:0.3f}%")
+
+    html_string = "<div class=w3-light-grey><div class=w3-pro id=trained  style=width:{percentage_complete}%>{percentage_complete}%</div></div><br>".format(
+        percentage_complete=round(score * 100, 2)
+    )
+    st.write(f"Trained Model Score")
+    st.markdown(html_string, unsafe_allow_html=True)
 
     # if st.button('Score: Trained Model'):
     #     score = m1.calculate_score(m1.trained_model, m1.X, m1.y)
