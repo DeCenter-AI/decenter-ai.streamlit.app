@@ -2,8 +2,6 @@ import importlib.util
 
 import joblib
 import streamlit as st
-import pandas as pd
-import plotly.express as px
 from dotenv import load_dotenv
 
 from enums.model_trainer import ModelTrainer
