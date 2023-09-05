@@ -2,7 +2,7 @@
 runOnSave = true
 port = 8501
 [theme]
-primaryColor="#F63366"
+primaryColor="#fff"
 backgroundColor="#000000"
 secondaryBackgroundColor="#252B48"
 textColor="#ffffff"

@@ -45,7 +45,10 @@ requirements_txt = st.file_uploader('Upload requirements.txt', type=['txt'])
 
 
 train_split_ratio = st.number_input(
-    'Train Split Ratio (%)', min_value=0, max_value=100, value=80,
+    'Train Split Ratio (%)',
+    min_value=0,
+    max_value=100,
+    value=80,
 )
 
 if requirements_txt:
@@ -72,13 +75,16 @@ if python_code and dataset:
     exec(python_code.getvalue(), module.__dict__)
 
     m1: ModelTrainer = module.__dict__['ModelTrainer'](
-        dataset, loaded_model, train_test_split=train_split_ratio / 100,
+        dataset,
+        loaded_model,
+        train_test_split=train_split_ratio / 100,
     )
 
     c[model_name] = m1
 
     pretrained_model = st.file_uploader(
-        'Upload Pretrained Model', type=['sav'],
+        'Upload Pretrained Model',
+        type=['sav'],
     )
 
     if pretrained_model:
@@ -88,8 +94,10 @@ if python_code and dataset:
         if st.button('Score: Pretrained Model'):
             score_placeholder = m1.calculate_score(loaded_model)  # m1.X, m1.y
             display_score = round(score_placeholder * 100, 2)
+
             html_string = f'<div class=w3-light-grey><div class=w3-pro id=pretrained  style=width:{display_score}%>{display_score}%</div></div><br>'
-            st.write('Pretrained-Model Score')
+            st.write(f'Pretrained-Model Score')
+
             st.markdown(html_string, unsafe_allow_html=True)
 
             # st.write(f"Pretrained-Model Score: {score_placeholder * 100:0.3f}%")
