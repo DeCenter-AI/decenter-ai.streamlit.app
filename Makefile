@@ -15,7 +15,7 @@ run:
 	@venv/bin/python -m streamlit run main.py
 
 install-tests:
-	@ python -m pip install -r requirements-test.txt
+	@python -m pip install -r requirements-test.txt
 
 test:
 	@pytest -p no:cacheprovider
