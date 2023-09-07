@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from io import BytesIO
-from typing import Union, TypeVar
+from typing import TypeVar, Union
 
 Model = TypeVar('Model')
 
 
+@dataclass
 class ModelTrainer(ABC):
     dataset: Union[BytesIO, 'str']
     pretrained_model: BytesIO
