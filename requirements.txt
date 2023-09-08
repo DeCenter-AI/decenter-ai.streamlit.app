@@ -4,6 +4,9 @@ clarifai
 clarifai-grpc
 
 colorama
+colorama
+
+colored
 gTTS~=2.3.2
 # huggingface-hub==0.15.1
 icecream~=2.1.3
