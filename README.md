@@ -1,4 +1,5 @@
 # decenter.streamlit.app
+
 # DeCenter AI
 
 Decentralized AI Model Training Infrastructure
@@ -6,9 +7,11 @@ Visit: https://decenter.streamlit.app
 
 ## Description
 
-DeCenter AI is a PaaS infrastructure that empowers machine learning engineers to train AI models more quickly and affordably through decentralized parallel training mechanisms.
+DeCenter AI is a PaaS infrastructure that empowers machine learning engineers to train AI models more quickly and
+affordably through decentralized parallel training mechanisms.
 
 ## Table of Contents
+
 - [Prerequisites](#prerequisites)
 - [How-to-run-with-python3](#How-to-run-with-python3)
 - [How-to-run-via-docker](#How-to-run-via-docker)
@@ -25,17 +28,17 @@ DeCenter AI is a PaaS infrastructure that empowers machine learning engineers to
 
 ## Prerequisites
 
-To run  project, you need to have the following prerequisites:
+To run project, you need to have the following prerequisites:
 
 - Python (version 3.10 or higher) installed on your machine.
 - The necessary Python packages and dependencies installed. You can find the required packages in the `requirements.txt`
   file of the project repository.
-- Dowload and extract the sample python code (model training code), Dataset, requirement text and pre-trained model for the demo [sample1.zip](https://github.com/Nasfame/decenter.streamlit.app/files/12517829/sample1.zip)
-
+- Download and extract the sample python code (model training code), Dataset, requirement text and pre-trained model for
+  the demo [sample1.zip](https://github.com/Nasfame/decenter.streamlit.app/files/12517829/sample1.zip)
 
 ## How to Run with Python3
 
-To run the OS-Chat project using `Python` and `make`, follow these steps:
+To run using `Python` and `make`, follow these steps:
 
 ```shell
    git clone <repository_url> decenter.app
@@ -65,35 +68,49 @@ docker run -p 8501:8501 app
 I hope this helps! Raise issues to clarify your doubts and notify bugs.
 
 ## Overview
-DeCenter AI functions as a PaaS infrastructure, empowering machine learning engineers to expedite and make the training of AI models more cost-effective through decentralized parallel training methods.
 
-The core objective of DeCenter AI is to democratize and decentralize AI model training. By offering a distributed training platform, it allows data scientists, machine learning engineers, researchers, and AI specialists to collaboratively contribute to the training of AI models. Structured around a distributed parallel training mechanism, DeCenter AI has been designed to facilitate the training of various ML and DL models in a significantly reduced time frame and cost compared to the current norms.
-Our platform incorporates a built-in incentive system, fueled by DCEN Tokens. This system not only rewards contributors and participants but also encourages them to undertake tasks such as reviewing, testing, and rating AI models.
+DeCenter AI functions as a PaaS infrastructure, empowering machine learning engineers to expedite and make the training
+of AI models more cost-effective through decentralized parallel training methods.
+
+The core objective of DeCenter AI is to democratize and decentralize AI model training. By offering a distributed
+training platform, it allows data scientists, machine learning engineers, researchers, and AI specialists to
+collaboratively contribute to the training of AI models. Structured around a distributed parallel training mechanism,
+DeCenter AI has been designed to facilitate the training of various ML and DL models in a significantly reduced time
+frame and cost compared to the current norms.
+Our platform incorporates a built-in incentive system, fueled by DCEN Tokens. This system not only rewards contributors
+and participants but also encourages them to undertake tasks such as reviewing, testing, and rating AI models.
 
 ### Features
+
 - Intuitive AI model deployment UI
 - Customizable node configuration
 - Private decentralized infrastructure
 - Scheduled model training
 
- ### Target Customers
+### Target Customers
+
 - Data scientists
 - Machine learning engineers
 - AI Engineers
-View our [Customer profile](https://www.canva.com/design/DAFri_nB4wo/eI4WrI2aQGyfy6T1bx4ZTQ/view?utm_content=DAFri_nB4wo&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink).
- 
-  
- ### Benefits 
+  View
+  our [Customer profile](https://www.canva.com/design/DAFri_nB4wo/eI4WrI2aQGyfy6T1bx4ZTQ/view?utm_content=DAFri_nB4wo&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink).
+
+### Benefits
+
 - Rapid iteration
 - Cost effective
 - Seamless deployment
 - Automated resource management
 
-  
 ## Hackathon
-For the hackathon, we built the PoC for project which is a distributed parallel training platform leveraging hyperledger fabric to train a single type of ML model. We also worked on the website, waitlist for erly access to generate EOI, Pitch deck, Customer profiles, Demo videos, Tokenomics, Go-to-market strategy, product pricing, token economy/usecase, market research, competitive analysis and advantage among others.
+
+For the hackathon, we built the PoC for project which is a distributed parallel training platform leveraging hyperledger
+fabric to train a single type of ML model. We also worked on the website, waitlist for erly access to generate EOI,
+Pitch deck, Customer profiles, Demo videos, Tokenomics, Go-to-market strategy, product pricing, token economy/usecase,
+market research, competitive analysis and advantage among others.
 
 ## How to use the demo
+
 - Visit: https://decenter.streamlit.app
 - Enter a model name
 - Upload python code (model training code)
@@ -104,22 +121,27 @@ For the hackathon, we built the PoC for project which is a distributed parallel 
 - Download your trained model once the model training process is complete
 
 ## Backend Workflow
+
 ![Decenter Ai Deck (4)](https://github.com/Nasfame/decenter.streamlit.app/assets/131058062/d233ea0c-e09e-4787-a9f5-997bde5902a7)
+
 # DeCenter AI Model Training Workflow
 
-This provides an overview of the DeCenter AI model training workflow, outlining the interactions between various components and actors involved in the process.
+This provides an overview of the DeCenter AI model training workflow, outlining the interactions between various
+components and actors involved in the process.
 
 ### Organization (Data Scientists, ML Engineers, AI Engineers, Model Trainers)
 
 1. Initiates model training on the DeCenter AI platform.
 2. Provides model name, uploads datasets, pre-trained models, and requirements.
-3. Model-related data, including metadata in `metadata.json`, is stored in a folder within the DeCenter AI bucket on BNB Greenfield.
+3. Model-related data, including metadata in `metadata.json`, is stored in a folder within the DeCenter AI bucket on BNB
+   Greenfield.
 4. If datasets or models exceed 2GB, they are sharded and stored on DeCenter for efficient handling.
 5. Access to the folder in the DeCenter AI bucket is granted only to the wallet that initiated the training.
 
 ### NFTs Certifications
 
-- NFTs (Non-Fungible Tokens) certifications are generated and issued to trainers and contributors as a form of recognition for their contributions to the model training process.
+- NFTs (Non-Fungible Tokens) certifications are generated and issued to trainers and contributors as a form of
+  recognition for their contributions to the model training process.
 
 ### Hyperledger
 
@@ -152,9 +174,9 @@ This provides an overview of the DeCenter AI model training workflow, outlining 
 
 - Retrieves the trained model from BNB Greenfield for downloading and testing.
 
-This workflow outlines how DeCenter AI manages the training, evaluation, and storage of AI models, ensuring that the best-performing model is selected and made available for users. NFTs certifications add an additional layer of recognition for contributors and trainers.
-
-
+This workflow outlines how DeCenter AI manages the training, evaluation, and storage of AI models, ensuring that the
+best-performing model is selected and made available for users. NFTs certifications add an additional layer of
+recognition for contributors and trainers.
 
 ## How to Contribute
 
@@ -168,16 +190,17 @@ We welcome contributions from the community! To get started, follow these steps:
 6. Open a pull request from your fork's branch to the main repository.
 
 Please make sure to follow the [Code of Conduct](./CODE_OF_CONDUCT.md) when contributing to this project.
+
 ## License
 
 DeCenter AI is released under the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Authors
 
-- Victor Kaycee [Email](victorkaycee17@gmail.com).  [Linkedln](https://www.linkedin.com/in/victor-kaycee). 
-- Glory Lucas  [Email](lucasgold24@gmail.com).  [Linkedln](https://www.linkedin.com/in/glorylucas/). 
-- Hiro Hamada  [Email](laciferin@gmail.com).  [Linkedln](http://linkedin.com/in/laciferin/). 
-- William Ikeji  [Email](williamikeji@gmail.com).  [Linkedln](https://www.linkedin.com/in/codypharm/). 
+- Victor Kaycee [Email](victorkaycee17@gmail.com).  [Linkedln](https://www.linkedin.com/in/victor-kaycee).
+- Glory Lucas  [Email](lucasgold24@gmail.com).  [Linkedln](https://www.linkedin.com/in/glorylucas/).
+- Hiro Hamada  [Email](laciferin@gmail.com).  [Linkedln](http://linkedin.com/in/laciferin/).
+- William Ikeji  [Email](williamikeji@gmail.com).  [Linkedln](https://www.linkedin.com/in/codypharm/).
 
 ## Acknowledgments
 
@@ -188,8 +211,8 @@ We would like to thank the following individuals and organizations for their con
 
 ## Support
 
-For any inquiries or assistance, please contact our support team at admin@decenterai.com or visit our [website](https://decenterai.com/).
-
+For any inquiries or assistance, please contact our support team at admin@decenterai.com or visit
+our [website](https://decenterai.com/).
 
 ## Links
 
