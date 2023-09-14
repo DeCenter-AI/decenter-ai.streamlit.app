@@ -6,6 +6,13 @@ WORKDIR /app
 # Install Poetry
 RUN pip install poetry
 
+ENV POETRY_VIRTUALENVS_IN_PROJECT=true
+ENV POETRY_VIRTUALENVS_OPTIONS_ALWAYS_COPY=true
+ENV POETRY_VIRTUALENVS_OPTIONS_NO_PIP=false
+ENV POETRY_VIRTUALENVS_OPTIONS_NO_SETUPTOOLS=true
+# ENV POETRY_VIRTUALENVS_PATH={cache-dir}/virtualenvs not required since virtual env is set in
+# fixme: add setup tooools
+
 # Copy only the dependency-related files
 COPY pyproject.toml poetry.lock ./
 
@@ -23,7 +30,7 @@ WORKDIR /app
 
 # Copy dependencies from the builder stage
 COPY --from=builder /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
-COPY --from=builder /app/venv /app/venv
+COPY --from=builder /app/.venv /app/venv
 
 # Activate the virtual environment
 RUN . venv/bin/activate
