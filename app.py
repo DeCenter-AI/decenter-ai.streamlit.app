@@ -29,10 +29,12 @@ head()
 
 model_name = st.text_input(
     'Enter the model name: ',
-    value=f'model-${dt.datetime.now().strftime("%d-%m-%Y %H:%M:%S")}',
+    value=f'model-{dt.datetime.now().strftime("%d-%m-%Y-%H:%M:%S")}',
 )
 
-input_archive = st.file_uploader('Upload Archive', type=['zip'])
+input_archive = st.file_uploader(
+    'Upload working directory of notebook', type=['zip'],
+)
 
 starter_notebook: str
 
