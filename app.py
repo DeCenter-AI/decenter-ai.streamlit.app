@@ -42,23 +42,23 @@ if not input_archive:
     input_archive = 'examples/sample_v3'
     temp_dir = 'examples/sample_v3'
 else:
-    with tempfile.TemporaryDirectory() as temp_dir:
-        # Save the uploaded archive to a temporary file
-        temp_file_path = temp_dir + '/input_archive.zip'
-        with open(temp_file_path, 'wb') as temp_file:
-            temp_file.write(input_archive.read())
+    temp_dir = tempfile.TemporaryDirectory()
+    # Save the uploaded archive to a temporary file
+    temp_file_path = temp_dir + '/input_archive.zip'
+    with open(temp_file_path, 'wb') as temp_file:
+        temp_file.write(input_archive.read())
 
-        # Extract the contents of the archive to the temporary directory
-        with zipfile.ZipFile(temp_file_path, 'r') as zip_ref:
-            zip_ref.extractall(temp_dir)
+    # Extract the contents of the archive to the temporary directory
+    with zipfile.ZipFile(temp_file_path, 'r') as zip_ref:
+        zip_ref.extractall(temp_dir)
 
-        # At this point, the contents of the archive are extracted to the temporary directory
-        # You can access the extracted files using the 'temp_dir' path
+    # At this point, the contents of the archive are extracted to the temporary directory
+    # You can access the extracted files using the 'temp_dir' path
 
-        # Example: Print the list of extracted files
-        import os
-        extracted_files = os.listdir(temp_dir)
-        print('extracted:', extracted_files)
+    # Example: Print the list of extracted files
+    import os
+    extracted_files = os.listdir(temp_dir)
+    print('extracted:', extracted_files)
 
 
 def find_notebooks(path):
