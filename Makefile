@@ -6,6 +6,9 @@ setup:
 	@make install
 	pre-commit autoupdate
 
+activate:
+	source $(poetry env info --path)/bin/activate
+
 install:
 	# @ pip install --upgrade pip
 	# @ pip install -r requirements.txt
