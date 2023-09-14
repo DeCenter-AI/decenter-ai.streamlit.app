@@ -2,7 +2,6 @@ import importlib.util
 
 import joblib
 import streamlit as st
-from dotenv import load_dotenv
 from sklearn.linear_model import LinearRegression
 
 from enums.model_trainer import ModelTrainer
@@ -12,16 +11,21 @@ from utils.install_deps import install_dependencies_v2
 from views.head import head_v2
 from views.train import train_v2
 
+progress = 10
+
+
+def update_progress(number: int):
+    progress_bar.progress(number)
+
+
 st.sidebar.header('v2')
 
-st.set_page_config(
-    page_title='Decenter AI',
-    page_icon='static/favicon.ico',
-)
-
-load_dotenv()
+progress_bar = st.sidebar.progress(0)
+status_text = st.sidebar.empty()
 
 head_v2()
+
+update_progress(20)
 
 # @st.cache_data
 # def get_python_code(filename: str, label: str):
@@ -31,6 +35,9 @@ head_v2()
 model_name = st.text('model: sklearn.linear_model.Linear Regression')
 
 m1: ModelTrainer = getModelTrainer_v2(model_name)
+
+update_progress(30)
+
 
 # python_code = st.file_uploader('Upload Training Python Script', type=['py'])
 
@@ -60,6 +67,9 @@ train_split_ratio = st.number_input(
     max_value=100,
     value=80,
 )
+
+update_progress(50)
+
 # train_split_ratio = 100
 
 if requirements_txt:
@@ -122,6 +132,7 @@ if training_code and dataset:
             st.markdown(html_string, unsafe_allow_html=True)
 
             # st.write(f"Pretrained-Model Score: {score_placeholder * 100:0.3f}%")
+update_progress(100)
 
 if st.button('Train'):
     if not training_code:
