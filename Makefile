@@ -39,7 +39,7 @@ clean:
 docker:
 	docker build -t review-ai .
 
-.PHONY: run install clean setup test
+.PHONY: run install clean setup test activate
 
 poetry-export:
 	poetry export --with dev --format requirements.txt --output requirements.txt
