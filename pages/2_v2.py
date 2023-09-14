@@ -6,11 +6,13 @@ from dotenv import load_dotenv
 from sklearn.linear_model import LinearRegression
 
 from enums.model_trainer import ModelTrainer
-from models.model import c, getModelTrainer
-from utils.format_display_code import format_python_code
-from utils.install_deps import install_dependencies
-from views.head import head
-from views.train import train
+from models.model import c, getModelTrainer_v2
+from utils.format_display_code import format_python_code_v2
+from utils.install_deps import install_dependencies_v2
+from views.head import head_v2
+from views.train import train_v2
+
+st.sidebar.header('v2')
 
 st.set_page_config(
     page_title='Decenter AI',
@@ -19,7 +21,7 @@ st.set_page_config(
 
 load_dotenv()
 
-head()
+head_v2()
 
 # @st.cache_data
 # def get_python_code(filename: str, label: str):
@@ -28,7 +30,7 @@ head()
 # model_name = st.text_input('Enter a model name: ', value=f'model')
 model_name = st.text('model: sklearn.linear_model.Linear Regression')
 
-m1: ModelTrainer = getModelTrainer(model_name)
+m1: ModelTrainer = getModelTrainer_v2(model_name)
 
 # python_code = st.file_uploader('Upload Training Python Script', type=['py'])
 
@@ -41,7 +43,7 @@ with open('examples/sample1/linear-regression.py') as f1:
 
 if training_code and st.checkbox('Show Code'):
     # display_code = format_python_code(python_code.getvalue().decode())
-    display_code = format_python_code(training_code)
+    display_code = format_python_code_v2(training_code)
     st.code(display_code, language='python')
 
 dataset = st.file_uploader('Upload Dataset', type=['csv'])
@@ -66,7 +68,7 @@ if requirements_txt:
         uploaded_file = requirements_txt
         return uploaded_file
     # requirements_txt.getvalue().decode().split('\n')
-    install_dependencies(requirements_txt)
+    install_dependencies_v2(requirements_txt)
 
     # FIXME: add icon william
     # st.download_button(
@@ -130,5 +132,5 @@ if st.button('Train'):
 
     if training_code and dataset:
         st.snow()
-        train(model_name)
+        train_v2(model_name)
         st.balloons()
