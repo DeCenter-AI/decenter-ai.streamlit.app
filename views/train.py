@@ -52,12 +52,6 @@ def train(model_name: str):  # if python_code and dataset:
     #     score = m1.calculate_score(m1.trained_model, m1.X, m1.y)
     #     st.write(f"Trained Model Score: {score * 100:0.3f}")
 
-    st.download_button(
-        label='Download trained model',
-        data=model_bytes,
-        file_name=fName,
-    )
-
 
 def train_v1(model_name: str):  # if python_code and dataset:
     m1 = getModelTrainer_v1(model_name)
