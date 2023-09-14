@@ -33,7 +33,7 @@ clean:
 	@find . -type d -name '.pytest_cache' -exec rm -rf {} +
 	@find . -type d -name 'testcache' -exec rm -rf {} +
 	@find . -type d -name '.benchmarks' -exec rm -rf {} +
-	@find . -type f -name '<_io.BytesIO object at*' -exec rm -f {} +
+	# @find . -type f -name '<_io.BytesIO object at*' -exec rm -f {} +
 	@find . -type f -name '*.log' -exec rm -f {} +
 
 docker:
