@@ -29,7 +29,7 @@ head()
 
 model_name = st.text_input(
     'Enter the model name: ',
-    value=f'model-{dt.datetime.now().strftime("%d-%m-%Y-%H:%M:%S")}',
+    value=f'decenter-model-{dt.datetime.now().strftime("%d-%m-%Y-%H:%M:%S")}',
 )
 
 input_archive = st.file_uploader(
@@ -117,7 +117,7 @@ if starter_notebook and st.button('Execute'):
     with open(zipfile_, 'rb') as f1:
         st.download_button(
             label='download working directory',
-            data=f1, file_name=os.path.basename(zipfile_),
+            data=f1, file_name=f'decenter-{os.path.basename(zipfile_)}',
         )
 
     if hasattr(temp_dir, 'cleanup'):
