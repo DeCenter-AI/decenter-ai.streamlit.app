@@ -5,7 +5,9 @@ import subprocess
 import tempfile
 import zipfile
 
+import pip
 import streamlit as st
+import venv
 from dotenv import load_dotenv
 
 from utils.archive import archive_directory
@@ -36,7 +38,7 @@ input_archive = st.file_uploader(
     'Upload working directory of notebook', type=['zip'],
 )
 
-starter_notebook: str
+starter_script: str  # notebook or python_script
 
 temp_dir: str | tempfile.TemporaryDirectory
 
@@ -46,8 +48,8 @@ if not input_archive:
     temp_dir = 'examples/sample_v3'
 else:
     temp_dir = tempfile.TemporaryDirectory()
-    # Save the uploaded archive to a temporary file
-    temp_file_path = temp_dir + '/input_archive.zip'
+
+    temp_file_path = os.path.join(temp_dir, '/input_archive.zip')
     with open(temp_file_path, 'wb') as temp_file:
         temp_file.write(input_archive.read())
 
@@ -75,32 +77,110 @@ def find_notebooks(path):
     return notebooks
 
 
+def find_notebook_scripts(path):
+    driver_codes = []
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if file.endswith('.ipynb') or file.endswith('.py'):
+                rel_path = os.path.relpath(os.path.join(root, file), path)
+                driver_codes.append(rel_path)
+                # notebooks.append(os.path.join(root, file))
+    return driver_codes
+
+
 if temp_dir:
     print('temp_dir is ', temp_dir)
     temp_dir_contents = os.listdir(temp_dir)
     print('temp_dir contains', temp_dir_contents)  # FIXME error
     # notebooks = [f for f in os.listdir(temp_dir) if f.endswith('.ipynb')]
-    notebooks = find_notebooks(temp_dir)
+    driver_scripts = find_notebook_scripts(temp_dir)
 
-    starter_notebook = st.selectbox('Select a notebook:', notebooks)
+    starter_script = st.selectbox('Select a notebook:', driver_scripts)
 
 
-if starter_notebook and st.button('Execute'):
-
-    logging.info('starter-notebook', starter_notebook)
-
-    st.snow()
-
+def run_notebook():
     # It will save executed notebook to your-notebook.nbconvert.ipynb file. You can specify the custom output name and custom output director
     cmd_string = 'jupyter nbconvert --execute --to notebook --output custom-name --output-dir /custom/path/ your-notebook.ipynb'
 
     cmd_string = 'jupyter nbconvert --execute --to notebook --allow-errors your-notebook.ipynb'
     #  You can execute the notebook and save output into PDF or HTML format. Additionally, you can hide code in the final notebook. The example command that will execute notebook and save it as HTML file with code hidden.
-    cmd_string = f'jupyter nbconvert --execute --to html --no-input {starter_notebook}'
-    cmd_string = f'jupyter nbconvert --execute --to html  {starter_notebook}'
+    cmd_string = f'jupyter nbconvert --execute --to html --no-input {starter_script}'
+    cmd_string = f'jupyter nbconvert --execute --to html  {starter_script}'
 
     # cmd_string = f'jupyter nbconvert --execute --to notebook {starter_notebook}'
     command = cmd_string.split(' ')
+
+    return command
+
+
+def run_python_script(python_interpreter='python3'):
+    command = [python_interpreter, starter_script]
+    return command
+
+
+def find_requirements_txt_files(root_directory):
+    requirements_files = []
+
+    for root, dirs, files in os.walk(root_directory):
+        for file in files:
+            if file.endswith('.txt') and file.startswith('requirements'):
+                rel_path = os.path.relpath(os.path.join(root, file), path)
+                requirements_files.append(rel_path)
+
+    return requirements_files
+
+
+execution_modes = {
+    '.py': run_python_script,
+    '.ipynb': run_notebook,
+}
+
+
+def install_dependencies(requirements_path):
+    pip.main(['install', '-r', requirements_path])
+
+
+if starter_script and st.button('Execute'):
+
+    # TODO: revive python script, requirements.txt from v1
+    script_ext = os.path.splitext(starter_script)[1]
+
+    match (script_ext):
+        case '.py':
+            available_requirement_files = find_requirements_txt_files(temp_dir)
+            requirements = st.selectbox(
+                'Select dependencies to install', available_requirement_files)
+
+            venv_dir: str = None
+
+            python_repl = 'python3'
+
+            if requirements:
+                venv_dir = os.path.join(temp_dir, 'venv')
+                venv.create(venv_dir, with_pip=True)
+
+                activate_this = os.path.join(
+                    venv_dir, 'bin', 'activate_this.py')
+                with open(activate_this) as file_:
+                    exec(file_.read(), dict(__file__=activate_this))
+
+                requirements_path = os.path.join(temp_dir, requirements)
+                install_dependencies(requirements_path)
+
+                python_repl = f'{python_repl}/venv/bin/python3'
+
+            command = run_python_script(python_interpreter=python_repl)
+
+        case '.ipynb':
+            command = run_notebook()
+
+        case _:
+            raise Exception(f'invalid script-{script_ext}')
+
+    logging.info('starter-script', starter_script)
+
+    st.snow()
+
     # command = ['jupyter', 'nbconvert', '--to', 'notebook', '--execute', f'{temp_dir}/{starter_notebook}', '--no-browser', '--notebook-dir', temp_dir]
     with st.spinner():
         result = subprocess.run(command, capture_output=True, encoding='UTF-8')
@@ -116,7 +196,7 @@ if starter_notebook and st.button('Execute'):
 
     with open(zipfile_, 'rb') as f1:
         st.download_button(
-            label='download working directory',
+            label='Download Working Directory',
             data=f1, file_name=f'decenter-{os.path.basename(zipfile_)}',
         )
 
