@@ -64,3 +64,5 @@ You can modify this file as per your specific requirements.
 .env.*
 
 *.sav
+
+*.zip

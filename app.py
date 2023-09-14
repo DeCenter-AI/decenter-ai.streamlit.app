@@ -1,5 +1,7 @@
 import datetime as dt
+import logging
 import os.path
+import subprocess
 
 import streamlit as st
 from dotenv import load_dotenv
@@ -57,22 +59,28 @@ if temp_dir:
 
     starter_notebook = st.selectbox('Select a notebook:', notebooks)
 
-if starter_notebook:
-    pass
-    # command = ['jupyter', 'nbconvert', '--to', 'notebook', '--execute', f'{temp_dir}/{notebook_name}', '--no-browser', '--notebook-dir', temp_dir]
-    #
-    # result = subprocess.run(command, capture_output=True, encoding='UTF-8')
-    #
-    # print(result.stdout)
-    # print(result.stderr)
 
-    # with tempfile.TemporaryDirectory() as temp_dir:
-    #     shutil.copy(notebook_path, temp_dir)
+if starter_notebook and st.button('Execute'):
 
-if st.button('Execute'):
+    logging.info('starter-notebook', starter_notebook)
+
     st.snow()
 
-    # temp_dir = '' #FIXME:
+    # It will save executed notebook to your-notebook.nbconvert.ipynb file. You can specify the custom output name and custom output director
+    cmd_string = 'jupyter nbconvert --execute --to notebook --output custom-name --output-dir /custom/path/ your-notebook.ipynb'
+
+    cmd_string = 'jupyter nbconvert --execute --to notebook --allow-errors your-notebook.ipynb'
+    #  You can execute the notebook and save output into PDF or HTML format. Additionally, you can hide code in the final notebook. The example command that will execute notebook and save it as HTML file with code hidden.
+    cmd_string = 'jupyter nbconvert --execute --to html --no-input your-notebook.ipynb'
+
+    cmd_string = f'jupyter nbconvert --execute --to notebook {starter_notebook}'
+    command = cmd_string.split(' ')
+    # command = ['jupyter', 'nbconvert', '--to', 'notebook', '--execute', f'{temp_dir}/{starter_notebook}', '--no-browser', '--notebook-dir', temp_dir]
+    with st.spinner():
+        result = subprocess.run(command, capture_output=True, encoding='UTF-8')
+
+    # print(result.stdout) #TODO: logs trace
+    # print(result.stderr)
 
     zipfile_ = archive_directory(model_name, temp_dir)
 
