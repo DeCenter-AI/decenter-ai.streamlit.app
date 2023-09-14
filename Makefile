@@ -29,7 +29,7 @@ test:
 	@echo "testing complete"
 
 clean:
-	@echo "cleaning"
+	@echo "clean all temp folders"
 	@find . -type d -name '.pytest_cache' -exec rm -rf {} +
 	@find . -type d -name 'testcache' -exec rm -rf {} +
 	@find . -type d -name '.benchmarks' -exec rm -rf {} +
