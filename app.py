@@ -74,10 +74,10 @@ def find_notebooks(path):
 
 if temp_dir:
     print('temp_dir is ', temp_dir)
-    # temp_dir_contents = os.listdir(temp_dir)
-    # print("temp_dir contains", temp_dir_contents) #FIXME error
-    notebooks = [f for f in os.listdir(temp_dir) if f.endswith('.ipynb')]
-    # notebooks = find_notebooks(temp_dir)
+    temp_dir_contents = os.listdir(temp_dir)
+    print('temp_dir contains', temp_dir_contents)  # FIXME error
+    # notebooks = [f for f in os.listdir(temp_dir) if f.endswith('.ipynb')]
+    notebooks = find_notebooks(temp_dir)
 
     starter_notebook = st.selectbox('Select a notebook:', notebooks)
 
