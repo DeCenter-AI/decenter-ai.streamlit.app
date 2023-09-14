@@ -2,6 +2,8 @@ import datetime as dt
 import logging
 import os.path
 import subprocess
+import tempfile
+import zipfile
 
 import streamlit as st
 from dotenv import load_dotenv
@@ -39,7 +41,24 @@ if not input_archive:
     st.warning('input archive not found: using sample')
     input_archive = 'examples/sample_v3'
     temp_dir = 'examples/sample_v3'
-    notebook_name = 'linear-regression.ipynb'
+else:
+    with tempfile.TemporaryDirectory() as temp_dir:
+        # Save the uploaded archive to a temporary file
+        temp_file_path = temp_dir + '/input_archive.zip'
+        with open(temp_file_path, 'wb') as temp_file:
+            temp_file.write(input_archive.read())
+
+        # Extract the contents of the archive to the temporary directory
+        with zipfile.ZipFile(temp_file_path, 'r') as zip_ref:
+            zip_ref.extractall(temp_dir)
+
+        # At this point, the contents of the archive are extracted to the temporary directory
+        # You can access the extracted files using the 'temp_dir' path
+
+        # Example: Print the list of extracted files
+        import os
+        extracted_files = os.listdir(temp_dir)
+        print('extracted:', extracted_files)
 
 
 def find_notebooks(path):
@@ -54,8 +73,11 @@ def find_notebooks(path):
 
 
 if temp_dir:
-    # notebooks = [f for f in os.listdir(temp_dir) if f.endswith('.ipynb')]
-    notebooks = find_notebooks(temp_dir)
+    print('temp_dir is ', temp_dir)
+    # temp_dir_contents = os.listdir(temp_dir)
+    # print("temp_dir contains", temp_dir_contents) #FIXME error
+    notebooks = [f for f in os.listdir(temp_dir) if f.endswith('.ipynb')]
+    # notebooks = find_notebooks(temp_dir)
 
     starter_notebook = st.selectbox('Select a notebook:', notebooks)
 
