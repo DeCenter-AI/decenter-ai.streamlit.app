@@ -17,7 +17,7 @@ st.set_page_config(
     page_icon='static/favicon.ico',
 )
 
-st.sidebar.header('v3:beta')
+st.sidebar.header('v3-beta')
 
 load_dotenv()
 
