@@ -36,6 +36,7 @@ input_archive = st.file_uploader('Upload Archive', type=['zip'])
 
 starter_notebook: str
 
+temp_dir: str | tempfile.TemporaryDirectory
 
 if not input_archive:
     st.warning('input archive not found: using sample')
@@ -116,3 +117,7 @@ if starter_notebook and st.button('Execute'):
             label='download working directory',
             data=f1, file_name=os.path.basename(zipfile_),
         )
+
+    if hasattr(temp_dir, 'cleanup'):
+        print('cleaning up the temp dirctory')
+        temp_dir.cleanup()
