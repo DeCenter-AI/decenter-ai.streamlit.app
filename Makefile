@@ -7,15 +7,18 @@ setup:
 	pre-commit autoupdate
 
 install:
-	@ pip install --upgrade pip
-	@ pip install -r requirements.txt
+	# @ pip install --upgrade pip
+	# @ pip install -r requirements.txt
+	@pip install poetry
+	@poetry install
 
 run:
   # @source venv/bin/activate
 	@venv/bin/python -m streamlit run main.py
 
 install-tests:
-	@python -m pip install -r requirements-test.txt
+	# @python -m pip install -r requirements-test.txt
+	@make install
 
 test:
 	@pytest -p no:cacheprovider
