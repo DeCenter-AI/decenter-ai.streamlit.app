@@ -11,7 +11,7 @@ install:
 	@ pip install -r requirements.txt
 
 run:
-  # @source venv/bin/activate     
+  # @source venv/bin/activate
 	@venv/bin/python -m streamlit run main.py
 
 install-tests:
@@ -33,3 +33,6 @@ docker:
 	docker build -t review-ai .
 
 .PHONY: run install clean setup test
+
+poetry-export:
+	poetry export --with dev --format requirements.txt --output requirements.txt
