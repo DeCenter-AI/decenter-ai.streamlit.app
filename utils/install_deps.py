@@ -22,6 +22,22 @@ def install_dependencies(requirements_txt):
 
 
 @st.cache_resource
+def install_dependencies_v1(requirements_txt):
+    if not requirements_txt:
+        return
+    requirements = requirements_txt
+
+    def install(package):
+        subprocess.check_call(
+            [sys.executable, '-m', 'pip', 'install', package],
+        )
+
+    # Use a ThreadPoolExecutor to install the packages in parallel
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        executor.map(install, requirements)
+
+
+@st.cache_resource
 def install_dependencies_v2(requirements_txt):
     if not requirements_txt:
         return

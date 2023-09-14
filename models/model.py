@@ -17,5 +17,9 @@ def getModelTrainer(model_name: str) -> ModelTrainer:
     return c.get(model_name)
 
 
+def getModelTrainer_v1(model_name: str) -> ModelTrainer:
+    return c.get(model_name)
+
+
 def getModelTrainer_v2(model_name: str) -> ModelTrainer:
     return c.get(model_name)
