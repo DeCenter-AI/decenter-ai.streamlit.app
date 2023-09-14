@@ -5,7 +5,6 @@ import subprocess
 import tempfile
 import zipfile
 
-import pip
 import streamlit as st
 import venv
 from dotenv import load_dotenv
@@ -132,8 +131,12 @@ def find_requirements_txt_files(root_directory):
     for root, dirs, files in os.walk(root_directory):
         for file in files:
             if file.endswith('.txt') and file.startswith('requirements'):
-                rel_path = os.path.relpath(os.path.join(root, file), path)
+                rel_path = os.path.relpath(
+                    os.path.join(root, file), root_directory,
+                )
                 requirements_files.append(rel_path)
+
+    logging.info('requirements', requirements_files)
 
     return requirements_files
 
@@ -144,19 +147,28 @@ execution_modes = {
 }
 
 
-def install_dependencies(requirements_path):
-    pip.main(['install', '-r', requirements_path])
+def install_dependencies(python_repl='python3', requirements_path=None):
+
+    if not requirements_path:
+        logging.warning('requirements not found')
+        return
+    logging.info('installing deps')
+    command = [python_repl, '-m', 'pip', 'install', '-r', requirements_path]
+    result = subprocess.run(command, capture_output=True, encoding='UTF-8')
+
+    logging.debug(result.stdout)
+    logging.debug(result.stderr)
+    return result
 
 
-if starter_script and st.button('Execute'):
-
-    # TODO: revive python script, requirements.txt from v1
+if starter_script:
     script_ext = os.path.splitext(starter_script)[1]
 
-    match (script_ext):
+    match script_ext:
         case '.py':
             available_requirement_files = find_requirements_txt_files(
-                temp_dir_path)
+                temp_dir_path,
+            )
             requirements = st.selectbox(
                 'Select dependencies to install', available_requirement_files,
             )
@@ -166,19 +178,17 @@ if starter_script and st.button('Execute'):
             python_repl = 'python3'
 
             if requirements:
-                venv_dir = os.path.join(temp_dir_path, 'venv')
-                venv.create(venv_dir, with_pip=True)
+                with st.spinner('Installing dependencies in progress'):
+                    venv_dir = os.path.join(temp_dir_path, 'venv')
+                    venv.create(venv_dir, with_pip=True)
+                    python_repl = f'venv/bin/python3'
 
-                activate_this = os.path.join(
-                    venv_dir, 'bin', 'activate_this.py',
-                )
-                with open(activate_this) as file_:
-                    exec(file_.read(), dict(__file__=activate_this))
+                    print('venv contains', os.listdir(venv_dir))
 
-                requirements_path = os.path.join(temp_dir_path, requirements)
-                install_dependencies(requirements_path)
-
-                python_repl = f'{python_repl}/venv/bin/python3'
+                    requirements_path = os.path.join(
+                        temp_dir_path, requirements,
+                    )
+                    install_dependencies(python_repl, requirements_path)
 
             command = run_python_script(python_interpreter=python_repl)
 
@@ -187,6 +197,11 @@ if starter_script and st.button('Execute'):
 
         case _:
             raise Exception(f'invalid script-{script_ext}')
+
+
+if command and st.button('Execute'):
+
+    # TODO: revive python script, requirements.txt from v1
 
     logging.info('starter-script', starter_script)
 
