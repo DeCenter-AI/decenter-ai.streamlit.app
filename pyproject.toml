@@ -59,6 +59,7 @@ streamlit = "1.26.0"
 flake8 = "^6.1.0"
 pytest-benchmark = "^4.0.0"
 flake8-in-file-ignores = "^0.2.2"
+pre-commit = "^3.4.0"
 
 [build-system]
 requires = ["poetry-core"]

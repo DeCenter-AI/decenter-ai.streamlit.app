@@ -1,16 +1,17 @@
 setup:
-	pip install pre-commit
-	pre-commit install
-	python -m venv venv
-	source venv/bin/activate
-
+	# pip install pre-commit
+	# pre-commit install
+	# python -m venv venv
+	# source venv/bin/activate
+	@make install
 	pre-commit autoupdate
 
 install:
 	# @ pip install --upgrade pip
 	# @ pip install -r requirements.txt
 	@pip install poetry
-	@poetry install
+	@poetry install --no-root
+
 
 run:
   # @source venv/bin/activate
