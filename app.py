@@ -46,23 +46,31 @@ if not input_archive:
     st.warning('input archive not found: using sample')
     input_archive = 'examples/sample_v3'
     temp_dir = 'examples/sample_v3'
+    temp_dir_path = temp_dir
 else:
     temp_dir = tempfile.TemporaryDirectory()
 
-    temp_file_path = os.path.join(temp_dir, '/input_archive.zip')
+    temp_dir_path = temp_dir.name
+
+    print('temp dir', temp_dir_path)
+
+    temp_file_path = f'{temp_dir.name}/input_archive.zip'
+
+    print('temp file path', temp_file_path)
+
     with open(temp_file_path, 'wb') as temp_file:
         temp_file.write(input_archive.read())
 
     # Extract the contents of the archive to the temporary directory
     with zipfile.ZipFile(temp_file_path, 'r') as zip_ref:
-        zip_ref.extractall(temp_dir)
+        zip_ref.extractall(temp_dir_path)
 
     # At this point, the contents of the archive are extracted to the temporary directory
     # You can access the extracted files using the 'temp_dir' path
 
     # Example: Print the list of extracted files
     import os
-    extracted_files = os.listdir(temp_dir)
+    extracted_files = os.listdir(temp_dir_path)
     print('extracted:', extracted_files)
 
 
@@ -90,10 +98,10 @@ def find_notebook_scripts(path):
 
 if temp_dir:
     print('temp_dir is ', temp_dir)
-    temp_dir_contents = os.listdir(temp_dir)
+    temp_dir_contents = os.listdir(temp_dir_path)
     print('temp_dir contains', temp_dir_contents)  # FIXME error
     # notebooks = [f for f in os.listdir(temp_dir) if f.endswith('.ipynb')]
-    driver_scripts = find_notebook_scripts(temp_dir)
+    driver_scripts = find_notebook_scripts(temp_dir_path)
 
     starter_script = st.selectbox('Select a notebook:', driver_scripts)
 
@@ -147,24 +155,27 @@ if starter_script and st.button('Execute'):
 
     match (script_ext):
         case '.py':
-            available_requirement_files = find_requirements_txt_files(temp_dir)
+            available_requirement_files = find_requirements_txt_files(
+                temp_dir_path)
             requirements = st.selectbox(
-                'Select dependencies to install', available_requirement_files)
+                'Select dependencies to install', available_requirement_files,
+            )
 
             venv_dir: str = None
 
             python_repl = 'python3'
 
             if requirements:
-                venv_dir = os.path.join(temp_dir, 'venv')
+                venv_dir = os.path.join(temp_dir_path, 'venv')
                 venv.create(venv_dir, with_pip=True)
 
                 activate_this = os.path.join(
-                    venv_dir, 'bin', 'activate_this.py')
+                    venv_dir, 'bin', 'activate_this.py',
+                )
                 with open(activate_this) as file_:
                     exec(file_.read(), dict(__file__=activate_this))
 
-                requirements_path = os.path.join(temp_dir, requirements)
+                requirements_path = os.path.join(temp_dir_path, requirements)
                 install_dependencies(requirements_path)
 
                 python_repl = f'{python_repl}/venv/bin/python3'
@@ -188,7 +199,7 @@ if starter_script and st.button('Execute'):
     # print(result.stdout) #TODO: logs trace
     # print(result.stderr)
 
-    zipfile_ = archive_directory(model_name, temp_dir)
+    zipfile_ = archive_directory(model_name, temp_dir_path)
 
     st.toast('executed the notebook successfully')
 
