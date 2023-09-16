@@ -43,3 +43,7 @@ docker:
 
 poetry-export:
 	poetry export --with dev --format requirements.txt --output requirements.txt
+
+
+zip_examples:
+	zip -r sample_v2 .
