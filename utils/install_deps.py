@@ -26,7 +26,7 @@ def install_deps(python_repl=sys.executable, requirements: list = None, cwd=None
 
 
 @st.cache_resource
-def install_dependencies(python_repl='python3', requirements_path=None, requirements=None, cwd=None):
+def install_dependencies(python_repl=sys.executable, requirements_path=None, requirements=None, cwd=None):
 
     if requirements:
         logging.info('install_dependencies:')
