@@ -42,11 +42,10 @@ docker-build:
 .PHONY: run install clean setup test activate docker-build
 
 poetry-export:
-	poetry export --with dev --format requirements.txt --output requirements.txt
+	poetry export --with dev --format requirements.txt --output requirements-poetry.txt
 
 export:
 	conda env export --name ml > environment.yml export
-
 
 zip_examples:
 	zip -r sample_v2 .

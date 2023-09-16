@@ -6,4 +6,4 @@ dependencies:
   - pip
   - poetry
   - pip:
-      - -r requirements.txt
+      - -r requirements-poetry.txt
