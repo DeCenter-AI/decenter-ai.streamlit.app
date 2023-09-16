@@ -153,7 +153,11 @@ if training_cmd and st.button('Execute'):
             st.error(result.stderr)
 
         if EXECUTION_LANG is TRAINER_PYTHON_NB:
-            if not os.path.exists(os.path.join(temp_dir_path, f'{starter_script}.html')):
+            out = f'{starter_script}.html'
+            if os.path.exists(os.path.join(temp_dir_path, f'{starter_script}.html')):
+                st.info(f'notebook: output generated at {out}')
+                print(f'notebook: output generated at {out}')
+            else:
                 st.error('notebook: execution failed')
                 print('notebook:', 'execution failed')
 
