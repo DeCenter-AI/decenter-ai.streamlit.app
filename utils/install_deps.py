@@ -29,14 +29,14 @@ def install_deps(python_repl=sys.executable, requirements: list = None, cwd=None
 def install_dependencies(python_repl='python3', requirements_path=None, requirements=None, cwd=None):
 
     if requirements:
-        logging.info('install deps:')
+        logging.info('install_dependencies:')
         install_deps(python_repl, requirements, cwd)
 
     if not requirements_path:
-        logging.warning('requirements_path not found')
+        logging.warning('install_dependencies:requirements_path not found')
         return
 
-    print('installing deps for ', python_repl)
+    print('installing dependencies:  for ', python_repl)
     command = [python_repl, '-m', 'pip', 'install', '-r', requirements_path]
     result = subprocess.run(
         command, cwd=cwd, capture_output=True, encoding='UTF-8',
