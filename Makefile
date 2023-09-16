@@ -44,6 +44,9 @@ docker-build:
 poetry-export:
 	poetry export --with dev --format requirements.txt --output requirements.txt
 
+export:
+	conda env export --name ml > environment.yml export
+
 
 zip_examples:
 	zip -r sample_v2 .
