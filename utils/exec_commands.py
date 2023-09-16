@@ -5,7 +5,7 @@ def get_notebook_cmd(starter_script: str, python_repl=None):
     cmd_string = 'jupyter nbconvert --execute --to notebook --allow-errors your-notebook.ipynb'
     #  You can execute the notebook and save output into PDF or HTML format. Additionally, you can hide code in the final notebook. The example command that will execute notebook and save it as HTML file with code hidden.
     cmd_string = f'jupyter nbconvert --execute --to html --no-input {starter_script}'
-    cmd_string = f'jupyter nbconvert --execute --to html  {starter_script}'
+    cmd_string = f'jupyter nbconvert --execute --to html --output {starter_script} {starter_script}'
 
     # cmd_string = f'jupyter nbconvert --execute --to notebook {starter_notebook}'
     command = cmd_string.split(' ')
