@@ -139,6 +139,8 @@ if starter_script:
         case '.ipynb':
             EXECUTION_LANG: str = TRAINER_PYTHON_NB
 
+            python_repl = sys.executable
+
             # install_deps(
             #     python_repl, requirements="""
             #     """.strip().split(' '), cwd=temp_dir_path,
