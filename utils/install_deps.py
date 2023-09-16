@@ -18,8 +18,8 @@ def install_dependencies(python_repl='python3', requirements_path=None, cwd=None
         command, cwd=cwd, capture_output=True, encoding='UTF-8',
     )
 
-    logging.debug(result.stdout)
-    logging.debug(result.stderr)
+    logging.info(result.stdout)
+    logging.info(result.stderr)
     return result
 
 
