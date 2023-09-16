@@ -37,7 +37,7 @@ clean:
 	@find . -type f -name '*.log' -exec rm -f {} +
 
 docker-build:
-	docker build -t review-ai .
+	docker build -t  decenter.streamlit .
 
 .PHONY: run install clean setup test activate docker-build
 

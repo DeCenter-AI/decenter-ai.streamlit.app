@@ -14,18 +14,18 @@ affordably through decentralized parallel training mechanisms.
 
 - [decenter.streamlit.app](#decenterstreamlitapp)
 - [DeCenter AI](#decenter-ai)
-  - [Description](#description)
-  - [Table of Contents](#table-of-contents)
-  - [Prerequisites](#prerequisites)
-  - [How to Run with Python3](#how-to-run-with-python3)
-  - [How to Run via Docker](#how-to-run-via-docker)
-  - [Overview](#overview)
-    - [Features](#features)
-    - [Target Customers](#target-customers)
-    - [Benefits](#benefits)
-  - [Hackathon](#hackathon)
-  - [How to use the demo](#how-to-use-the-demo)
-  - [Backend Workflow](#backend-workflow)
+    - [Description](#description)
+    - [Table of Contents](#table-of-contents)
+    - [Prerequisites](#prerequisites)
+    - [How to Run with Python3](#how-to-run-with-python3)
+    - [How to Run via Docker](#how-to-run-via-docker)
+    - [Overview](#overview)
+        - [Features](#features)
+        - [Target Customers](#target-customers)
+        - [Benefits](#benefits)
+    - [Hackathon](#hackathon)
+    - [How to use the demo](#how-to-use-the-demo)
+    - [Backend Workflow](#backend-workflow)
 - [DeCenter AI Model Training Workflow](#decenter-ai-model-training-workflow)
     - [Organization (Data Scientists, ML Engineers, AI Engineers, Model Trainers)](#organization-data-scientists-ml-engineers-ai-engineers-model-trainers)
     - [NFTs Certifications](#nfts-certifications)
@@ -35,12 +35,12 @@ affordably through decentralized parallel training mechanisms.
     - [Hyperledger Fabric](#hyperledger-fabric)
     - [BNB Greenfield](#bnb-greenfield)
     - [User](#user)
-  - [How to Contribute](#how-to-contribute)
-  - [License](#license)
-  - [Authors](#authors)
-  - [Acknowledgments](#acknowledgments)
-  - [Support](#support)
-  - [Links](#links)
+    - [How to Contribute](#how-to-contribute)
+    - [License](#license)
+    - [Authors](#authors)
+    - [Acknowledgments](#acknowledgments)
+    - [Support](#support)
+    - [Links](#links)
 
 ## Prerequisites
 
@@ -69,8 +69,8 @@ To run using `Python` and `make`, follow these steps:
 To run the project using `Docker`, follow these steps:
 
 ```shell
-docker build -t app .
-docker run -p 8501:8501 app
+docker build -t decenter.streamlit .
+docker run -p 8501:8501 decenter.streamlit
 ```
 
 > For developers,
