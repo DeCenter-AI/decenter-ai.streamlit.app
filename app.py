@@ -94,7 +94,7 @@ else:
 
 
 driver_scripts = find_driver_scripts(temp_dir_path)
-starter_script = st.selectbox('Driver Script:', driver_scripts)
+starter_script = st.selectbox('Training Script:', driver_scripts)
 
 if starter_script:
     script_ext = os.path.splitext(starter_script)[1]
@@ -143,7 +143,7 @@ if starter_script:
         case _:
             raise Exception(f'invalid script-{script_ext}')
 
-if training_cmd and st.button('Execute'):
+if training_cmd and st.button('Train'):
 
     print(starter_script)
 

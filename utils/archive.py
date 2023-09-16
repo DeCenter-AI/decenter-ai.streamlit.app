@@ -1,3 +1,4 @@
+import logging
 import os
 
 from icecream import ic
@@ -12,6 +13,7 @@ def archive_directory(archive_name: str, src_dir: str, base_dir: str = None, for
 
     created_archive_loc = shutil.make_archive(
         archive_name, format, src_dir, base_dir, True,
+        logger=logging.getLogger(),
     )
 
     ic(created_archive_loc)

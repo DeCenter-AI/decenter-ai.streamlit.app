@@ -1,14 +1,7 @@
+beautifulsoup4
 bokeh
 fastai
 gensim
-
-# Database Interaction
-# sqlalchemy
-# psycopg2
-#
-# # Web Scraping and Data Retrieval
-# requests
-# beautifulsoup4
 
 # General Utilities
 ipykernel
@@ -28,6 +21,13 @@ pandas
 
 # Data Visualization
 plotly
+
+# Database Interaction
+# sqlalchemy
+# psycopg2
+#
+# # Web Scraping and Data Retrieval
+requests
 scikit-learn
 scipy
 seaborn
