@@ -136,8 +136,8 @@ if training_cmd and st.button('Execute'):
             training_cmd, cwd=temp_dir_path, capture_output=True, encoding='UTF-8',
         )
 
-    # print(result.stdout) #TODO: logs trace
-    # print(result.stderr)
+        logging.info(result.stdout)  # TODO: logs trace
+        logging.info(result.stderr)
 
     zipfile_ = archive_directory(model_name, temp_dir_path)
 
