@@ -127,9 +127,9 @@ if starter_script:
             EXECUTION_LANG: str = TRAINER_PYTHON_NB
 
             install_dependencies(
-                python_repl, requirements=[
-                    'jupyter',
-                ], cwd=temp_dir_path,
+                python_repl, requirements="""
+                jupyter pandas numpy torch tensorflow scikit-learn matplotlib seaborn keras xgboost
+                """.strip().split(' '), cwd=temp_dir_path,
             )
 
             training_cmd = get_notebook_cmd(starter_script, python_repl)

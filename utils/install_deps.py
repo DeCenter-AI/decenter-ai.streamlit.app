@@ -15,6 +15,9 @@ def install_deps(python_repl=sys.executable, requirements: list = None, cwd=None
     def install(package):
         subprocess.check_call(
             [python_repl, '-m', 'pip', 'install', package],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
         )
     # Use a ThreadPoolExecutor to install the packages in parallel
     with concurrent.futures.ThreadPoolExecutor() as executor:
