@@ -6,11 +6,29 @@ import sys
 import streamlit as st
 
 
+def install_deps(python_repl=sys.executable, requirements: list = None, cwd=None):
+    if not requirements:
+        return
+
+    logging.info('install_deps', requirements)
+
+    def install(package):
+        subprocess.check_call(
+            [python_repl, '-m', 'pip', 'install', package],
+        )
+    # Use a ThreadPoolExecutor to install the packages in parallel
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        executor.map(install, requirements)
+
+
 @st.cache_resource
-def install_dependencies(python_repl='python3', requirements_path=None, cwd=None):
+def install_dependencies(python_repl='python3', requirements_path=None, requirements=None, cwd=None):
 
     if not requirements_path:
-        logging.warning('requirements not found')
+        logging.warning('requirements_path not found')
+        if requirements is not None:
+            logging.info('installing requirements')
+            install_deps()
         return
     print('installing deps for ', python_repl)
     command = [python_repl, '-m', 'pip', 'install', '-r', requirements_path]
