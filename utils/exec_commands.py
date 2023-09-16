@@ -1,4 +1,7 @@
-def get_notebook_cmd(starter_script: str, python_repl=None):
+import sys
+
+
+def get_notebook_cmd(starter_script: str, python_repl=sys.executable):
     # It will save executed notebook to your-notebook.nbconvert.ipynb file. You can specify the custom output name and custom output director
     cmd_string = 'jupyter nbconvert --execute --to notebook --output custom-name --output-dir /custom/path/ your-notebook.ipynb'
 
@@ -16,6 +19,6 @@ def get_notebook_cmd(starter_script: str, python_repl=None):
     return command
 
 
-def get_python_cmd(starter_script, python_interpreter='python3'):
+def get_python_cmd(starter_script, python_interpreter=sys.executable):
     command = [python_interpreter, starter_script]
     return command
