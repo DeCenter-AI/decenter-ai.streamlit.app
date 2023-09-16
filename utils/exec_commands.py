@@ -1,3 +1,21 @@
-version https: // git-lfs.github.com/spec/v1
-oid sha256: 5c87bd367879375b4faf7cdcb9714bdfef9472f9e49fa6be12f3370cde9c427f
-size 1172
+def get_notebook_cmd(starter_script: str, python_repl=None):
+    # It will save executed notebook to your-notebook.nbconvert.ipynb file. You can specify the custom output name and custom output director
+    cmd_string = 'jupyter nbconvert --execute --to notebook --output custom-name --output-dir /custom/path/ your-notebook.ipynb'
+
+    cmd_string = 'jupyter nbconvert --execute --to notebook --allow-errors your-notebook.ipynb'
+    #  You can execute the notebook and save output into PDF or HTML format. Additionally, you can hide code in the final notebook. The example command that will execute notebook and save it as HTML file with code hidden.
+    cmd_string = f'jupyter nbconvert --execute --to html --no-input {starter_script}'
+    cmd_string = f'jupyter nbconvert --execute --to html  {starter_script}'
+
+    # cmd_string = f'jupyter nbconvert --execute --to notebook {starter_notebook}'
+    command = cmd_string.split(' ')
+
+    if python_repl is not None:
+        command = [python_repl, '-m'] + command
+
+    return command
+
+
+def get_python_cmd(starter_script, python_interpreter='python3'):
+    command = [python_interpreter, starter_script]
+    return command
