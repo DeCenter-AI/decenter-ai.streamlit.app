@@ -109,7 +109,7 @@ if starter_script:
             requirements = st.selectbox(
                 'Select dependencies to install', available_requirement_files,
             )
-            if not requirements:
+            if not requirements and not DEMO_MODE:
                 requirements = os.path.join(os.getcwd(), 'requirements-ml.txt')
 
             if requirements:
