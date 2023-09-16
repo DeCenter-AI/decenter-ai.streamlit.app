@@ -20,6 +20,14 @@ st.set_page_config(
     page_title='Decenter AI',
     page_icon='static/favicon.ico',
 )
+
+
+@st.cache_resource
+def get_temp_zip_dir():
+    temp_dir = tempfile.TemporaryDirectory()
+    return temp_dir.name
+
+
 setup_log()
 
 st.sidebar.header('v3-beta')
@@ -40,6 +48,8 @@ input_archive = st.file_uploader(
 starter_script: str  # notebook or python_script
 
 temp_dir: str | tempfile.TemporaryDirectory
+
+temp_zip_dir = get_temp_zip_dir()
 
 python_repl: str = sys.executable
 
@@ -85,7 +95,7 @@ else:
     venv_dir = os.path.join(temp_dir_path, 'venv')
     venv.create(
         venv_dir, system_site_packages=True,
-        with_pip=True, symlinks=False,
+        with_pip=True, symlinks=True,
     )
 
     logging.info('created venv dir')
@@ -149,6 +159,7 @@ if training_cmd and st.button('Train'):
 
     st.snow()
 
+    EXECUTION_SUCCESS = True
     # command = ['jupyter', 'nbconvert', '--to', 'notebook', '--execute', f'{temp_dir}/{starter_notebook}', '--no-browser', '--notebook-dir', temp_dir]
     with st.spinner():
         result = subprocess.run(
@@ -170,20 +181,25 @@ if training_cmd and st.button('Train'):
                 st.info(f'notebook: output generated at {out}')
                 print(f'notebook: output generated at {out}')
             else:
+                EXECUTION_SUCCESS = False
                 st.error('notebook: execution failed')
                 print('notebook:', 'execution failed')
 
-    zipfile_ = archive_directory(model_name, temp_dir_path)
-
-    st.toast('executed the notebook successfully')
-
-    st.balloons()
-
-    with open(zipfile_, 'rb') as f1:
-        st.download_button(
-            label='Download Working Directory',
-            data=f1, file_name=f'decenter-{os.path.basename(zipfile_)}',
+    if EXECUTION_SUCCESS:
+        zipfile_ = archive_directory(
+            f'{temp_zip_dir}/{model_name}', temp_dir_path,
         )
+        # zipfile_ = archive_directory_in_memory(temp_dir_path)
+
+        st.toast('executed the notebook successfully')
+
+        st.balloons()
+
+        with open(zipfile_, 'rb') as f1:
+            st.download_button(
+                label='Download Working Directory',
+                data=f1, file_name=f'decenter-{os.path.basename(zipfile_)}',
+            )
 
     if hasattr(temp_dir, 'cleanup'):
         print('cleaning up the temp dirctory')

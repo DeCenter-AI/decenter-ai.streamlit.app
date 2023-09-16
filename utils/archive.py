@@ -4,7 +4,7 @@ import os
 from icecream import ic
 
 
-def archive_directory(archive_name: str, src_dir: str, base_dir: str = None, format='zip') -> str:
+def archive_directory(archive_path_name: str, src_dir: str, base_dir: str = None, format='zip') -> str:
     import shutil
 
     # with tempfile.TemporaryDirectory() as temp_dir:
@@ -12,7 +12,7 @@ def archive_directory(archive_name: str, src_dir: str, base_dir: str = None, for
     print('zipping', os.listdir(src_dir))
 
     created_archive_loc = shutil.make_archive(
-        archive_name, format, src_dir, base_dir, True,
+        archive_path_name, format, src_dir, base_dir, True,
         logger=logging.getLogger(),
     )
 
@@ -21,25 +21,25 @@ def archive_directory(archive_name: str, src_dir: str, base_dir: str = None, for
     return created_archive_loc
 
 
-def archive_in_mem():
-    import io
-    import zipfile
+# def archive_in_mem():
+#     import io
+#     import zipfile
+#
+#     # Create BytesIO object
+#     in_memory_zip = io.BytesIO()
+#
+#     # Create a ZipFile object
+#     with zipfile.ZipFile(in_memory_zip, 'w') as zf:
+#         zf.writestr('file1.txt', 'This is content of file1')
+#         zf.writestr('file2.txt', 'This is content of file2')
+#
+#     # Get data from BytesIO object
+#     data = in_memory_zip.getvalue()
+#
+#     return zipfile
 
-    # Create BytesIO object
-    in_memory_zip = io.BytesIO()
 
-    # Create a ZipFile object
-    with zipfile.ZipFile(in_memory_zip, 'w') as zf:
-        zf.writestr('file1.txt', 'This is content of file1')
-        zf.writestr('file2.txt', 'This is content of file2')
-
-    # Get data from BytesIO object
-    data = in_memory_zip.getvalue()
-
-    return zipfile
-
-
-def zip_directory(directory):
+def archive_directory_in_memory(directory):
     import io
     import zipfile
     import os
