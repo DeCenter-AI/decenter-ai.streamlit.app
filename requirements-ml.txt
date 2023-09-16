@@ -1,0 +1,40 @@
+bokeh
+fastai
+gensim
+
+# Database Interaction
+# sqlalchemy
+# psycopg2
+#
+# # Web Scraping and Data Retrieval
+# requests
+# beautifulsoup4
+
+# General Utilities
+ipykernel
+joblib
+# Machine Learning Libraries
+jupyter
+
+# Optional libraries for deep learning
+keras
+lightgbm
+matplotlib
+
+# Natural Language Processing (NLP) Libraries
+nltk
+numpy
+pandas
+
+# Data Visualization
+plotly
+pytorch
+scikit-learn
+scipy
+seaborn
+spacy
+
+# Additional tools and utilities
+statsmodels
+tensorflow
+xgboost
