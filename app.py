@@ -109,6 +109,8 @@ if starter_script:
             requirements = st.selectbox(
                 'Select dependencies to install', available_requirement_files,
             )
+            if not requirements:
+                requirements = os.path.join(os.getcwd(), 'requirements-ml.txt')
 
             if requirements:
                 with st.spinner('Installing dependencies in progress'):
