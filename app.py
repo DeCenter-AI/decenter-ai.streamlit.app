@@ -12,7 +12,7 @@ from config.log import setup_log
 from utils.archive import archive_directory
 from utils.exec_commands import get_notebook_cmd, get_python_cmd
 from utils.helper_find import find_requirements_txt_files, find_driver_scripts
-from utils.install_deps import install_dependencies
+from utils.install_deps import install_dependencies, install_deps
 from views.head import head
 
 st.set_page_config(
@@ -126,7 +126,7 @@ if starter_script:
         case '.ipynb':
             EXECUTION_LANG: str = TRAINER_PYTHON_NB
 
-            install_dependencies(
+            install_deps(
                 python_repl, requirements="""
                 jupyter pandas numpy torch tensorflow scikit-learn matplotlib seaborn keras xgboost
                 """.strip().split(' '), cwd=temp_dir_path,
