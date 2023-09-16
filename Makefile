@@ -36,10 +36,10 @@ clean:
 	# @find . -type f -name '<_io.BytesIO object at*' -exec rm -f {} +
 	@find . -type f -name '*.log' -exec rm -f {} +
 
-docker:
+docker-build:
 	docker build -t review-ai .
 
-.PHONY: run install clean setup test activate
+.PHONY: run install clean setup test activate docker-build
 
 poetry-export:
 	poetry export --with dev --format requirements.txt --output requirements.txt

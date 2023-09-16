@@ -94,7 +94,7 @@ else:
 
 
 driver_scripts = find_driver_scripts(temp_dir_path)
-starter_script = st.selectbox('Select a notebook:', driver_scripts)
+starter_script = st.selectbox('Driver Script:', driver_scripts)
 
 if starter_script:
     script_ext = os.path.splitext(starter_script)[1]
