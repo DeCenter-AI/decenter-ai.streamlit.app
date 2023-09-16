@@ -126,6 +126,12 @@ if starter_script:
         case '.ipynb':
             EXECUTION_LANG: str = TRAINER_PYTHON_NB
 
+            install_dependencies(
+                python_repl, requirements=[
+                    'jupyter',
+                ], cwd=temp_dir_path,
+            )
+
             training_cmd = get_notebook_cmd(starter_script, python_repl)
 
         case _:
