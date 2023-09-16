@@ -1,14 +1,13 @@
 import datetime as dt
 import logging
-import os.path
 import subprocess
 import tempfile
 import venv
 import zipfile
 
 import streamlit as st
-from dotenv import load_dotenv
 
+from config.constants import *
 from config.log import setup_log
 from utils.archive import archive_directory
 from utils.exec_commands import get_notebook_cmd, get_python_cmd
@@ -44,6 +43,7 @@ temp_dir: str | tempfile.TemporaryDirectory
 python_repl: str = 'python3'
 
 DEMO_MODE: bool = input_archive is None
+
 
 # DEMO_MODE = st.checkbox('DEMO_MODE') #TODO: wip
 
@@ -100,6 +100,8 @@ if starter_script:
 
     match script_ext:
         case '.py':
+            EXECUTION_LANG: str = TRAINER_PYTHON
+
             available_requirement_files = find_requirements_txt_files(
                 temp_dir_path,
             )
@@ -122,6 +124,8 @@ if starter_script:
             )
 
         case '.ipynb':
+            EXECUTION_LANG: str = TRAINER_PYTHON_NB
+
             training_cmd = get_notebook_cmd(starter_script, python_repl)
 
         case _:
@@ -141,6 +145,17 @@ if training_cmd and st.button('Execute'):
 
         logging.info(result.stdout)  # TODO: logs trace
         logging.info(result.stderr)
+
+        if result.stdout:
+            st.info(result.stdout)
+
+        if result.stderr:
+            st.error(result.stderr)
+
+        if EXECUTION_LANG is TRAINER_PYTHON_NB:
+            if not os.path.exists(os.path.join(temp_dir_path, f'{starter_script}.html')):
+                st.error('notebook: execution failed')
+                print('notebook:', 'execution failed')
 
     zipfile_ = archive_directory(model_name, temp_dir_path)
 
