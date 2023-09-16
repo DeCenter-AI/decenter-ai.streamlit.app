@@ -90,7 +90,7 @@ else:
 
     logging.info('created venv dir')
 
-    python_repl = 'venv/bin/python3'
+    python_repl = os.path.join(venv_dir, 'bin/python3')
 
 
 driver_scripts = find_driver_scripts(temp_dir_path)

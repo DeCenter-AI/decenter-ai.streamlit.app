@@ -41,6 +41,9 @@ def install_dependencies(python_repl=sys.executable, requirements_path=None, req
     result = subprocess.run(
         command, cwd=cwd, capture_output=True, encoding='UTF-8',
     )
+    with st.echo():
+        st.toast(result.stdout)
+        st.toast(result.stderr)
 
     logging.info(result.stdout)
     logging.info(result.stderr)
