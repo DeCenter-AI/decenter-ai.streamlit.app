@@ -28,12 +28,14 @@ def install_deps(python_repl=sys.executable, requirements: list = None, cwd=None
 @st.cache_resource
 def install_dependencies(python_repl='python3', requirements_path=None, requirements=None, cwd=None):
 
+    if requirements:
+        logging.info('install deps:')
+        install_deps(python_repl, requirements, cwd)
+
     if not requirements_path:
         logging.warning('requirements_path not found')
-        if requirements is not None:
-            logging.info('install deps:')
-            install_deps()
         return
+
     print('installing deps for ', python_repl)
     command = [python_repl, '-m', 'pip', 'install', '-r', requirements_path]
     result = subprocess.run(
