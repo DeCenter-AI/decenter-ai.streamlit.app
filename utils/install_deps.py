@@ -31,7 +31,7 @@ def install_dependencies(python_repl='python3', requirements_path=None, requirem
     if not requirements_path:
         logging.warning('requirements_path not found')
         if requirements is not None:
-            logging.info('installing requirements')
+            logging.info('install deps:')
             install_deps()
         return
     print('installing deps for ', python_repl)
