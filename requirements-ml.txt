@@ -28,7 +28,6 @@ pandas
 
 # Data Visualization
 plotly
-pytorch
 scikit-learn
 scipy
 seaborn
@@ -37,4 +36,7 @@ spacy
 # Additional tools and utilities
 statsmodels
 tensorflow
+
+torch
+torchvision
 xgboost
