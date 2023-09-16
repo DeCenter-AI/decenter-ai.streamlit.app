@@ -138,9 +138,6 @@ if starter_script:
 
         case '.ipynb':
             EXECUTION_LANG: str = TRAINER_PYTHON_NB
-
-            python_repl = sys.executable
-
             # install_deps(
             #     python_repl, requirements="""
             #     """.strip().split(' '), cwd=temp_dir_path,
@@ -150,7 +147,7 @@ if starter_script:
             #         python_repl, './requirements-ml.txt',
             #     )
 
-            training_cmd = get_notebook_cmd(starter_script, python_repl)
+            training_cmd = get_notebook_cmd(starter_script, sys.executable)
 
         case _:
             raise Exception(f'invalid script-{script_ext}')
