@@ -157,7 +157,7 @@ if training_cmd and st.button('Execute'):
             st.info(result.stdout)
 
         if result.stderr:
-            st.error(result.stderr)
+            st.warning(result.stderr)
 
         if EXECUTION_LANG is TRAINER_PYTHON_NB:
             out = f'{starter_script}.html'
