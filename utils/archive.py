@@ -1,14 +1,18 @@
+import logging
+import os
+
 from icecream import ic
 
 
-def archive_directory(archive_name: str, directory: str, base_dir: str = None, format='zip') -> str:
+def archive_directory(archive_name: str, src_dir: str, base_dir: str = None, format='zip') -> str:
     import shutil
 
     # with tempfile.TemporaryDirectory() as temp_dir:
     #     subprocess.run(command, cwd=temp_dir)
+    logging.info('zipping', os.listdir(src_dir))
 
     created_archive_loc = shutil.make_archive(
-        archive_name, format, directory, base_dir, True,
+        archive_name, format, src_dir, base_dir, True,
     )
 
     ic(created_archive_loc)
