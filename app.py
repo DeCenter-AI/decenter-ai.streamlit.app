@@ -133,7 +133,7 @@ if starter_script:
             # )
             if not DEMO_MODE:
                 install_dependencies(
-                    python_repl, './requirements-ml.txt', cwd=temp_dir_path,
+                    python_repl, './requirements-ml.txt',
                 )
 
             training_cmd = get_notebook_cmd(starter_script, python_repl)
