@@ -1,6 +1,7 @@
 import datetime as dt
 import logging
 import subprocess
+import sys
 import tempfile
 import venv
 import zipfile
@@ -40,7 +41,7 @@ starter_script: str  # notebook or python_script
 
 temp_dir: str | tempfile.TemporaryDirectory
 
-python_repl: str = 'python3'
+python_repl: str = sys.executable
 
 DEMO_MODE: bool = input_archive is None
 
