@@ -41,14 +41,30 @@ head()
 
 
 @dataclass
-class AppPpt:
+class App:
     demo: bool = True
     model_name: str = 'model: decenter-model-linear-reg-sample_v3'
 
+    def set_model_name(self, val: str):
+        # self.demo = False
+        logging.info(f'model val updated to {val}')
+        # st.toast(f'model name updated to {model_name}', icon='👌')
+        # self.model_name = val
+
+    def validate_model_name(self):
+        if not self.model_name:
+            self.model_name = 'model: decenter-model-linear-reg-sample_v3'
+            st.toast(f'model name reverted to {self.model_name}', icon='👎')
+        else:
+            st.toast(f'model name updated to {self.model_name}', icon='👌')
+
+        logging.info(self.model_name)
+
 
 app = st.session_state.get('app')
+app = None  # DEV: when testing
 if not app:
-    app = AppPpt()
+    app = App()
     st.session_state.app = app
 
 
@@ -56,22 +72,22 @@ def setDemoMode(val: bool = False):
     app.demo = val
 
 
-def model_name_changed():
-    app.demo = False
-    app.model_name = model_name
-    st.toast(f'model name updated to {model_name}', icon='👌')
-
-
-model_name = st.text_input(
+app.model_name = st.text_input(
     'model: decenter-model-linear-reg-sample_v3 ',
     max_chars=50,
     placeholder='decenter-model-linear-reg-sample_v3',
     key='model_name',
-    on_change=model_name_changed,
-    args=(),
-    kwargs=(),
+    value=app.model_name,
+    on_change=app.validate_model_name,
+    # on_change=app.set_model_name,
+    # args=(),
+    # kwargs=(),
     # value=f'decenter-model-{dt.datetime.now().strftime("%d-%m-%Y-%H:%M:%S")}',
 )
+
+logging.info(f'model-name:{app.model_name}')
+
+model_name = app.model_name
 
 input_archive = st.file_uploader(
     'Upload working directory of notebook', type=['zip'],
