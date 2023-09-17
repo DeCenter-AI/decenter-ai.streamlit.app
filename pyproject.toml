@@ -57,6 +57,7 @@ jupyter = "^1.0.0"
 matplotlib = "^3.8.0"
 ipykernel = "^6.25.2"
 beautifulsoup4 = "^4.12.2"
+seaborn = "^0.12.2"
 
 
 [tool.poetry.group.dev.dependencies]
