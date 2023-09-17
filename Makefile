@@ -15,6 +15,9 @@ install:
 	@pip install poetry
 	@poetry install --no-root
 
+install-ml-deps:
+	poetry add --group ml $(cat requirements-ml.txt)
+
 
 run:
   # @source venv/bin/activate
