@@ -5,6 +5,7 @@ import sys
 import tempfile
 import venv
 import zipfile
+import shutil
 
 import streamlit as st
 
@@ -187,6 +188,8 @@ if training_cmd and st.button('Train'):
                 print('notebook:', 'execution failed')
 
     if EXECUTION_SUCCESS:
+        shutil.rmtree(venv_dir)
+
         zipfile_ = archive_directory(
             f'{temp_zip_dir}/{model_name}', temp_dir_path,
         )
