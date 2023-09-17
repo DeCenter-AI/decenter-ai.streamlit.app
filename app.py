@@ -16,7 +16,7 @@ from utils.exec_commands import get_notebook_cmd, get_python_cmd
 from utils.helper_find import find_requirements_txt_files, find_driver_scripts
 from utils.install_deps import install_dependencies
 from views.head import head
-
+from dataclasses import dataclass
 st.set_page_config(
     page_title='Decenter AI',
     page_icon='static/favicon.ico',
@@ -25,7 +25,9 @@ st.set_page_config(
 
 @st.cache_resource
 def get_temp_zip_dir():
-    temp_dir = tempfile.TemporaryDirectory()
+    temp_dir = tempfile.TemporaryDirectory(
+        prefix='decenter-ai-', suffix='-models-zip-dir',
+    )
     return temp_dir.name
 
 
@@ -37,35 +39,70 @@ load_dotenv()
 
 head()
 
+
+@dataclass
+class AppPpt:
+    demo: bool = True
+    model_name: str = 'model: decenter-model-linear-reg-sample_v3'
+
+
+app = st.session_state.get('app')
+if not app:
+    app = AppPpt()
+    st.session_state.app = app
+
+
+def setDemoMode(val: bool = False):
+    app.demo = val
+
+
+def model_name_changed():
+    app.demo = False
+    app.model_name = model_name
+    st.toast(f'model name updated to {model_name}', icon='👌')
+
+
 model_name = st.text_input(
-    'Enter the model name: ',
-    value=f'decenter-model-{dt.datetime.now().strftime("%d-%m-%Y-%H:%M:%S")}',
+    'model: decenter-model-linear-reg-sample_v3 ',
+    max_chars=50,
+    placeholder='decenter-model-linear-reg-sample_v3',
+    key='model_name',
+    on_change=model_name_changed,
+    args=(),
+    kwargs=(),
+    # value=f'decenter-model-{dt.datetime.now().strftime("%d-%m-%Y-%H:%M:%S")}',
 )
 
 input_archive = st.file_uploader(
     'Upload working directory of notebook', type=['zip'],
+    on_change=lambda: setDemoMode(False),
 )
 
 starter_script: str  # notebook or python_script
 
 temp_dir: str | tempfile.TemporaryDirectory
 
+venv_dir: str = None
+
 temp_zip_dir = get_temp_zip_dir()
 
 python_repl: str = sys.executable
 
-DEMO_MODE: bool = input_archive is None
+app.demo = input_archive is None
 
+# app.demo = st.checkbox('app.demo') #TODO: wip
 
-# DEMO_MODE = st.checkbox('DEMO_MODE') #TODO: wip
-
-if DEMO_MODE:
-    st.warning('input archive not found: DEMO_MODE:on')
+if app.demo:
+    st.warning('input archive not found: app.demo:on')
+    model_name = 'decenter-model-linear-reg-sample_v3'
+    model_name_val = 'decenter-model-linear-reg-sample_v3'
     input_archive = 'examples/sample_v3'
     temp_dir = 'examples/sample_v3'
     temp_dir_path = temp_dir
 else:
-    temp_dir = tempfile.TemporaryDirectory()
+    temp_dir = tempfile.TemporaryDirectory(
+        prefix='decenter-ai-', suffix=model_name,
+    )
 
     temp_dir_path = temp_dir.name
 
@@ -120,7 +157,7 @@ if starter_script:
             requirements = st.selectbox(
                 'Select dependencies to install', available_requirement_files,
             )
-            if not requirements and not DEMO_MODE:
+            if not requirements and not app.demo:
                 requirements = os.path.join(os.getcwd(), 'requirements-ml.txt')
 
             if requirements:
@@ -143,7 +180,7 @@ if starter_script:
             #     python_repl, requirements="""
             #     """.strip().split(' '), cwd=temp_dir_path,
             # )
-            if not DEMO_MODE and MODE != DEVELOPMENT:
+            if not app.demo and MODE != DEVELOPMENT:
                 logging.info('installing  deps venv for nb')
                 install_dependencies(
                     python_repl, './requirements-ml.txt',
@@ -188,7 +225,8 @@ if training_cmd and st.button('Train'):
                 print('notebook:', 'execution failed')
 
     if EXECUTION_SUCCESS:
-        shutil.rmtree(venv_dir)
+        if venv_dir:
+            shutil.rmtree(venv_dir)
 
         zipfile_ = archive_directory(
             f'{temp_zip_dir}/{model_name}', temp_dir_path,
@@ -205,6 +243,7 @@ if training_cmd and st.button('Train'):
                 data=f1, file_name=f'decenter-{os.path.basename(zipfile_)}',
             )
 
-    if hasattr(temp_dir, 'cleanup'):
-        print('cleaning up the temp dirctory')
-        temp_dir.cleanup()
+        st.balloons()
+        if isinstance(temp_dir, tempfile.TemporaryDirectory):
+            st.toast('cleaning up the temp dirctory')
+            temp_dir.cleanup()

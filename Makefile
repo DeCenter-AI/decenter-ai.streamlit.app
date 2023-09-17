@@ -18,7 +18,7 @@ install:
 
 run:
   # @source venv/bin/activate
-	@venv/bin/python -m streamlit run main.py
+	@python -m streamlit run app.py
 
 install-tests:
 	# @python -m pip install -r requirements-test.txt
