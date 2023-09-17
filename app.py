@@ -45,12 +45,6 @@ class App:
     demo: bool = True
     model_name: str = 'model: decenter-model-linear-reg-sample_v3'
 
-    def set_model_name(self, val: str):
-        # self.demo = False
-        logging.info(f'model val updated to {val}')
-        # st.toast(f'model name updated to {model_name}', icon='👌')
-        # self.model_name = val
-
     def validate_model_name(self):
         if not self.model_name:
             self.model_name = 'model: decenter-model-linear-reg-sample_v3'
@@ -62,7 +56,7 @@ class App:
 
 
 app = st.session_state.get('app')
-app = None  # DEV: when testing
+# app = None if MODE == DEVELOPMENT else app  # DEV: when testing
 if not app:
     app = App()
     st.session_state.app = app
