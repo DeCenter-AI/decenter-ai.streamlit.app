@@ -147,6 +147,7 @@ if starter_script:
                 install_dependencies(
                     python_repl, './requirements-ml.txt',
                 )
+            python_repl = sys.executable  # FIXME:
 
             training_cmd = get_notebook_cmd(starter_script, python_repl)
 
