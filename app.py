@@ -105,7 +105,6 @@ app.demo = input_archive is None
 if app.demo:
     st.warning('input archive not found: app.demo:on')
     model_name = 'decenter-model-linear-reg-sample_v3'
-    model_name_val = 'decenter-model-linear-reg-sample_v3'
     input_archive = 'examples/sample_v3'
     temp_dir = 'examples/sample_v3'
     temp_dir_path = temp_dir
