@@ -92,7 +92,7 @@ else:
     temp_dir_contents = os.listdir(temp_dir_path)
     print('temp_dir contains', temp_dir_contents)  # FIXME error
 
-    venv_dir = os.path.join(temp_dir_path, 'venv')
+    venv_dir = os.path.join(temp_dir_path, '.venv')
     venv.create(
         venv_dir, system_site_packages=True,
         with_pip=True, symlinks=True,

@@ -21,7 +21,7 @@ def find_driver_scripts(path, ignore_dirs=None):
     if ignore_dirs is None:
         ignore_dirs = []
 
-    ignore_dirs += ['venv']
+    ignore_dirs += ['venv', '.venv']
 
     driver_codes = []
     for root, dirs, files in os.walk(path):
