@@ -33,11 +33,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Install poetry
+        run: pipx install poetry
+
       - name: Set up Python ${{ matrix.python-version }} on ${{matrix.os}}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "pip"
+          cache: "poetry"
 
       - name: Write environment
         run: |
@@ -48,9 +52,8 @@ jobs:
       - name: Install dependencies
         run: |
           #make install
-          # make install-tests
-          python -m pip install poetry
-          python -m poetry install --no-root
+          #make install-tests
+          poetry install --no-root
           source $(poetry env info --path)/bin/activate
 
       - name: Lint with flake8
@@ -76,3 +79,4 @@ jobs:
       - name: Build Dockerfile
         run: |
           make docker
+# https://github.com/actions/setup-python/blob/v4/docs/advanced-usage.md#caching-packages
