@@ -1,9 +1,9 @@
-# decenter.streamlit.app
+# decenter-ai.streamlit.app
 
 # DeCenter AI
 
 Decentralized AI Model Training Infrastructure
-Visit: https://decenter.streamlit.app
+Visit: https://decenter-ai.streamlit.app
 
 ## Description
 
@@ -12,20 +12,20 @@ affordably through decentralized parallel training mechanisms.
 
 ## Table of Contents
 
-- [decenter.streamlit.app](#decenterstreamlitapp)
+- [decenter-ai.streamlit.app](#decenter-aistreamlitapp)
 - [DeCenter AI](#decenter-ai)
-    - [Description](#description)
-    - [Table of Contents](#table-of-contents)
-    - [Prerequisites](#prerequisites)
-    - [How to Run with Python3](#how-to-run-with-python3)
-    - [How to Run via Docker](#how-to-run-via-docker)
-    - [Overview](#overview)
-        - [Features](#features)
-        - [Target Customers](#target-customers)
-        - [Benefits](#benefits)
-    - [Hackathon](#hackathon)
-    - [How to use the demo](#how-to-use-the-demo)
-    - [Backend Workflow](#backend-workflow)
+  - [Description](#description)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [How to Run with Python3](#how-to-run-with-python3)
+  - [How to Run via Docker](#how-to-run-via-docker)
+  - [Overview](#overview)
+    - [Features](#features)
+    - [Target Customers](#target-customers)
+    - [Benefits](#benefits)
+  - [Hackathon](#hackathon)
+  - [How to use the demo](#how-to-use-the-demo)
+  - [Backend Workflow](#backend-workflow)
 - [DeCenter AI Model Training Workflow](#decenter-ai-model-training-workflow)
     - [Organization (Data Scientists, ML Engineers, AI Engineers, Model Trainers)](#organization-data-scientists-ml-engineers-ai-engineers-model-trainers)
     - [NFTs Certifications](#nfts-certifications)
@@ -35,12 +35,12 @@ affordably through decentralized parallel training mechanisms.
     - [Hyperledger Fabric](#hyperledger-fabric)
     - [BNB Greenfield](#bnb-greenfield)
     - [User](#user)
-    - [How to Contribute](#how-to-contribute)
-    - [License](#license)
-    - [Authors](#authors)
-    - [Acknowledgments](#acknowledgments)
-    - [Support](#support)
-    - [Links](#links)
+  - [How to Contribute](#how-to-contribute)
+  - [License](#license)
+  - [Authors](#authors)
+  - [Acknowledgments](#acknowledgments)
+  - [Support](#support)
+  - [Links](#links)
 
 ## Prerequisites
 
@@ -50,7 +50,7 @@ To run project, you need to have the following prerequisites:
 - The necessary Python packages and dependencies installed. You can find the required packages in the `requirements.txt`
   file of the project repository.
 - Download and extract the sample python code (model training code), Dataset, requirement text and pre-trained model for
-  the demo [sample1.zip](https://github.com/Nasfame/decenter.streamlit.app/files/12517829/sample1.zip)
+  the demo [sample1.zip](https://github.com/DeCenter-AI/decenter-ai.streamlit.app//files/12517829/sample1.zip)
 
 ## How to Run with Python3
 
@@ -138,7 +138,7 @@ market research, competitive analysis and advantage among others.
 
 ## Backend Workflow
 
-![Decenter Ai Deck (4)](https://github.com/Nasfame/decenter.streamlit.app/assets/131058062/d233ea0c-e09e-4787-a9f5-997bde5902a7)
+![Decenter Ai Deck (4)](https://github.com/DeCenter-AI/decenter-ai.streamlit.app//assets/131058062/d233ea0c-e09e-4787-a9f5-997bde5902a7)
 
 # DeCenter AI Model Training Workflow
 
