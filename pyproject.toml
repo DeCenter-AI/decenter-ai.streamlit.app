@@ -76,7 +76,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-app = "streamlit run app.py"
+
 
 [tool.poetry.extras]
 dev = ['pytest']
