@@ -39,10 +39,10 @@ clean:
 	# @find . -type f -name '<_io.BytesIO object at*' -exec rm -f {} +
 	@find . -type f -name '*.log' -exec rm -f {} +
 
-docker-build:
-	docker build -t  decenter.streamlit .
+docker:
+	docker build -t  decenter.streamlit.app .
 
-.PHONY: run install clean setup test activate docker-build
+.PHONY: run install clean setup test activate docker
 
 poetry-export:
 	poetry export --with dev --format requirements.txt --output requirements-poetry.txt
