@@ -43,11 +43,11 @@ head()
 @dataclass
 class App:
     demo: bool = True
-    model_name: str = 'model: decenter-model-linear-reg-sample_v3'
+    model_name: str = 'decenter-model-linear-reg-sample_v3'
 
     def validate_model_name(self):
         if not self.model_name:
-            self.model_name = 'model: decenter-model-linear-reg-sample_v3'
+            self.model_name = 'decenter-model-linear-reg-sample_v3'
             st.toast(f'model name reverted to {self.model_name}', icon='👎')
         else:
             st.toast(f'model name updated to {self.model_name}', icon='👌')
@@ -67,7 +67,7 @@ def setDemoMode(val: bool = False):
 
 
 app.model_name = st.text_input(
-    'model: decenter-model-linear-reg-sample_v3 ',
+    'Model Name',
     max_chars=50,
     placeholder='decenter-model-linear-reg-sample_v3',
     key='model_name',
