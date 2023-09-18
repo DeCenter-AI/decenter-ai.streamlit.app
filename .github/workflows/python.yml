@@ -15,7 +15,7 @@ concurrency:
 env:
   envfile: ${{ secrets.ENV }}
   mode: testing
-  "POETRY_VIRTUALENVS_IN_PROJECT": false
+  "POETRY_VIRTUALENVS_IN_PROJECT": true
   "POETRY_VIRTUALENVS_OPTIONS_ALWAYS_COPY": false
   "POETRY_VIRTUALENVS_OPTIONS_NO_PIP": false
   "POETRY_VIRTUALENVS_OPTIONS_NO_SETUPTOOLS": true
@@ -71,7 +71,7 @@ jobs:
 
       - name: Test with pytest
         run: |
-          pytest
+          .venv/pytest
           # pip install pytest pytest-cov
           # pytest . --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
 
