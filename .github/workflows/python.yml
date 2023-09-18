@@ -59,7 +59,7 @@ jobs:
           #make install
           #make install-tests
           poetry install --no-root
-          source $(poetry env info --path)/bin/activate
+          # source $(poetry env info --path)/bin/activate
 
       - name: Lint with flake8
         run: |
@@ -84,4 +84,5 @@ jobs:
       - name: Build Dockerfile
         run: |
           make docker
+
 # https://github.com/actions/setup-python/blob/v4/docs/advanced-usage.md#caching-packages
