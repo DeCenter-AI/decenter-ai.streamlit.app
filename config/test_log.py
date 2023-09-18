@@ -64,6 +64,7 @@ def test_app():
 
     assert_tokens_in_log(appLog, testcase)
 
+
 # @pytest.mark.run(order=2)
 # @pytest.mark.parametrize("testcase", test_cases)
 # def test_logs(testcase: Testcase):

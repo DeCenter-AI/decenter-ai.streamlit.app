@@ -17,6 +17,7 @@ from utils.helper_find import find_requirements_txt_files, find_driver_scripts
 from utils.install_deps import install_dependencies
 from views.head import head
 from dataclasses import dataclass
+
 st.set_page_config(
     page_title='Decenter AI',
     page_icon='static/favicon.ico',
@@ -26,7 +27,8 @@ st.set_page_config(
 @st.cache_resource
 def get_temp_zip_dir():
     temp_dir = tempfile.TemporaryDirectory(
-        prefix='decenter-ai-', suffix='-models-zip-dir',
+        prefix='decenter-ai-',
+        suffix='-models-zip-dir',
     )
     return temp_dir.name
 
@@ -84,7 +86,8 @@ logging.info(f'model-name:{app.model_name}')
 model_name = app.model_name
 
 input_archive = st.file_uploader(
-    'Upload working directory of notebook', type=['zip'],
+    'Upload working directory of notebook',
+    type=['zip'],
     on_change=lambda: setDemoMode(False),
 )
 
@@ -110,7 +113,8 @@ if app.demo:
     temp_dir_path = temp_dir
 else:
     temp_dir = tempfile.TemporaryDirectory(
-        prefix='decenter-ai-', suffix=model_name,
+        prefix='decenter-ai-',
+        suffix=model_name,
     )
 
     temp_dir_path = temp_dir.name
@@ -141,8 +145,10 @@ else:
 
     venv_dir = os.path.join(temp_dir_path, '.venv')
     venv.create(
-        venv_dir, system_site_packages=True,
-        with_pip=True, symlinks=True,
+        venv_dir,
+        system_site_packages=True,
+        with_pip=True,
+        symlinks=True,
     )
 
     logging.info('created venv dir')
@@ -164,23 +170,27 @@ if starter_script:
                 temp_dir_path,
             )
             requirements = st.selectbox(
-                'Select dependencies to install', available_requirement_files,
+                'Select dependencies to install',
+                available_requirement_files,
             )
             if not requirements and not app.demo:
                 requirements = os.path.join(os.getcwd(), 'requirements-ml.txt')
 
             if requirements:
                 with st.spinner('Installing dependencies in progress'):
-
                     requirements_path = os.path.join(
-                        temp_dir_path, requirements,
+                        temp_dir_path,
+                        requirements,
                     )
                     install_dependencies(
-                        python_repl, requirements_path, cwd=temp_dir_path,
+                        python_repl,
+                        requirements_path,
+                        cwd=temp_dir_path,
                     )
 
             training_cmd = get_python_cmd(
-                starter_script, python_interpreter=python_repl,
+                starter_script,
+                python_interpreter=python_repl,
             )
 
         case '.ipynb':
@@ -192,7 +202,8 @@ if starter_script:
             if not app.demo and MODE != DEVELOPMENT:
                 logging.info('installing  deps venv for nb')
                 install_dependencies(
-                    python_repl, './requirements-ml.txt',
+                    python_repl,
+                    './requirements-ml.txt',
                 )
             python_repl = sys.executable  # FIXME:
 
@@ -202,7 +213,6 @@ if starter_script:
             raise Exception(f'invalid script-{script_ext}')
 
 if training_cmd and st.button('Train'):
-
     print(starter_script)
 
     st.snow()
@@ -211,7 +221,10 @@ if training_cmd and st.button('Train'):
     # command = ['jupyter', 'nbconvert', '--to', 'notebook', '--execute', f'{temp_dir}/{starter_notebook}', '--no-browser', '--notebook-dir', temp_dir]
     with st.spinner():
         result = subprocess.run(
-            training_cmd, cwd=temp_dir_path, capture_output=True, encoding='UTF-8',
+            training_cmd,
+            cwd=temp_dir_path,
+            capture_output=True,
+            encoding='UTF-8',
         )
 
         logging.info(result.stdout)  # TODO: logs trace
@@ -238,7 +251,8 @@ if training_cmd and st.button('Train'):
             shutil.rmtree(venv_dir)
 
         zipfile_ = archive_directory(
-            f'{temp_zip_dir}/{model_name}', temp_dir_path,
+            f'{temp_zip_dir}/{model_name}',
+            temp_dir_path,
         )
         # zipfile_ = archive_directory_in_memory(temp_dir_path)
 
@@ -249,7 +263,8 @@ if training_cmd and st.button('Train'):
         with open(zipfile_, 'rb') as f1:
             st.download_button(
                 label='Download Working Directory',
-                data=f1, file_name=f'decenter-{os.path.basename(zipfile_)}',
+                data=f1,
+                file_name=f'decenter-{os.path.basename(zipfile_)}',
             )
 
         st.balloons()

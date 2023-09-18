@@ -1,6 +1,5 @@
 # Plan to work with this later when I have time
 class Chromadb:
-
     def __init__(self):
         # Constructor code, if needed
         pass

@@ -8,7 +8,8 @@ def find_requirements_txt_files(root_directory):
         for file in files:
             if file.endswith('.txt') and file.startswith('requirements'):
                 rel_path = os.path.relpath(
-                    os.path.join(root, file), root_directory,
+                    os.path.join(root, file),
+                    root_directory,
                 )
                 requirements_files.append(rel_path)
 

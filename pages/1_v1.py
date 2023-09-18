@@ -44,10 +44,12 @@ train_split_ratio = st.number_input(
 )
 
 if requirements_txt:
+
     @st.experimental_memo
     def retrieve_requirements():  # @todo TODO: use in other pages https://discuss.streamlit.io/t/caching-uploaded-file-while-using-multipage/26287/3
         uploaded_file = requirements_txt
         return uploaded_file
+
     install_dependencies_v1(requirements_txt)
 
     # FIXME: add icon william

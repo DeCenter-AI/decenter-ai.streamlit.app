@@ -50,7 +50,9 @@ def get_vectorstore_openAI(data):
     # https://python.langchain.com/docs/modules/data_connection/vectorstores/integrations/pinecone
 
     vectorstore = Pinecone.from_documents(
-        data, embedding=embeddings, index_name=INDEX_NAME,
+        data,
+        embedding=embeddings,
+        index_name=INDEX_NAME,
     )
     return vectorstore
 
@@ -62,7 +64,8 @@ def create_or_get_conversation_chain(vectorstore):
     # llm = ChatOpenAI(model=OPENAI_CHAT_MODEL)
     llm = ChatOpenAI()
     memory = ConversationBufferMemory(
-        memory_key='chat_history', return_messages=True,
+        memory_key='chat_history',
+        return_messages=True,
     )
     prompt_template = PromptTemplate.from_template(template)
 

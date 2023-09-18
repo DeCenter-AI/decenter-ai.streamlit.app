@@ -17,11 +17,13 @@ def setup_log():
 
     _alog = logging.getLogger('app')
 
-    def _info(s): return _alog.info(s)
+    def _info(s):
+        return _alog.info(s)
 
     ic.configureOutput(
         prefix=_prefix_time,
-        outputFunction=_info, includeContext=True,
+        outputFunction=_info,
+        includeContext=True,
     )
 
 

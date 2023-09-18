@@ -20,7 +20,8 @@ def text_to_speech(config: TextToSpeechConfig):
         text=config.text,
         lang=config.lang,
         slow=config.slow,
-        tld=config.tld, )
+        tld=config.tld,
+    )
 
     out = config.output
     if isinstance(out, str) or isinstance(out, Path):

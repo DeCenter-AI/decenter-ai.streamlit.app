@@ -13,21 +13,22 @@ def install_deps(python_repl=sys.executable, requirements: list = None, cwd=None
     print('install_deps', requirements)
 
     def install(package):
-
         subprocess.check_call(
             [python_repl, '-m', 'pip', 'install', package],
             stdout=st.info,
             stderr=st.error,
             universal_newlines=True,
         )
+
     # Use a ThreadPoolExecutor to install the packages in parallel
     with concurrent.futures.ThreadPoolExecutor() as executor:
         executor.map(install, requirements)
 
 
 @st.cache_resource
-def install_dependencies(python_repl=sys.executable, requirements_path=None, requirements=None, cwd=None):
-
+def install_dependencies(
+    python_repl=sys.executable, requirements_path=None, requirements=None, cwd=None,
+):
     if requirements:
         logging.info('install_dependencies:')
         install_deps(python_repl, requirements, cwd)
@@ -39,7 +40,10 @@ def install_dependencies(python_repl=sys.executable, requirements_path=None, req
     print('installing dependencies:  for ', python_repl)
     command = [python_repl, '-m', 'pip', 'install', '-r', requirements_path]
     result = subprocess.run(
-        command, cwd=cwd, capture_output=True, encoding='UTF-8',
+        command,
+        cwd=cwd,
+        capture_output=True,
+        encoding='UTF-8',
     )
 
     logging.info(result.stdout)

@@ -4,7 +4,9 @@ import os
 from icecream import ic
 
 
-def archive_directory(archive_path_name: str, src_dir: str, base_dir: str = None, format='zip') -> str:
+def archive_directory(
+    archive_path_name: str, src_dir: str, base_dir: str = None, format='zip',
+) -> str:
     import shutil
 
     # with tempfile.TemporaryDirectory() as temp_dir:
@@ -12,7 +14,11 @@ def archive_directory(archive_path_name: str, src_dir: str, base_dir: str = None
     print('zipping', os.listdir(src_dir))
 
     created_archive_loc = shutil.make_archive(
-        archive_path_name, format, src_dir, base_dir, True,
+        archive_path_name,
+        format,
+        src_dir,
+        base_dir,
+        True,
         logger=logging.getLogger(),
     )
 
@@ -56,8 +62,10 @@ def archive_directory_in_memory(directory):
 
                 # Add file to zip
                 zf.write(
-                    file_path, arcname=os.path.relpath(
-                        file_path, directory,
+                    file_path,
+                    arcname=os.path.relpath(
+                        file_path,
+                        directory,
                     ),
                 )
 

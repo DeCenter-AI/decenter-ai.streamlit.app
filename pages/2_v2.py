@@ -73,10 +73,12 @@ update_progress(50)
 # train_split_ratio = 100
 
 if requirements_txt:
+
     @st.experimental_memo
     def retrieve_requirements():  # @todo TODO: use in other pages https://discuss.streamlit.io/t/caching-uploaded-file-while-using-multipage/26287/3
         uploaded_file = requirements_txt
         return uploaded_file
+
     # requirements_txt.getvalue().decode().split('\n')
     install_dependencies_v2(requirements_txt)
 
