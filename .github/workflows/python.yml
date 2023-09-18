@@ -42,6 +42,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: "poetry"
+          cache-dependency-path: |
+            **/setup.cfg
+            **/requirements*.txt
+            poetry.lock
+            pyproject.toml
 
       - name: Write environment
         run: |
