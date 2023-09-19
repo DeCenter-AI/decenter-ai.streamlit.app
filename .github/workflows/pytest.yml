@@ -61,6 +61,7 @@ jobs:
           # poetry config settings.virtualenvs.create false --local
           poetry config virtualenvs.create false
           poetry install --no-root
+          pip install pytest
           # source $(poetry env info --path)/bin/activate
 
       - name: Poetry Config
