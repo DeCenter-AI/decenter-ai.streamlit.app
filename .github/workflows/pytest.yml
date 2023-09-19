@@ -58,8 +58,19 @@ jobs:
         run: |
           #make install
           #make install-tests
+          poetry config settings.virtualenvs.create false
           poetry install --no-root
-          source $(poetry env info --path)/bin/activate
+          # source $(poetry env info --path)/bin/activate
+
+      - name: Poetry Config
+        run: poetry config --list
+
+      - name: Set timezone
+        uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Asia/Calcutta"
+          # timezoneMacos: "Asia/Singapore"
+          # timezoneWindows: "Singapore Standard Time"
 
       - name: Run pytest
         uses: pavelzw/pytest-action@v2
