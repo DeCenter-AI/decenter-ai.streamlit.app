@@ -91,16 +91,6 @@ jobs:
       #   run: |
       #     make test
 
-  docker:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Build Dockerfile
-        run: |
-          make docker
 
 
 # https://github.com/actions/setup-python/blob/v4/docs/advanced-usage.md#caching-packages
