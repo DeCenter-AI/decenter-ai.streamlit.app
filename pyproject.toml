@@ -1,6 +1,6 @@
 # https://python-poetry.org/docs/pyproject/
 [tool.poetry]
-name = "decenter-ai-streamlit-app"
+name = "decenter-ai.streamlit.app"
 version = "3.0.0"
 description = "Official decenter ai infra app"
 authors = ["Nasfame <laciferin@gmail.com>"]
