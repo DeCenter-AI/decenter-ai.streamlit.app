@@ -188,10 +188,7 @@ if starter_script:
                         cwd=temp_dir_path,
                     )
 
-            training_cmd = get_python_cmd(
-                starter_script,
-                python_interpreter=python_repl,
-            )
+            training_cmd = [python_repl, starter_script]
 
         case ".ipynb":
             EXECUTION_LANG: str = TRAINER_PYTHON_NB
