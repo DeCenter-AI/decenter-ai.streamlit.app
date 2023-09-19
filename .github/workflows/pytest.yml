@@ -74,7 +74,7 @@ jobs:
           # timezoneWindows: "Singapore Standard Time"
 
       - name: Pytest Deps
-        run: poetry add pytest-md pytest-emoji
+        run: poetry add pytest pytest-md pytest-emoji
 
       - name: Run pytest
         uses: pavelzw/pytest-action@v2
