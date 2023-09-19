@@ -15,10 +15,10 @@ concurrency:
 env:
   envfile: ${{ secrets.ENV }}
   mode: testing
-  "POETRY_VIRTUALENVS_IN_PROJECT": true
-  "POETRY_VIRTUALENVS_OPTIONS_ALWAYS_COPY": false
+  "POETRY_VIRTUALENVS_IN_PROJECT": false
+  "POETRY_VIRTUALENVS_OPTIONS_ALWAYS_COPY": true
   "POETRY_VIRTUALENVS_OPTIONS_NO_PIP": false
-  "POETRY_VIRTUALENVS_OPTIONS_NO_SETUPTOOLS": true
+  "POETRY_VIRTUALENVS_OPTIONS_NO_SETUPTOOLS": false
 
 jobs:
   build:
@@ -63,6 +63,7 @@ jobs:
 
       - name: Lint with flake8
         run: |
+          source $(poetry env info --path)/bin/activate
           pip install flake8
           # stop the build if there are Python syntax errors or undefined names
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
@@ -71,7 +72,8 @@ jobs:
 
       - name: Test with pytest
         run: |
-          .venv/pytest
+          source $(poetry env info --path)/bin/activate
+          # .venv/pytest
           # pip install pytest pytest-cov
           # pytest . --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
 
@@ -81,9 +83,9 @@ jobs:
           verbose: true
           emoji: true
           job-summary: true
-          custom-arguments: '-q'
+          custom-arguments: "-q"
           click-to-expand: true
-          report-title: 'Test Report'
+          report-title: "Test Report"
 
       # - name: Run tests
       #   run: |
