@@ -71,15 +71,14 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-      - name: Test with pytest
+      - name: Test
         run: |
-          source $(poetry env info --path)/bin/activate
-          # .venv/pytest
+          make test
           # pip install pytest pytest-cov
           # pytest . --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
-
 
       # - name: Run tests
       #   run: |
       #     make test
+
 # https://github.com/actions/setup-python/blob/v4/docs/advanced-usage.md#caching-packages
