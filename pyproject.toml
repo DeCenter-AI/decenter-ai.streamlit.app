@@ -7,8 +7,8 @@ authors = ["Nasfame <laciferin@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://decenter-ai.streamlit.app"
-repository = "https://github.com/Web3Mustketeers/decenter-ai.streamlit.app"
-documentation = "https://github.com/Web3Mustketeers/decenter-ai.streamlit.app"
+repository = "https://github.com/Decenter-AI/decenter-ai.streamlit.app"
+documentation = "https://github.com/Decenter-AI/decenter-ai.streamlit.app"
 keywords = ["ai", "decenter", "ai-infra"]
 
 
@@ -97,7 +97,7 @@ ml = [
 # poetry install --all-extras
 
 [tool.poetry.urls]
-"Bug Tracker" = "https://github.com/Web3Mustketeers/decenter-ai.streamlit.app/issues"
+"Bug Tracker" = "https://github.com/Decenter-AI/decenter-ai.streamlit.app/issues"
 
 [tool.black]
 line-length = 79
