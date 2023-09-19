@@ -82,3 +82,4 @@ jobs:
       #     make test
 
 # https://github.com/actions/setup-python/blob/v4/docs/advanced-usage.md#caching-packages
+# doc: poetry-config https://python-poetry.org/docs/configuration/
