@@ -74,7 +74,7 @@ jobs:
           # timezoneWindows: "Singapore Standard Time"
 
       - name: Run pytest
-        uses: pavelzw/pytest-action@v2
+        uses: pavelzw/pytest-action@main
         with:
           verbose: true
           emoji: true
