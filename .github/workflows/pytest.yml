@@ -21,7 +21,7 @@ env:
   "POETRY_VIRTUALENVS_OPTIONS_NO_SETUPTOOLS": false
 
 jobs:
-  build:
+  test:
     strategy:
       fail-fast: false
       max-parallel: 2
