@@ -58,7 +58,7 @@ jobs:
         run: |
           #make install
           #make install-tests
-          poetry config settings.virtualenvs.create false
+          poetry config settings.virtualenvs.create false --local
           poetry install --no-root
           # source $(poetry env info --path)/bin/activate
 
