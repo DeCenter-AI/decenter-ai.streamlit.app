@@ -21,7 +21,8 @@ install-ml-deps:
 
 run:
   # @source venv/bin/activate
-	@python -m streamlit run app.py
+	# @python -m streamlit run app.py
+	@poetry run streamlit run app.py
 
 install-tests:
 	# @python -m pip install -r requirements-test.txt

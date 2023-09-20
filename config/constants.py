@@ -1,18 +1,19 @@
 import os
+from os import environ
 from typing import Final
 
 from dotenv import load_dotenv
 
 load_dotenv()
 
-PRODUCTION: Final[str] = 'production'
-DEVELOPMENT: Final[str] = 'development'
-TESTING: Final[str] = 'testing'
-MODE: Final[str] = os.getenv('mode', DEVELOPMENT)
+PRODUCTION: Final[str] = "production"
+DEVELOPMENT: Final[str] = "development"
+TESTING: Final[str] = "testing"
+MODE: Final[str] = os.getenv("mode", DEVELOPMENT)
 
 # PINECONE_API_KEY: Final[str] = environ['PINECONE_API_KEY'].strip()
 # PINECONE_API_ENV: Final[str] = environ['PINECONE_API_ENV'].strip()
-# INDEX_NAME: Final[str] = environ['INDEX_NAME'].strip()
+INDEX_NAME: Final[str] = environ.get("PINECONE_INDEX", "decenter-ai").strip()
 #
 # OPENAI_API_KEY: Final[str] = environ['OPENAI_API_KEY'].strip()
 # OPENAI_ORGANIZATION_ID: Final[str] = environ.get(
@@ -25,5 +26,5 @@ MODE: Final[str] = os.getenv('mode', DEVELOPMENT)
 #     'OPENAI_CHAT_MODEL', 'gpt-3.5-turbo',
 # ).strip()
 
-TRAINER_PYTHON: Final[str] = '.py'
-TRAINER_PYTHON_NB: Final[str] = '.pynb'
+TRAINER_PYTHON: Final[str] = ".py"
+TRAINER_PYTHON_NB: Final[str] = ".pynb"

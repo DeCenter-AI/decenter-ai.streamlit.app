@@ -1,4 +1,4 @@
-name: Python
+name: Pytest
 
 on:
   push:
@@ -8,20 +8,20 @@ on:
 
   workflow_dispatch:
 
-# concurrency:
-#   group: ${{ github.workflow }}-${{ github.ref }}
-#   cancel-in-progress: true
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   envfile: ${{ secrets.ENV }}
   mode: testing
   "POETRY_VIRTUALENVS_IN_PROJECT": false
-  "POETRY_VIRTUALENVS_OPTIONS_ALWAYS_COPY": true
+  "POETRY_VIRTUALENVS_OPTIONS_ALWAYS_COPY": false
   "POETRY_VIRTUALENVS_OPTIONS_NO_PIP": false
   "POETRY_VIRTUALENVS_OPTIONS_NO_SETUPTOOLS": false
 
 jobs:
-  build:
+  test:
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -59,27 +59,34 @@ jobs:
           #make install
           #make install-tests
           # poetry config settings.virtualenvs.create false --local
+          # poetry config virtualenvs.create false
           poetry install --no-root
           source $(poetry env info --path)/bin/activate
 
-      - name: Lint with flake8
-        run: |
-          source $(poetry env info --path)/bin/activate
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Poetry Config
+        run: poetry config --list
 
-      - name: Test
-        run: |
-          source $(poetry env info --path)/bin/activate
-          make test
-          # pip install pytest pytest-cov
-          # pytest . --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+      - name: Set timezone
+        uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: "Asia/Calcutta"
+          # timezoneMacos: "Asia/Singapore"
+          # timezoneWindows: "Singapore Standard Time"
+
+      - name: Pytest Deps
+        run: poetry add pytest pytest-md pytest-emoji
+
+      - name: Run pytest
+        uses: pavelzw/pytest-action@v2
+        with:
+          verbose: true
+          emoji: true
+          job-summary: true
+          custom-arguments: "-p no:cacheprovider -q"
+          click-to-expand: true
+          report-title: "Test Report"
+          custom-pytest: "poetry run pytest"
 
       # - name: Run tests
       #   run: |
       #     make test
-
-# https://github.com/actions/setup-python/blob/v4/docs/advanced-usage.md#caching-packages
-# doc: poetry-config https://python-poetry.org/docs/configuration/

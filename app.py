@@ -103,10 +103,10 @@ python_repl: str = sys.executable
 
 app.demo = input_archive is None
 
-# app.demo = st.checkbox('app.demo') #TODO: wip
+# app.demo = st.checkbox('demo') #TODO: wip
 
 if app.demo:
-    st.warning("input archive not found: app.demo:on")
+    st.warning("input archive not found: demo:on")
     model_name = "decenter-model-linear-reg-sample_v3"
     input_archive = "examples/sample_v3"
     temp_dir = "examples/sample_v3"
@@ -188,10 +188,7 @@ if starter_script:
                         cwd=temp_dir_path,
                     )
 
-            training_cmd = get_python_cmd(
-                starter_script,
-                python_interpreter=python_repl,
-            )
+            training_cmd = [python_repl, starter_script]
 
         case ".ipynb":
             EXECUTION_LANG: str = TRAINER_PYTHON_NB
