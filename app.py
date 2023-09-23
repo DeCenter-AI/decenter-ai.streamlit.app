@@ -42,7 +42,7 @@ head()
 
 @dataclass
 class App:
-    version = "v3"
+    version: str = "v3"
     demo: bool = True
     model_name: str = "decenter-model-linear-reg-sample_v3"
 
@@ -57,10 +57,14 @@ class App:
 
 
 app = st.session_state.get("app")
+# app = None if MODE == DEVELOPMENT else app  # DEV: when testing
+if not app:
+    app = App()
+    st.session_state.app = app
 
 option = st.selectbox(
     "Select a version:",
-    ("v3", "v1", "v2"),
+    ("v3", "v2", "v1"),
 )
 
 if option != app.version:  # don't redirect if in the same page
@@ -68,12 +72,6 @@ if option != app.version:  # don't redirect if in the same page
         f'<meta http-equiv="refresh" content="0;URL=/{option}">',
         unsafe_allow_html=True,
     )
-
-
-# app = None if MODE == DEVELOPMENT else app  # DEV: when testing
-if not app:
-    app = App()
-    st.session_state.app = app
 
 
 def setDemoMode(val: bool = False):
