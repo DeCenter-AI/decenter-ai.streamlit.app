@@ -16,7 +16,7 @@ head_v1()
 # def get_python_code(filename: str, label: str):
 #     return
 
-model_name = st.text_input('Enter a model name: ', value=f'model')
+model_name = st.text_input("Enter a model name: ", value=f"model")
 
 m1: ModelTrainer = getModelTrainer_v1(model_name)
 
@@ -24,20 +24,20 @@ m1: ModelTrainer = getModelTrainer_v1(model_name)
 #     python_code = f1.read()
 # dataset: str = dataset or 'examples/canada_per_capita_income.csv'
 
-python_code = st.file_uploader('Upload Python Code', type=['py'])
+python_code = st.file_uploader("Upload Python Code", type=["py"])
 
 # with st.echo():
 #     st.write('This code will be printed')
-if python_code and st.checkbox('Show Code'):
+if python_code and st.checkbox("Show Code"):
     display_code = format_python_code_v1(python_code.getvalue().decode())
-    st.code(display_code, language='python')
+    st.code(display_code, language="python")
 
-dataset = st.file_uploader('Upload Dataset', type=['csv'])
-requirements_txt = st.file_uploader('Upload requirements.txt', type=['txt'])
+dataset = st.file_uploader("Upload Dataset", type=["csv"])
+requirements_txt = st.file_uploader("Upload requirements.txt", type=["txt"])
 
 
 train_split_ratio = st.number_input(
-    'Train Split Ratio (%)',
+    "Train Split Ratio (%)",
     min_value=0,
     max_value=100,
     value=80,
@@ -65,14 +65,14 @@ if requirements_txt:
 loaded_model = None
 
 if python_code and dataset:
-    module_name = '__temp_module__'
+    module_name = "__temp_module__"
     spec = importlib.util.spec_from_loader(module_name, loader=None)
     module = importlib.util.module_from_spec(spec)
     # spec.loader.load_module() #FIXME: install and inject deps to the module only
     # Compile and execute the code within the module
     exec(python_code.getvalue(), module.__dict__)
 
-    m1: ModelTrainer = module.__dict__['ModelTrainer'](
+    m1: ModelTrainer = module.__dict__["ModelTrainer"](
         dataset,
         loaded_model,
         train_test_split=train_split_ratio / 100,
@@ -81,31 +81,31 @@ if python_code and dataset:
     c[model_name] = m1
 
     pretrained_model = st.file_uploader(
-        'Upload Pretrained Model',
-        type=['sav'],
+        "Upload Pretrained Model",
+        type=["sav"],
     )
 
     if pretrained_model:
         loaded_model = joblib.load(pretrained_model)
-        st.write('Loaded pretrained model.')
+        st.write("Loaded pretrained model.")
 
-        if st.button('Score: Pretrained Model'):
+        if st.button("Score: Pretrained Model"):
             score_placeholder = m1.calculate_score(loaded_model)  # m1.X, m1.y
             display_score = round(score_placeholder * 100, 2)
 
-            html_string = f'<div class=w3-light-grey><div class=w3-pro id=pretrained  style=width:{display_score}%>{display_score}%</div></div><br>'
-            st.write(f'Pretrained-Model Score')
+            html_string = f"<div class=w3-light-grey><div class=w3-pro id=pretrained  style=width:{display_score}%>{display_score}%</div></div><br>"
+            st.write(f"Pretrained-Model Score")
 
             st.markdown(html_string, unsafe_allow_html=True)
 
             # st.write(f"Pretrained-Model Score: {score_placeholder * 100:0.3f}%")
 
-if st.button('Train'):
+if st.button("Train"):
     if not python_code:
-        st.error('Please upload Python code to train the model.')
+        st.error("Please upload Python code to train the model.")
 
     if not dataset:
-        st.warning('Please upload the dataset to train or test the model')
+        st.warning("Please upload the dataset to train or test the model")
 
     if python_code and dataset:
         st.snow()

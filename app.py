@@ -63,7 +63,7 @@ if not app:
     st.session_state.app = app
 
 option = st.selectbox(
-    "Select a version:",
+    "App Version",
     ("v3", "v2", "v1"),
 )
 
