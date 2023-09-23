@@ -6,9 +6,7 @@ import tempfile
 import venv
 import zipfile
 import shutil
-
 import streamlit as st
-
 from config.constants import *
 from config.log import setup_log
 from utils.archive import archive_directory
@@ -44,6 +42,7 @@ head()
 
 @dataclass
 class App:
+    version: str = "v3"
     demo: bool = True
     model_name: str = "decenter-model-linear-reg-sample_v3"
 
@@ -62,6 +61,17 @@ app = st.session_state.get("app")
 if not app:
     app = App()
     st.session_state.app = app
+
+option = st.selectbox(
+    "App Version",
+    ("v3", "v2", "v1"),
+)
+
+if option != app.version:  # don't redirect if in the same page
+    st.markdown(
+        f'<meta http-equiv="refresh" content="0;URL=/{option}">',
+        unsafe_allow_html=True,
+    )
 
 
 def setDemoMode(val: bool = False):
