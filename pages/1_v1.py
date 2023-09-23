@@ -15,18 +15,7 @@ head_v1()
 # @st.cache_data
 # def get_python_code(filename: str, label: str):
 #     return
-option = st.selectbox(
-    'Select a version:',
-    ('v1', 'v2', 'v3')
-)
 
-if option == 'v1' and st.button("Go to v1"):
-    st.markdown('<meta http-equiv="refresh" content="0;URL=/v1">', unsafe_allow_html=True)      
-if option == 'v2' and st.button("Go to v2"):
-    st.markdown('<meta http-equiv="refresh" content="0;URL=/v2">', unsafe_allow_html=True)
-if option == 'v3' and st.button("Go to v3"):
-    st.markdown('<meta http-equiv="refresh" content="0;URL=/">', unsafe_allow_html=True)
- 
 model_name = st.text_input('Enter a model name: ', value=f'model')
 
 m1: ModelTrainer = getModelTrainer_v1(model_name)
