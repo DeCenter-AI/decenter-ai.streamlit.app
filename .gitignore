@@ -65,6 +65,6 @@ You can modify this file as per your specific requirements.
 
 *.sav
 
-*.zip
+#*.zip
 
 *.html

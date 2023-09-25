@@ -11,7 +11,7 @@ repos:
       - id: requirements-txt-fixer
 
   - repo: https://github.com/asottile/add-trailing-comma
-    rev: v2.5.1
+    rev: v3.1.0
     hooks:
       - id: add-trailing-comma
         args: [ --py36-plus ]
@@ -22,7 +22,7 @@ repos:
   #      - id: usort
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.7.0
+    rev: v3.13.0
     hooks:
       - id: pyupgrade
         args: [ --py38-plus ]
@@ -33,12 +33,12 @@ repos:
   #     - id: autopep8
 
   - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
+    rev: 6.1.0
     hooks:
       - id: flake8
 
   - repo: https://github.com/psf/black
-    rev: stable
+    rev: 23.9.1
     hooks:
     - id: black
       language_version: python3.10
