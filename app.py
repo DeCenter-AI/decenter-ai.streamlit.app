@@ -6,9 +6,7 @@ import tempfile
 import venv
 import zipfile
 import shutil
-
 import streamlit as st
-
 from config.constants import *
 from config.log import setup_log
 from utils.archive import archive_directory
@@ -44,14 +42,17 @@ head()
 
 @dataclass
 class App:
+    version: str = "v3"
     demo: bool = True
     model_name: str = "decenter-model-linear-reg-sample_v3"
-
+    model_name_changed: bool = False
     def validate_model_name(self):
         if not self.model_name:
+            self.model_name_changed= False
             self.model_name = "decenter-model-linear-reg-sample_v3"
             st.toast(f"model name reverted to {self.model_name}", icon="👎")
-        else:
+        elif not self.model_name== "decenter-model-linear-reg-sample_v3" :
+            self.model_name_changed= True
             st.toast(f"model name updated to {self.model_name}", icon="👌")
 
         logging.info(self.model_name)
@@ -63,6 +64,17 @@ if not app:
     app = App()
     st.session_state.app = app
 
+option = st.selectbox(
+    "App Version",
+    ("v3", "v2", "v1"),
+)
+
+if option != app.version:  # don't redirect if in the same page
+    st.markdown(
+        f'<meta http-equiv="refresh" content="0;URL=/{option}">',
+        unsafe_allow_html=True,
+    )
+
 
 def setDemoMode(val: bool = False):
     app.demo = val
@@ -71,7 +83,7 @@ def setDemoMode(val: bool = False):
 app.model_name = st.text_input(
     "Model Name",
     max_chars=50,
-    placeholder="decenter-model-linear-reg-sample_v3",
+    placeholder="decenter-model",
     key="model_name",
     value=app.model_name,
     on_change=app.validate_model_name,
@@ -80,7 +92,7 @@ app.model_name = st.text_input(
     # kwargs=(),
     # value=f'decenter-model-{dt.datetime.now().strftime("%d-%m-%Y-%H:%M:%S")}',
 )
-
+app.validate_model_name()
 logging.info(f"model-name:{app.model_name}")
 
 model_name = app.model_name
@@ -90,7 +102,12 @@ input_archive = st.file_uploader(
     type=["zip"],
     on_change=lambda: setDemoMode(False),
 )
-
+#if app.model_name_changed and input_archive : Fixme
+if app.model_name == "decenter-model-linear-reg-sample_v3"  and input_archive :
+   app.model_name = "decenter-model-"+os.path.splitext(os.path.basename(input_archive.name))[0]
+   print("streamlit rerun")
+   st.experimental_rerun()
+   print("rerun complete")
 starter_script: str  # notebook or python_script
 
 temp_dir: str | tempfile.TemporaryDirectory
@@ -188,10 +205,7 @@ if starter_script:
                         cwd=temp_dir_path,
                     )
 
-            training_cmd = get_python_cmd(
-                starter_script,
-                python_interpreter=python_repl,
-            )
+            training_cmd = [python_repl, starter_script]
 
         case ".ipynb":
             EXECUTION_LANG: str = TRAINER_PYTHON_NB
@@ -266,7 +280,7 @@ if training_cmd and st.button("Train"):
             st.download_button(
                 label="Download Working Directory",
                 data=f1,
-                file_name=f"decenter-{os.path.basename(zipfile_)}",
+                file_name=f"{os.path.basename(zipfile_)}",
             )
 
         st.balloons()
