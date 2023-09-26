@@ -1,3 +1,10 @@
+---
+name: Bug
+about: Report a bug
+title: "bug: <issue> "
+labels: bug
+---
+
 **Bug Description:**
 
 [Describe the bug in detail here. Include any error messages, unexpected behavior, or other relevant information.]
