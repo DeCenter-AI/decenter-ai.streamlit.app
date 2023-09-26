@@ -46,6 +46,9 @@ class App:
     demo: bool = True
     model_name: str = "decenter-model-linear-reg-sample_v3"
     model_name_changed: bool = False
+    def set_model_name(self, model_name:str):
+        app.model_name=model_name
+        app.model_name_changed=True
     def validate_model_name(self):
         if not self.model_name:
             self.model_name_changed= False
@@ -59,7 +62,7 @@ class App:
 
 
 app = st.session_state.get("app")
-# app = None if MODE == DEVELOPMENT else app  # DEV: when testing
+#app = None if MODE == DEVELOPMENT else app  # DEV: when testing 
 if not app:
     app = App()
     st.session_state.app = app
@@ -102,12 +105,13 @@ input_archive = st.file_uploader(
     type=["zip"],
     on_change=lambda: setDemoMode(False),
 )
-#if app.model_name_changed and input_archive : Fixme
-if app.model_name == "decenter-model-linear-reg-sample_v3"  and input_archive :
-   app.model_name = "decenter-model-"+os.path.splitext(os.path.basename(input_archive.name))[0]
+
+if  not app.model_name_changed and input_archive : 
+   model_name = "decenter-model-"+os.path.splitext(os.path.basename(input_archive.name))[0]
+   app.set_model_name(model_name)
    print("streamlit rerun")
    st.experimental_rerun()
-   print("rerun complete")
+   print("rerun complete") #know this
 starter_script: str  # notebook or python_script
 
 temp_dir: str | tempfile.TemporaryDirectory
