@@ -46,10 +46,11 @@ class App:
     demo: bool = True
     model_name: str = "decenter-model-linear-reg-sample_v3"
     model_name_changed: bool = False
-    
+
     def set_model_name(self, model_name:str):
         app.model_name=model_name
         app.model_name_changed=True
+        
     def validate_model_name(self):
         if not self.model_name:
             self.model_name_changed= False
