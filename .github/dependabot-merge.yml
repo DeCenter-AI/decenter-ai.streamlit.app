@@ -1,0 +1,19 @@
+- match:
+    dependency_type: development
+    update_type: all
+
+- match:
+    dependency_type: all
+    update_type: semver:${TARGET}
+
+- match:
+    dependency_type: all
+    update_type: 'security:*'
+
+- match:
+    dependency_type: all
+    update_type: '*:minor'
+
+- match:
+    dependency_type: all
+    update_type: '*:patch'
