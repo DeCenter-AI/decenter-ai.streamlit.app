@@ -19,6 +19,6 @@ def train_model(dataset):
     return model
 
 
-if __name__ == '__main__':
-    dataset = 'income.csv'
+if __name__ == "__main__":
+    dataset = "income.csv"
     train_model(dataset)

@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 
 @dataclass
 class ModelTrainer:
-    dataset: Union[BytesIO, 'str']
+    dataset: Union[BytesIO, "str"]
     pretrained_model: BytesIO = LinearRegression()
 
     train_test_split: int = 0.8
@@ -24,7 +24,12 @@ class ModelTrainer:
         self.split_dataset(1 - self.train_test_split)
 
     def split_dataset(self, test_size=0.2, random_state=42, **kwargs):
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(
+        (
+            self.X_train,
+            self.X_test,
+            self.y_train,
+            self.y_test,
+        ) = train_test_split(
             self.X,
             self.y,
             test_size=test_size,
@@ -34,12 +39,12 @@ class ModelTrainer:
 
     def load_dataset(self):
         df = pd.read_csv(self.dataset)
-        self.y = df['per_capita_income_in_usd']
-        self.X = df[['year']]
+        self.y = df["per_capita_income_in_usd"]
+        self.X = df[["year"]]
 
-    def train_model(self) -> 'model':
+    def train_model(self) -> "model":
         if self.X is None or self.y is None:
-            raise ValueError('Dataset has not been loaded yet.')
+            raise ValueError("Dataset has not been loaded yet.")
         model = self.pretrained_model or LinearRegression()
         model.fit(self.X, self.y)
         self.trained_model = model
@@ -50,20 +55,20 @@ class ModelTrainer:
             model = self.trained_model
 
         if model is None:
-            raise ValueError('Model missing')
+            raise ValueError("Model missing")
 
         if X is None or y is None:
             X = self.X_test
             y = self.y_test
 
         if X is None or y is None:
-            raise ValueError('Test data missing')
+            raise ValueError("Test data missing")
 
         _score = model.score(X, y)
         return _score
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # import joblib
     #
     # dataset = "canada_per_capita_income.csv"
@@ -74,7 +79,7 @@ if __name__ == '__main__':
     # m2 = joblib.load(loaded_model)
     # train_model(dataset, m2)
 
-    dataset = 'canada_per_capita_income.csv'
+    dataset = "canada_per_capita_income.csv"
 
     m1 = ModelTrainer(dataset)
     start_time = time.time()
@@ -82,7 +87,7 @@ if __name__ == '__main__':
     end_time = time.time()
 
     elapsed_time = end_time - start_time
-    print(f'Elapsed time: {elapsed_time:.6f} seconds')
+    print(f"Elapsed time: {elapsed_time:.6f} seconds")
 
     score = m1.calculate_score()
-    print(f'Model Score: {score * 100:0.3f}')
+    print(f"Model Score: {score * 100:0.3f}")
