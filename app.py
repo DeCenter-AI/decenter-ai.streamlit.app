@@ -35,6 +35,62 @@ setup_log()
 
 st.sidebar.header("v3-beta")
 
+# Define the CSS for positioning the buttons in the top right corner and changing text color to white
+button_position_css = """
+<style>
+.button-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    display: flex; /* Use flexbox to align buttons horizontally */
+    flex-direction: row; /* Arrange buttons in a row */
+}
+
+.report-button, .request-button {
+    color: #f1f5f1; 
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 5px; /* Add margin to separate buttons */
+    /* Text color set to white */
+}
+
+.report-button {
+    background-color: #751919; /* Red background color for "Report an issue" */
+}
+
+.report-button:hover {
+    background-color: #2B3A4F; /* Transition to darker color on hover */
+}
+
+.request-button {
+    background-color: #28d41f; /* Red background color for "Request a Feature" */
+}
+
+.request-button:hover {
+    background-color: #2B3A4F; /* Transition to darker color on hover */
+}
+</style>
+"""
+
+# Add the buttons and their positioning to the Streamlit app
+st.markdown(button_position_css, unsafe_allow_html=True)
+st.markdown(
+    """
+    <div class="button-container">
+        <a href="https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new?assignees=&labels=bug&projects=&template=00-bug.md&title=bug%3A++" target="_blank" class="report-button">Report an issue</a>
+        <a href="https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose" target="_blank" class="request-button">Request a Feature</a>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 load_dotenv()
 
 head()
