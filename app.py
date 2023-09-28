@@ -102,19 +102,19 @@ button_position_css = """
 }
 
 .report-button {
-    background-color: #751919; /* Red background color for "Report an issue" */
+    background-color: #751919;
 }
 
 .report-button:hover {
-    background-color: #2B3A4F; /* Transition to darker color on hover */
+    background-color: #2B3A4F;
 }
 
 .request-button {
-    background-color: #28d41f; /* Red background color for "Request a Feature" */
+    background-color: #28d41f;
 }
 
 .request-button:hover {
-    background-color: #2B3A4F; /* Transition to darker color on hover */
+    background-color: #2B3A4F;
 }
 </style>
 """
