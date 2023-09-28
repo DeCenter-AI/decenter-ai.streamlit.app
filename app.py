@@ -124,7 +124,7 @@ st.markdown(button_position_css, unsafe_allow_html=True)
 st.markdown(
     """
     <div class="button-container">
-        <a href="https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new?assignees=&labels=bug&projects=&template=00-bug.md&title=bug%3A++" target="_blank" id="bug-report-button" class="report-button">Report an issue</a>
+        <a href="https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new?assignees=&labels=bug&projects=&template=00-bug.md&title=bug%3A++" target="_blank" id="bug-report-button" class="report-button">Report a Bug</a>
         <a href="https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose" target="_blank" id="request-feature-button" class="request-button">Request a Feature</a>
     </div>
     """,
