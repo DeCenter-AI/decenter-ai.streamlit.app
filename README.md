@@ -116,16 +116,16 @@ Pitch deck, Customer profiles, Demo videos, market research, competitive analysi
 
 ## How to use the demo
 ![image](https://github.com/DeCenter-AI/decenter-ai.streamlit.app/assets/131058062/95dad140-a127-4fc5-9a49-ef38885a19af)
-Visit https://decenterai.vercel.app/demo
-Enter model name
-Upload training dataset ( this gets uploaded using lighthouse)
-sign deal transaction with fvm ( for data backup purposes)
-Select training script
-Click train
-Sign lilypad contract
-Model training commences
-After training is done , you can download your trained model
-NFT certficates are created as license for the model
+1. Visit https://decenterai.vercel.app/demo
+2. Enter model name
+3. Upload training dataset ( this gets uploaded using lighthouse)
+4. sign deal transaction with fvm ( for data backup purposes)
+5. Select training script
+6. Click train
+7. Sign lilypad contract
+8. Model training commences
+9. After training is done , you can download your trained model
+10. NFT certficates are created as license for the model
 
 ## Backend Workflow
 ![Open Data Hackathon  (1)](https://github.com/DeCenter-AI/decenter-ai.streamlit.app/assets/131058062/77755a15-72ca-433a-846e-81ca7ff7dfc8)
