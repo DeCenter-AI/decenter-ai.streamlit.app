@@ -1,20 +1,21 @@
-import datetime as dt
 import logging
+import shutil
 import subprocess
 import sys
 import tempfile
 import venv
 import zipfile
-import shutil
+from dataclasses import dataclass
+
 import streamlit as st
+
 from config.constants import *
 from config.log import setup_log
 from utils.archive import archive_directory
-from utils.exec_commands import get_notebook_cmd, get_python_cmd
+from utils.exec_commands import get_notebook_cmd
 from utils.helper_find import find_requirements_txt_files, find_driver_scripts
 from utils.install_deps import install_dependencies
 from views.head import head
-from dataclasses import dataclass
 
 st.set_page_config(
     page_title="Decenter AI",
@@ -47,24 +48,24 @@ class App:
     model_name: str = "decenter-model-linear-reg-sample_v3"
     model_name_changed: bool = False
 
-    def set_model_name(self, model_name:str):
-        app.model_name=model_name
-        app.model_name_changed=True
-        
+    def set_model_name(self, model_name: str):
+        app.model_name = model_name
+        app.model_name_changed = True
+
     def validate_model_name(self):
         if not self.model_name:
-            self.model_name_changed= False
+            self.model_name_changed = False
             self.model_name = "decenter-model-linear-reg-sample_v3"
             st.toast(f"model name reverted to {self.model_name}", icon="👎")
-        elif not self.model_name== "decenter-model-linear-reg-sample_v3" :
-            self.model_name_changed= True
+        elif not self.model_name == "decenter-model-linear-reg-sample_v3":
+            self.model_name_changed = True
             st.toast(f"model name updated to {self.model_name}", icon="👌")
 
         logging.info(self.model_name)
 
 
 app = st.session_state.get("app")
-#app = None if MODE == DEVELOPMENT else app  # DEV: when testing 
+# app = None if MODE == DEVELOPMENT else app  # DEV: when testing
 if not app:
     app = App()
     st.session_state.app = app
@@ -108,12 +109,15 @@ input_archive = st.file_uploader(
     on_change=lambda: setDemoMode(False),
 )
 
-if  not app.model_name_changed and input_archive : 
-   model_name = "decenter-model-"+os.path.splitext(os.path.basename(input_archive.name))[0]
-   app.set_model_name(model_name)
-   print("streamlit rerun")
-   st.experimental_rerun()
-   print("rerun complete") #know this
+if not app.model_name_changed and input_archive:
+    model_name = (
+        "decenter-model-"
+        + os.path.splitext(os.path.basename(input_archive.name))[0]
+    )
+    app.set_model_name(model_name)
+    print("streamlit rerun")
+    st.experimental_rerun()
+    print("rerun complete")  # know this
 starter_script: str  # notebook or python_script
 
 temp_dir: str | tempfile.TemporaryDirectory
@@ -181,6 +185,7 @@ else:
 
 driver_scripts = find_driver_scripts(temp_dir_path)
 starter_script = st.selectbox("Training Script:", driver_scripts)
+training_cmd: str
 
 if starter_script:
     script_ext = os.path.splitext(starter_script)[1]
