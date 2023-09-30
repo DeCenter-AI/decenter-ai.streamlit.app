@@ -1,20 +1,21 @@
-import datetime as dt
 import logging
+import shutil
 import subprocess
 import sys
 import tempfile
 import venv
 import zipfile
-import shutil
+from dataclasses import dataclass
+
 import streamlit as st
+
 from config.constants import *
 from config.log import setup_log
 from utils.archive import archive_directory
-from utils.exec_commands import get_notebook_cmd, get_python_cmd
+from utils.exec_commands import get_notebook_cmd
 from utils.helper_find import find_requirements_txt_files, find_driver_scripts
 from utils.install_deps import install_dependencies
 from views.head import head
-from dataclasses import dataclass
 
 st.set_page_config(
     page_title="Decenter AI",
@@ -280,6 +281,7 @@ else:
 
 driver_scripts = find_driver_scripts(temp_dir_path)
 starter_script = st.selectbox("Training Script:", driver_scripts)
+training_cmd: str
 
 if starter_script:
     script_ext = os.path.splitext(starter_script)[1]
