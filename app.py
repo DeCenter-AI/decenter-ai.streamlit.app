@@ -34,95 +34,54 @@ def get_temp_zip_dir():
 
 setup_log()
 
-st.sidebar.header("v3-beta")
+st.sidebar.header("v3-beta") 
 
-# Define the CSS for positioning the buttons in the top right corner and changing text color to white
-button_position_css = """
+
+button_styles_css = """
 <style>
-.button-container {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 1;
-    display: flex; /* Use flexbox to align buttons horizontally */
-    flex-direction: row; /* Arrange buttons in a row */
-}
-
-#bug-report-button {
-    background-color: #ff6347;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-#bug-report-button:hover {
-    background-color: #ff4737;
-}
-
-#bug-report-button-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-}
-
-#request-feature-button {
-    background-color: #4caf50;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-#request-feature-button:hover {
-    background-color: #45a049;
-}
-
-#request-feature-button-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-}
 
 .report-button, .request-button {
-    color: #f1f5f1;
-    border: none;
-    border-radius: 4px;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
+    padding: 3px 7px;
+    border-radius: 3px;
     cursor: pointer;
-    margin-right: 5px; /* Add margin to separate buttons */
-    /* Text color set to white */
+    font-size: 14px;
+    margin-top: 10px;
 }
 
 .report-button {
-    background-color: #751919;
+    background-color: #e84242;
+    color: #fff !important;
 }
 
 .report-button:hover {
-    background-color: #2B3A4F;
+    background-color:#30e4ed;
 }
 
 .request-button {
-    background-color: #28d41f;
+    background-color: #41e536;
+    color: #fff !important;
 }
 
 .request-button:hover {
-    background-color: #2B3A4F;
+    background-color: #30e4ed;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 240px;
+    left: 60px; 
 }
 </style>
 """
 
-# Add the buttons and their positioning to the Streamlit app
-st.markdown(button_position_css, unsafe_allow_html=True)
-st.markdown(
+
+st.markdown(button_styles_css, unsafe_allow_html=True)
+
+
+st.sidebar.markdown(
     """
     <div class="button-container">
         <a href="https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new?assignees=&labels=bug&projects=&template=00-bug.md&title=bug%3A++" target="_blank" id="bug-report-button" class="report-button">Report a Bug</a>
@@ -131,7 +90,6 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
 load_dotenv()
 
 head()
