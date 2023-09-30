@@ -47,8 +47,48 @@ button_position_css = """
     flex-direction: row; /* Arrange buttons in a row */
 }
 
+#bug-report-button {
+    background-color: #ff6347;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#bug-report-button:hover {
+    background-color: #ff4737;
+}
+
+#bug-report-button-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+#request-feature-button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#request-feature-button:hover {
+    background-color: #45a049;
+}
+
+#request-feature-button-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
 .report-button, .request-button {
-    color: #f1f5f1; 
+    color: #f1f5f1;
     border: none;
     border-radius: 4px;
     padding: 5px 10px;
@@ -62,19 +102,19 @@ button_position_css = """
 }
 
 .report-button {
-    background-color: #751919; /* Red background color for "Report an issue" */
+    background-color: #751919;
 }
 
 .report-button:hover {
-    background-color: #2B3A4F; /* Transition to darker color on hover */
+    background-color: #2B3A4F;
 }
 
 .request-button {
-    background-color: #28d41f; /* Red background color for "Request a Feature" */
+    background-color: #28d41f;
 }
 
 .request-button:hover {
-    background-color: #2B3A4F; /* Transition to darker color on hover */
+    background-color: #2B3A4F;
 }
 </style>
 """
@@ -84,8 +124,8 @@ st.markdown(button_position_css, unsafe_allow_html=True)
 st.markdown(
     """
     <div class="button-container">
-        <a href="https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new?assignees=&labels=bug&projects=&template=00-bug.md&title=bug%3A++" target="_blank" class="report-button">Report an issue</a>
-        <a href="https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose" target="_blank" class="request-button">Request a Feature</a>
+        <a href="https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new?assignees=&labels=bug&projects=&template=00-bug.md&title=bug%3A++" target="_blank" id="bug-report-button" class="report-button">Report a Bug</a>
+        <a href="https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose" target="_blank" id="request-feature-button" class="request-button">Request a Feature</a>
     </div>
     """,
     unsafe_allow_html=True,
@@ -103,24 +143,24 @@ class App:
     model_name: str = "decenter-model-linear-reg-sample_v3"
     model_name_changed: bool = False
 
-    def set_model_name(self, model_name:str):
-        app.model_name=model_name
-        app.model_name_changed=True
-        
+    def set_model_name(self, model_name: str):
+        app.model_name = model_name
+        app.model_name_changed = True
+
     def validate_model_name(self):
         if not self.model_name:
-            self.model_name_changed= False
+            self.model_name_changed = False
             self.model_name = "decenter-model-linear-reg-sample_v3"
             st.toast(f"model name reverted to {self.model_name}", icon="👎")
-        elif not self.model_name== "decenter-model-linear-reg-sample_v3" :
-            self.model_name_changed= True
+        elif not self.model_name == "decenter-model-linear-reg-sample_v3":
+            self.model_name_changed = True
             st.toast(f"model name updated to {self.model_name}", icon="👌")
 
         logging.info(self.model_name)
 
 
 app = st.session_state.get("app")
-#app = None if MODE == DEVELOPMENT else app  # DEV: when testing 
+# app = None if MODE == DEVELOPMENT else app  # DEV: when testing
 if not app:
     app = App()
     st.session_state.app = app
@@ -164,12 +204,15 @@ input_archive = st.file_uploader(
     on_change=lambda: setDemoMode(False),
 )
 
-if  not app.model_name_changed and input_archive : 
-   model_name = "decenter-model-"+os.path.splitext(os.path.basename(input_archive.name))[0]
-   app.set_model_name(model_name)
-   print("streamlit rerun")
-   st.experimental_rerun()
-   print("rerun complete") #know this
+if not app.model_name_changed and input_archive:
+    model_name = (
+        "decenter-model-"
+        + os.path.splitext(os.path.basename(input_archive.name))[0]
+    )
+    app.set_model_name(model_name)
+    print("streamlit rerun")
+    st.experimental_rerun()
+    print("rerun complete")  # know this
 starter_script: str  # notebook or python_script
 
 temp_dir: str | tempfile.TemporaryDirectory
