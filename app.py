@@ -135,8 +135,8 @@ app.demo = input_archive is None
 if app.demo:
     st.warning("input archive not found: demo:on")
     model_name = "decenter-model-linear-reg-sample_v3"
-    input_archive = "examples/sample_v3"
-    temp_dir = "examples/sample_v3"
+    input_archive = "samples/sample_v3"
+    temp_dir = "samples/sample_v3"
     temp_dir_path = temp_dir
 else:
     temp_dir = tempfile.TemporaryDirectory(
