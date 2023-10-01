@@ -41,7 +41,7 @@ update_progress(30)
 
 # python_code = st.file_uploader('Upload Training Python Script', type=['py'])
 
-with open("examples/sample_v2/linear-regression.py") as f1:
+with open("samples/sample_v2/linear-regression.py") as f1:
     training_code = f1.read()
     # python_code = base64.b64encode(file_content)
 
@@ -59,7 +59,7 @@ requirements_txt = ""
 
 if not dataset:
     st.warning("Dataset not found: uploading a predefined dataset")
-    dataset = "examples/sample_v2/canada_per_capita_income.csv"
+    dataset = "samples/sample_v2/canada_per_capita_income.csv"
 
 train_split_ratio = st.number_input(
     "Train Split Ratio (%)",

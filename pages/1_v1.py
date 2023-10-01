@@ -20,9 +20,9 @@ model_name = st.text_input("Enter a model name: ", value=f"model")
 
 m1: ModelTrainer = getModelTrainer_v1(model_name)
 
-# with open('examples/linear-regression.py', 'r') as f1:
+# with open('samples/linear-regression.py', 'r') as f1:
 #     python_code = f1.read()
-# dataset: str = dataset or 'examples/canada_per_capita_income.csv'
+# dataset: str = dataset or 'samples/canada_per_capita_income.csv'
 
 python_code = st.file_uploader("Upload Python Code", type=["py"])
 

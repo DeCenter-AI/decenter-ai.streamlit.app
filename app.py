@@ -1,21 +1,22 @@
-import datetime as dt
 import logging
+import shutil
 import subprocess
 import sys
 import tempfile
-from typing import List
 import venv
 import zipfile
-import shutil
+from dataclasses import dataclass
+from typing import List
+
 import streamlit as st
+
 from config.constants import *
 from config.log import setup_log
 from utils.archive import archive_directory
-from utils.exec_commands import get_notebook_cmd, get_python_cmd
+from utils.exec_commands import get_notebook_cmd
 from utils.helper_find import find_requirements_txt_files, find_driver_scripts
 from utils.install_deps import install_dependencies
 from views.head import head
-from dataclasses import dataclass
 
 st.set_page_config(
     page_title="Decenter AI",
@@ -135,8 +136,8 @@ app.demo = input_archive is None
 if app.demo:
     st.warning("input archive not found: demo:on")
     model_name = "decenter-model-linear-reg-sample_v3"
-    input_archive = "examples/sample_v3"
-    temp_dir = "examples/sample_v3"
+    input_archive = "samples/sample_v3"
+    temp_dir = "samples/sample_v3"
     temp_dir_path = temp_dir
 else:
     temp_dir = tempfile.TemporaryDirectory(
