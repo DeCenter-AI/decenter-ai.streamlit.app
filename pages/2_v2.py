@@ -7,7 +7,7 @@ from sklearn.linear_model import LinearRegression
 from enums.model_trainer import ModelTrainer
 from models.model import c, getModelTrainer
 from utils.format_display_code import format_python_code
-from utils.install_deps import install_dependencies_v2
+from utils.install_deps import install_dependencies_v0
 from views.head import head
 from views.train import train
 
@@ -80,7 +80,7 @@ if requirements_txt:
         return uploaded_file
 
     # requirements_txt.getvalue().decode().split('\n')
-    install_dependencies_v2(requirements_txt)
+    install_dependencies_v0(requirements_txt)
 
     # FIXME: add icon william
     # st.download_button(
