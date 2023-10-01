@@ -21,7 +21,7 @@ from utils.archive import archive_directory
 from utils.exec_commands import get_notebook_cmd
 from utils.helper_find import find_requirements_txt_files, find_driver_scripts
 from utils.install_deps import install_dependencies
-from views.head import head
+from views.head import head_v3
 
 st.set_page_config(
     page_title="Decenter AI",
@@ -50,7 +50,7 @@ st.sidebar.header("v3-beta")
 
 load_dotenv()
 
-head()
+head_v3()
 
 
 @dataclass
