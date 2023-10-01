@@ -8,7 +8,7 @@ from models.model import c, getModelTrainer_v1
 from utils.format_display_code import format_python_code_v1
 from utils.install_deps import install_dependencies_v1
 from views.head import head_v1
-from views.train import train_v1
+from views.train import train
 
 head_v1()
 
@@ -109,5 +109,5 @@ if st.button("Train"):
 
     if python_code and dataset:
         st.snow()
-        train_v1(model_name)
+        train(model_name)
         st.balloons()
