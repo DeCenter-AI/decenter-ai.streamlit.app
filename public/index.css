@@ -1,3 +1,4 @@
+
 button.css-4lu1hd.ef3psqc11:hover {
     border: 1px solid white;
 
@@ -35,7 +36,6 @@ button.css-4lu1hd.ef3psqc11:focus {
 #pretrained {
     background-color: rgb(7, 85, 85);
 }
-
 
 /*hide streamlit style*/
 #MainMenu {

@@ -4,12 +4,14 @@ import public
 
 
 def head():
-    st.markdown(f"{public.index_css}", unsafe_allow_html=True)
+    st.write(f"{public.index_css}", unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 2, 1])
-    col2.image(public.logo, width=300)
 
-    st.toast("Welcome to Decenter", icon="🙏")
+    with col1:
+        st.image(
+            "static/stand.png", caption="AI Infrastructure for Model training"
+        )
+        st.toast("Welcome to Decenter", icon="🙏")
 
-    # st.image("static/stand.png")
-    st.title("AI Infrastructure for Model training")
+    col2.image(public.logo, width=400)
