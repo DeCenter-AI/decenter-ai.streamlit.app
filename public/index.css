@@ -1,4 +1,4 @@
-button.css-4lu1hd.ef3psqc11:hover {
+/*button.css-4lu1hd.ef3psqc11:hover {
     border: 1px solid white;
 
     color: white;
@@ -14,7 +14,9 @@ button.css-4lu1hd.ef3psqc11:focus {
     border: 1px solid white;
     background-color: #000000;
     color: white;
-}
+
+    FIXME: remove ask william what it is?
+}*/
 
 .w3-light-grey {
     height: 50px;
@@ -34,4 +36,13 @@ button.css-4lu1hd.ef3psqc11:focus {
 
 #pretrained {
     background-color: rgb(7, 85, 85);
+}
+
+/*hide streamlit style*/
+#MainMenu {
+    visibility: hidden;
+}
+
+footer {
+    visibility: hidden;
 }

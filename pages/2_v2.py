@@ -5,11 +5,11 @@ import streamlit as st
 from sklearn.linear_model import LinearRegression
 
 from enums.model_trainer import ModelTrainer
-from models.model import c, getModelTrainer_v2
-from utils.format_display_code import format_python_code_v2
-from utils.install_deps import install_dependencies_v2
-from views.head import head_v2
-from views.train import train_v2
+from models.model import c, getModelTrainer
+from utils.format_display_code import format_python_code
+from utils.install_deps import install_dependencies_v0
+from views.head import head
+from views.train import train
 
 progress = 10
 
@@ -23,7 +23,7 @@ st.sidebar.header("v2")
 progress_bar = st.sidebar.progress(0)
 status_text = st.sidebar.empty()
 
-head_v2()
+head()
 
 update_progress(20)
 
@@ -34,14 +34,14 @@ update_progress(20)
 # model_name = st.text_input('Enter a model name: ', value=f'model')
 model_name = st.text("model: sklearn.linear_model.Linear Regression")
 
-m1: ModelTrainer = getModelTrainer_v2(model_name)
+m1: ModelTrainer = getModelTrainer(model_name)
 
 update_progress(30)
 
 
 # python_code = st.file_uploader('Upload Training Python Script', type=['py'])
 
-with open("examples/sample_v2/linear-regression.py") as f1:
+with open("samples/sample_v2/linear-regression.py") as f1:
     training_code = f1.read()
     # python_code = base64.b64encode(file_content)
 
@@ -50,7 +50,7 @@ with open("examples/sample_v2/linear-regression.py") as f1:
 
 if training_code and st.checkbox("Show Code"):
     # display_code = format_python_code(python_code.getvalue().decode())
-    display_code = format_python_code_v2(training_code)
+    display_code = format_python_code(training_code)
     st.code(display_code, language="python")
 
 dataset = st.file_uploader("Upload Dataset", type=["csv"])
@@ -59,7 +59,7 @@ requirements_txt = ""
 
 if not dataset:
     st.warning("Dataset not found: uploading a predefined dataset")
-    dataset = "examples/sample_v2/canada_per_capita_income.csv"
+    dataset = "samples/sample_v2/canada_per_capita_income.csv"
 
 train_split_ratio = st.number_input(
     "Train Split Ratio (%)",
@@ -80,7 +80,7 @@ if requirements_txt:
         return uploaded_file
 
     # requirements_txt.getvalue().decode().split('\n')
-    install_dependencies_v2(requirements_txt)
+    install_dependencies_v0(requirements_txt)
 
     # FIXME: add icon william
     # st.download_button(
@@ -145,5 +145,5 @@ if st.button("Train"):
 
     if training_code and dataset:
         st.snow()
-        train_v2(model_name)
+        train(model_name)
         st.balloons()

@@ -1,25 +1,37 @@
-import datetime as dt
 import logging
+import shutil
 import subprocess
 import sys
 import tempfile
-from typing import List
 import venv
 import zipfile
-import shutil
+from dataclasses import dataclass
+from typing import List
+
 import streamlit as st
+from streamlit.commands.page_config import (
+    REPORT_A_BUG_KEY,
+    ABOUT_KEY,
+    GET_HELP_KEY,
+)
+
 from config.constants import *
 from config.log import setup_log
 from utils.archive import archive_directory
-from utils.exec_commands import get_notebook_cmd, get_python_cmd
+from utils.exec_commands import get_notebook_cmd
 from utils.helper_find import find_requirements_txt_files, find_driver_scripts
 from utils.install_deps import install_dependencies
-from views.head import head
-from dataclasses import dataclass
+from views.head import head_v3
 
 st.set_page_config(
     page_title="Decenter AI",
     page_icon="static/favicon.ico",
+    layout="centered",
+    menu_items={
+        REPORT_A_BUG_KEY: "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose",
+        ABOUT_KEY: "https://app.pitch.com/app/dashboard/0ba0eb40-0ffc-4970-91a5-64cec23d3457",
+        GET_HELP_KEY: "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose",
+    },
 )
 
 
@@ -38,7 +50,7 @@ st.sidebar.header("v3-beta")
 
 load_dotenv()
 
-head()
+head_v3()
 
 
 @dataclass
@@ -283,7 +295,9 @@ if training_cmd and st.button("Train"):
         )
         # zipfile_ = archive_directory_in_memory(temp_dir_path)
 
-        st.toast("executed the notebook successfully")
+        st.toast("Executed the notebook successfully", icon="🧤")
+
+        st.success("Execution completed successfully!", icon="✅")
 
         st.balloons()
 
