@@ -9,6 +9,11 @@ from dataclasses import dataclass
 from typing import List
 
 import streamlit as st
+from streamlit.commands.page_config import (
+    REPORT_A_BUG_KEY,
+    ABOUT_KEY,
+    GET_HELP_KEY,
+)
 
 from config.constants import *
 from config.log import setup_log
@@ -21,6 +26,12 @@ from views.head import head
 st.set_page_config(
     page_title="Decenter AI",
     page_icon="static/favicon.ico",
+    layout="centered",
+    menu_items={
+        REPORT_A_BUG_KEY: "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose",
+        ABOUT_KEY: "https://github.com/DeCenter-AI",
+        GET_HELP_KEY: "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose",
+    },
 )
 
 
