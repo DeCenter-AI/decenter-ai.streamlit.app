@@ -6,7 +6,7 @@ from sklearn.linear_model import LinearRegression
 
 from enums.model_trainer import ModelTrainer
 from models.model import c, getModelTrainer_v2
-from utils.format_display_code import format_python_code_v2
+from utils.format_display_code import format_python_code
 from utils.install_deps import install_dependencies_v2
 from views.head import head
 from views.train import train
@@ -50,7 +50,7 @@ with open("samples/sample_v2/linear-regression.py") as f1:
 
 if training_code and st.checkbox("Show Code"):
     # display_code = format_python_code(python_code.getvalue().decode())
-    display_code = format_python_code_v2(training_code)
+    display_code = format_python_code(training_code)
     st.code(display_code, language="python")
 
 dataset = st.file_uploader("Upload Dataset", type=["csv"])

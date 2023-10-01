@@ -5,7 +5,7 @@ import streamlit as st
 
 from enums.model_trainer import ModelTrainer
 from models.model import c, getModelTrainer_v1
-from utils.format_display_code import format_python_code_v1
+from utils.format_display_code import format_python_code
 from utils.install_deps import install_dependencies_v1
 from views.head import head
 from views.train import train
@@ -29,7 +29,7 @@ python_code = st.file_uploader("Upload Python Code", type=["py"])
 # with st.echo():
 #     st.write('This code will be printed')
 if python_code and st.checkbox("Show Code"):
-    display_code = format_python_code_v1(python_code.getvalue().decode())
+    display_code = format_python_code(python_code.getvalue().decode())
     st.code(display_code, language="python")
 
 dataset = st.file_uploader("Upload Dataset", type=["csv"])

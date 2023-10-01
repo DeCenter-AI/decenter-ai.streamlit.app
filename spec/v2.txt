@@ -1,4 +1,4 @@
-head_v2
+head
 getModelTrainer_v2
 format_python_code_v2
 install_dependencies_v2
