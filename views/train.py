@@ -5,11 +5,11 @@ import joblib
 import streamlit as st
 from colorama import Fore
 
-from models.model import getModelTrainer_v1
+from models.model import getModelTrainer
 
 
 def train(model_name: str):  # if python_code and dataset:
-    m1 = getModelTrainer_v1(model_name)
+    m1 = getModelTrainer(model_name)
 
     status_placeholder = st.empty()
     score_placeholder = st.empty()

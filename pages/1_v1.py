@@ -4,7 +4,7 @@ import joblib
 import streamlit as st
 
 from enums.model_trainer import ModelTrainer
-from models.model import c, getModelTrainer_v1
+from models.model import c, getModelTrainer
 from utils.format_display_code import format_python_code
 from utils.install_deps import install_dependencies_v1
 from views.head import head
@@ -18,7 +18,7 @@ head()
 
 model_name = st.text_input("Enter a model name: ", value=f"model")
 
-m1: ModelTrainer = getModelTrainer_v1(model_name)
+m1: ModelTrainer = getModelTrainer(model_name)
 
 # with open('samples/linear-regression.py', 'r') as f1:
 #     python_code = f1.read()

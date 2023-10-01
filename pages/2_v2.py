@@ -5,7 +5,7 @@ import streamlit as st
 from sklearn.linear_model import LinearRegression
 
 from enums.model_trainer import ModelTrainer
-from models.model import c, getModelTrainer_v2
+from models.model import c, getModelTrainer
 from utils.format_display_code import format_python_code
 from utils.install_deps import install_dependencies_v2
 from views.head import head
@@ -34,7 +34,7 @@ update_progress(20)
 # model_name = st.text_input('Enter a model name: ', value=f'model')
 model_name = st.text("model: sklearn.linear_model.Linear Regression")
 
-m1: ModelTrainer = getModelTrainer_v2(model_name)
+m1: ModelTrainer = getModelTrainer(model_name)
 
 update_progress(30)
 
