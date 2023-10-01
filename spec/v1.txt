@@ -1,5 +1,5 @@
 head
 getModelTrainer
 format_python_code
-install_dependencies_v1
+install_dependencies
 train
