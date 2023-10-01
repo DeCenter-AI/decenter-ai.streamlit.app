@@ -8,7 +8,7 @@ from enums.model_trainer import ModelTrainer
 from models.model import c, getModelTrainer_v2
 from utils.format_display_code import format_python_code_v2
 from utils.install_deps import install_dependencies_v2
-from views.head import head_v2
+from views.head import head
 from views.train import train
 
 progress = 10
@@ -23,7 +23,7 @@ st.sidebar.header("v2")
 progress_bar = st.sidebar.progress(0)
 status_text = st.sidebar.empty()
 
-head_v2()
+head()
 
 update_progress(20)
 

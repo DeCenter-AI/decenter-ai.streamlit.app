@@ -7,10 +7,10 @@ from enums.model_trainer import ModelTrainer
 from models.model import c, getModelTrainer_v1
 from utils.format_display_code import format_python_code_v1
 from utils.install_deps import install_dependencies_v1
-from views.head import head_v1
+from views.head import head
 from views.train import train
 
-head_v1()
+head()
 
 # @st.cache_data
 # def get_python_code(filename: str, label: str):
