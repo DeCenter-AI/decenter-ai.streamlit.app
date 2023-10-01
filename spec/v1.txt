@@ -2,4 +2,4 @@ head
 getModelTrainer
 format_python_code
 install_dependencies_v1
-train_v1
+train
