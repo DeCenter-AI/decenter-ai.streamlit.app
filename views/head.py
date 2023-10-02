@@ -42,3 +42,26 @@ def head_v3():
     col2.image(public.logo, width=400)
 
     st.sidebar.success("Load complete")
+
+
+def head_v4():
+    # to be tested
+    st.markdown(
+        """
+        <link rel="stylesheet" type="text/css" href="app/static/index.css">
+        """,
+        unsafe_allow_html=True,
+    )
+
+    col1, col2, col3 = st.columns([1, 2, 1])
+
+    with col1:
+        st.image(
+            "static/stand.png",
+            caption="AI Infrastructure for Model training",
+        )
+        st.toast("Welcome to Decenter", icon="🙏")
+
+    col2.image(public.logo, width=400)
+
+    st.sidebar.success("Load complete")

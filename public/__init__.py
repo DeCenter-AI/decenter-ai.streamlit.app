@@ -3,7 +3,7 @@ from utils.inputs.html import extract_html
 
 public_dir = "static/"
 
-index_css = extract_css(f"public/index.css")
+index_css = extract_css(f"static/index.css")
 
 # index_css = """
 # <link href="./static/index.css" rel="stylesheet">
