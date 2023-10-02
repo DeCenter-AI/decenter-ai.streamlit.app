@@ -1,4 +1,3 @@
-
 # doc: https://docs.streamlit.io/library/advanced-features/theming
 
 [server]
@@ -13,8 +12,8 @@ maxUploadSize = 1024 #mb
 maxMessageSize = 200 #mb
 enableWebsocketCompression = true
 
-enableStaticServing = false
-
+enableStaticServing = true
+#served in ./static :=/app/static/filename.jpg
 [theme]
 primaryColor = "#fff"
 backgroundColor = "#000000"
