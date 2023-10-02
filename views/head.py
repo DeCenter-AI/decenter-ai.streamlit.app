@@ -6,8 +6,8 @@ import public
 
 
 def head():
-    with open("static/style.css") as f:
-        logging.info("reading style.css")
+    with open("static/_style.css") as f:
+        logging.info("reading _style.css")
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -28,7 +28,30 @@ def head():
 
 
 def head_v3():
-    st.write(f"{public.index_css}", unsafe_allow_html=True)
+    st.write(public.index_css, unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns([1, 2, 1])
+
+    with col1:
+        st.image(
+            "static/stand.png",
+            caption="AI Infrastructure for Model training",
+        )
+        st.toast("Welcome to Decenter", icon="🙏")
+
+    col2.image(public.logo, width=400)
+
+    st.sidebar.success("Load complete")
+
+
+def head_v4():
+    # to be tested
+    st.markdown(
+        """
+        <link rel="stylesheet" type="text/css" href="app/static/index.css">
+        """,
+        unsafe_allow_html=True,
+    )
 
     col1, col2, col3 = st.columns([1, 2, 1])
 

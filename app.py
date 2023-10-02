@@ -17,6 +17,7 @@ from streamlit.commands.page_config import (
 
 from config.constants import *
 from config.log import setup_log
+from public import report_request_buttons_html, button_styles_css
 from utils.archive import archive_directory
 from utils.exec_commands import get_notebook_cmd
 from utils.helper_find import find_requirements_txt_files, find_driver_scripts
@@ -47,6 +48,10 @@ def get_temp_zip_dir():
 setup_log()
 
 st.sidebar.header("v3-beta")
+
+st.markdown(button_styles_css, unsafe_allow_html=True)
+
+st.sidebar.markdown(report_request_buttons_html, unsafe_allow_html=True)
 
 load_dotenv()
 
