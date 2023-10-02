@@ -6,8 +6,8 @@ import public
 
 
 def head():
-    with open("static/style.css") as f:
-        logging.info("reading style.css")
+    with open("static/_style.css") as f:
+        logging.info("reading _style.css")
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 2, 1])
