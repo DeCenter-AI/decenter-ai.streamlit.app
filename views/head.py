@@ -28,7 +28,7 @@ def head():
 
 
 def head_v3():
-    st.write(f"{public.index_css}", unsafe_allow_html=True)
+    st.write(public.index_css, unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 2, 1])
 
