@@ -47,7 +47,7 @@ def get_temp_zip_dir():
 
 setup_log()
 
-st.sidebar.header("v3-beta")
+st.sidebar.header("v3")
 
 st.markdown(button_styles_css, unsafe_allow_html=True)
 
