@@ -7,7 +7,7 @@ from typing import IO
 
 
 @cache
-def extract(html_src: str | IO | Path | StringIO) -> str:
+def extract_html(html_src: str | IO | Path | StringIO) -> str:
     isFile = False
 
     if isinstance(html_src, str):

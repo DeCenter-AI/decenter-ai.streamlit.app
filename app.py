@@ -17,6 +17,7 @@ from streamlit.commands.page_config import (
 
 from config.constants import *
 from config.log import setup_log
+from public import report_request_buttons_html, button_styles_css
 from utils.archive import archive_directory
 from utils.exec_commands import get_notebook_cmd
 from utils.helper_find import find_requirements_txt_files, find_driver_scripts
@@ -48,85 +49,9 @@ setup_log()
 
 st.sidebar.header("v3-beta")
 
-button_styles_css = """
-<style>
-.report-button, .request-button {
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    text-decoration: none;
-    transition: background-color 0.3s, color 0.3s; /* Add smooth transitions for background color and text color */
-}
-
-.report-button {
-    background-color: #e84242;
-    color: #000 !important;
-}
-
-.report-button:hover {
-    color: #000 !important; /* Change text color on hover to black */
-    text-decoration: none;
-}
-
-.request-button {
-    background-color: #FFFF00;
-    color: #000 !important;
-
-}
-
-.request-button:hover {
-    color: #000 !important; /* Change text color on hover to black */
-    text-decoration: none;
-}
-
-.button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 230px;
-    left: 50px;
-}
-
-/* Style for default-text and hover-text */
-.request-button .hover-text, .report-button .hover-text {
-    display: none; /* Hide hover-text by default */
-}
-
-.request-button:hover .hover-text, .report-button:hover .hover-text {
-    display: inline; /* Show hover-text on hover */
-}
-
-.request-button .default-text, .report-button .default-text {
-    display: inline; /* Show default-text initially */
-}
-
-.request-button:hover .default-text, .report-button:hover .default-text {
-    display: none; /* Hide default-text on hover */
-}
-</style>
-"""
-
 st.markdown(button_styles_css, unsafe_allow_html=True)
 
-st.sidebar.markdown(
-    """
-    <div class="button-container">
-        <a href="https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new?assignees=&labels=bug&projects=&template=00-bug.md&title=bug%3A++" target="_blank" id="bug-report-button" class="report-button">
-            <span class="default-text">Noticed a Bug?</span>
-            <span class="hover-text">Report the bug</span>
-        </a>
-        <a href="https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose" target="_blank" id="request-feature-button" class="request-button">
-            <span class="default-text">Missing a Feature?</span>
-            <span class="hover-text">Send Feature Request</span>
-        </a>
-
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+st.sidebar.markdown(report_request_buttons_html, unsafe_allow_html=True)
 
 load_dotenv()
 
