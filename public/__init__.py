@@ -1,5 +1,11 @@
-from utils.inputs.html import extract
+from utils.inputs.css import extract_css
 
-public_dir = 'public/'
+public_dir = "static/"
 
-css_index = extract(f'{public_dir}index.css')
+index_css = extract_css(f"public/index.css")
+
+# index_css = """
+# <link href="./static/index.css" rel="stylesheet">
+# """
+
+logo = "static/logo.png"

@@ -1,5 +1,5 @@
-head_v2
-getModelTrainer_v2
-format_python_code_v2
-install_dependencies_v2
-train_v2
+head
+getModelTrainer
+format_python_code
+install_dependencies
+train

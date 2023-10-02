@@ -4,13 +4,13 @@ import joblib
 import streamlit as st
 
 from enums.model_trainer import ModelTrainer
-from models.model import c, getModelTrainer_v1
-from utils.format_display_code import format_python_code_v1
-from utils.install_deps import install_dependencies_v1
-from views.head import head_v1
-from views.train import train_v1
+from models.model import c, getModelTrainer
+from utils.format_display_code import format_python_code
+from utils.install_deps import install_dependencies_v0
+from views.head import head
+from views.train import train
 
-head_v1()
+head()
 
 # @st.cache_data
 # def get_python_code(filename: str, label: str):
@@ -18,18 +18,18 @@ head_v1()
 
 model_name = st.text_input("Enter a model name: ", value=f"model")
 
-m1: ModelTrainer = getModelTrainer_v1(model_name)
+m1: ModelTrainer = getModelTrainer(model_name)
 
-# with open('examples/linear-regression.py', 'r') as f1:
+# with open('samples/linear-regression.py', 'r') as f1:
 #     python_code = f1.read()
-# dataset: str = dataset or 'examples/canada_per_capita_income.csv'
+# dataset: str = dataset or 'samples/canada_per_capita_income.csv'
 
 python_code = st.file_uploader("Upload Python Code", type=["py"])
 
 # with st.echo():
 #     st.write('This code will be printed')
 if python_code and st.checkbox("Show Code"):
-    display_code = format_python_code_v1(python_code.getvalue().decode())
+    display_code = format_python_code(python_code.getvalue().decode())
     st.code(display_code, language="python")
 
 dataset = st.file_uploader("Upload Dataset", type=["csv"])
@@ -50,7 +50,7 @@ if requirements_txt:
         uploaded_file = requirements_txt
         return uploaded_file
 
-    install_dependencies_v1(requirements_txt)
+    install_dependencies_v0(requirements_txt)
 
     # FIXME: add icon william
     # st.download_button(
@@ -109,5 +109,5 @@ if st.button("Train"):
 
     if python_code and dataset:
         st.snow()
-        train_v1(model_name)
+        train(model_name)
         st.balloons()
