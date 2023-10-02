@@ -2,19 +2,21 @@ import logging
 
 import streamlit as st
 
+import public
+
 
 def head():
-    with open('static/style.css') as f:
-        logging.info('reading style.css')
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    with open("static/_style.css") as f:
+        logging.info("reading _style.css")
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 2, 1])
-    col2.image('static/logo.png', width=300)
+    col2.image("static/logo.png", width=300)
 
-    st.toast('Welcome to Decenter', icon='🙏')
+    st.toast("Welcome to Decenter", icon="🙏")
 
     # st.image("static/stand.png")
-    st.title('AI Infrastructure for Model training')
+    st.title("AI Infrastructure for Model training")
 
     hide_streamlit_style = """
             <style>
@@ -25,45 +27,41 @@ def head():
     st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 
-def head_v1():
-    with open('static/style.css') as f:
-        logging.info('reading style.css')
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+def head_v3():
+    st.write(public.index_css, unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 2, 1])
-    col2.image('static/logo.png', width=300)
 
-    st.toast('Welcome to Decenter', icon='🙏')
+    with col1:
+        st.image(
+            "static/stand.png",
+            caption="AI Infrastructure for Model training",
+        )
+        st.toast("Welcome to Decenter", icon="🙏")
 
-    # st.image("static/stand.png")
-    st.title('AI Infrastructure for Model training')
+    col2.image(public.logo, width=400)
 
-    hide_streamlit_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            </style>
-            """
-    st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+    st.sidebar.success("Load complete")
 
 
-def head_v2():
-    with open('static/style.css') as f:
-        logging.info('reading style.css')
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+def head_v4():
+    # to be tested
+    st.markdown(
+        """
+        <link rel="stylesheet" type="text/css" href="app/static/index.css">
+        """,
+        unsafe_allow_html=True,
+    )
 
     col1, col2, col3 = st.columns([1, 2, 1])
-    col2.image('static/logo.png', width=300)
 
-    st.toast('Welcome to Decenter', icon='🙏')
+    with col1:
+        st.image(
+            "static/stand.png",
+            caption="AI Infrastructure for Model training",
+        )
+        st.toast("Welcome to Decenter", icon="🙏")
 
-    # st.image("static/stand.png")
-    st.title('AI Infrastructure for Model training')
+    col2.image(public.logo, width=400)
 
-    hide_streamlit_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            </style>
-            """
-    st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+    st.sidebar.success("Load complete")

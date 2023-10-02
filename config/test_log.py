@@ -10,37 +10,37 @@ from .log import setup_log
 
 setup_log()
 
-alog = getLogger('app')
+alog = getLogger("app")
 
-rootLog = 'root.log'
-appLog = 'app.log'
+rootLog = "root.log"
+appLog = "app.log"
 
 
-@dataclass(slots=True)
+@dataclass(slots=False)
 class Testcase:
     level: int  # Union[INFO, DEBUG, WARN, ERROR, CRITICAL]
     content: str
 
 
 test_cases = [
-    Testcase(DEBUG, 'Hiro-debug'),
-    Testcase(INFO, 'Hiro-info'),
-    Testcase(WARN, 'Hiro-warn'),
-    Testcase(ERROR, 'Hiro-error'),
-    Testcase(CRITICAL, 'Hiro-critical'),
+    Testcase(DEBUG, "Hiro-debug"),
+    Testcase(INFO, "Hiro-info"),
+    Testcase(WARN, "Hiro-warn"),
+    Testcase(ERROR, "Hiro-error"),
+    Testcase(CRITICAL, "Hiro-critical"),
 ]
 
 level_map_files = {
-    10: 'debug',
-    20: 'info',
-    30: 'warn',
-    40: 'error',
-    50: 'critical',
+    10: "debug",
+    20: "info",
+    30: "warn",
+    40: "error",
+    50: "critical",
 }
 
 
 def assert_tokens_in_log(log_file: str | Path, *tokens: str):
-    with open(f'logs/{log_file}', 'r+') as f1:
+    with open(f"logs/{log_file}", "r+") as f1:
         lines = f1.readlines()
         assert len(lines) != 0
         last_line = lines[-1].strip()
