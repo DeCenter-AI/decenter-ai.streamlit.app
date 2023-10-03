@@ -252,7 +252,7 @@ if starter_script:
                 #     python_repl,
                 #     "./requirements-ml.txt",
                 # )
-            # python_repl = sys.executable  # FIXME: Dinesh remove
+            # python_repl = sys.executable  # FIXME: remove once stable
 
             training_cmd = get_notebook_cmd(starter_script, python_repl)
 
