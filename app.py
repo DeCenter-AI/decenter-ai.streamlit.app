@@ -155,8 +155,6 @@ temp_dir: str | tempfile.TemporaryDirectory
 
 venv_dir: str = None
 
-temp_zip_dir = get_temp_zip_dir()
-
 python_repl: str = sys.executable
 
 app.demo = input_archive is None
@@ -310,7 +308,7 @@ if training_cmd and st.button("Train"):
             shutil.rmtree(venv_dir)
 
         zipfile_ = archive_directory(
-            f"{temp_zip_dir}/{model_name}",
+            f"{app.models_archive_dir}/{model_name}",
             temp_dir_path,
         )
         # zipfile_ = archive_directory_in_memory(temp_dir_path)
