@@ -1,5 +1,5 @@
 import os
-from typing import Final
+from typing import Final, TypeAlias, Literal
 
 from dotenv import load_dotenv
 
@@ -24,3 +24,6 @@ MODE: Final[str] = os.getenv("mode", DEVELOPMENT)
 
 TRAINER_PYTHON: Final[str] = ".py"
 TRAINER_PYTHON_NB: Final[str] = ".pynb"
+
+
+EXECUTION_TEMPLATE: TypeAlias = Literal[TRAINER_PYTHON, TRAINER_PYTHON_NB]

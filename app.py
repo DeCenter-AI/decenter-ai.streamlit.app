@@ -1,4 +1,5 @@
 import logging
+import platform
 import shutil
 import subprocess
 import sys
@@ -47,7 +48,7 @@ def get_temp_zip_dir():
 
 setup_log()
 
-st.sidebar.header("v3-beta")
+st.sidebar.header("v3")
 
 st.markdown(button_styles_css, unsafe_allow_html=True)
 
@@ -64,6 +65,19 @@ class App:
     demo: bool = True
     model_name: str = "decenter-model-linear-reg-sample_v3"
     model_name_changed: bool = False
+
+    # TODO: Dinesh Refactor the existing code
+    exec_mode: EXECUTION_TEMPLATE = None
+    starter_script: str = None
+    requirements_path: str = None
+    work_dir: str = None  # equivalent to temp_dir_path now
+    temp_dir: tempfile.TemporaryDirectory = None
+    models_archive_dir = tempfile.TemporaryDirectory(
+        prefix="decenter-ai-",
+        suffix="-models-zip-dir",
+    ).name  # TODO: refactor temp_zip_dir
+
+    # EXECUTION_TEMPLATE= TypeVar('EXECUTION_TEMPLATE',TRAINER_PYTHON, TRAINER_PYTHON_NB)
 
     def set_model_name(self, model_name: str):
         app.model_name = model_name
@@ -141,8 +155,6 @@ temp_dir: str | tempfile.TemporaryDirectory
 
 venv_dir: str = None
 
-temp_zip_dir = get_temp_zip_dir()
-
 python_repl: str = sys.executable
 
 app.demo = input_archive is None
@@ -197,8 +209,11 @@ else:
 
     logging.info("created venv dir")
 
-    python_repl = os.path.join(venv_dir, "bin/python3")
-
+    match platform.system():
+        case "Windows":
+            python_repl = os.path.join(venv_dir, "Scripts", "python.exe")
+        case _:
+            python_repl = os.path.join(venv_dir, "bin", "python3")
 
 driver_scripts = find_driver_scripts(temp_dir_path)
 starter_script = st.selectbox("Training Script:", driver_scripts)
@@ -218,8 +233,6 @@ if starter_script:
                 "Select dependencies to install",
                 available_requirement_files,
             )
-            if not requirements and not app.demo:
-                requirements = os.path.join(os.getcwd(), "requirements-ml.txt")
 
             if requirements:
                 with st.spinner("Installing dependencies in progress"):
@@ -241,13 +254,13 @@ if starter_script:
             #     python_repl, requirements="""
             #     """.strip().split(' '), cwd=temp_dir_path,
             # )
-            if not app.demo and MODE != DEVELOPMENT:
-                logging.info("installing  deps venv for nb")
-                install_dependencies(
-                    python_repl,
-                    "./requirements-ml.txt",
-                )
-            python_repl = sys.executable  # FIXME: Dinesh remove
+            # if not app.demo and MODE != DEVELOPMENT:
+            #     logging.info("installing  deps venv for nb")
+            #     install_dependencies(
+            #         python_repl,
+            #        "./requirements-ml.txt",
+            # )
+            # python_repl = sys.executable  # FIXME: remove once stable
 
             training_cmd = get_notebook_cmd(starter_script, python_repl)
 
@@ -260,8 +273,8 @@ if training_cmd and st.button("Train"):
     st.snow()
 
     EXECUTION_SUCCESS = True
-    # command = ['jupyter', 'nbconvert', '--to', 'notebook', '--execute', f'{temp_dir}/{starter_notebook}', '--no-browser', '--notebook-dir', temp_dir]
-    with st.spinner():
+
+    with st.spinner("Training in progress"):
         result = subprocess.run(
             training_cmd,
             cwd=temp_dir_path,
@@ -295,7 +308,7 @@ if training_cmd and st.button("Train"):
             shutil.rmtree(venv_dir)
 
         zipfile_ = archive_directory(
-            f"{temp_zip_dir}/{model_name}",
+            f"{app.models_archive_dir}/{model_name}",
             temp_dir_path,
         )
         # zipfile_ = archive_directory_in_memory(temp_dir_path)

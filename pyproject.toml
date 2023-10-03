@@ -51,6 +51,7 @@ openai = "^0.28.0"
 pinecone-client = "^2.2.2"
 pytest = ">=7.4.0,<7.5.0"
 python-dotenv = "1.0.0"
+pychroot = "0.9.18"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.1.0"
@@ -73,6 +74,10 @@ statsmodels = "^0.14.0"
 pillow = "9"
 tensorflow-addons = "^0.21.0"
 regex = "^2023.8.8"
+
+
+[tool.poetry.group.tensorflow-addons.dependencies]
+regex = "^2023.10.3"
 
 [build-system]
 # requires = ["python>=3.10", "setuptools", "wheel"]
