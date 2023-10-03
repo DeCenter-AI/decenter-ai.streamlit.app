@@ -270,6 +270,11 @@ if training_cmd and st.button("Train"):
         logging.info(training_cmd)
 
         if platform.system() == "Linux":
+            if python_repl is not sys.executable:
+                training_cmd[0] = os.path.relpath(
+                    training_cmd[0], temp_dir_path
+                )
+
             with Chroot(temp_dir_path, logging.getLogger(), skip_chdir=False):
                 print("chroot", os.getcwd())
                 result = subprocess.run(
