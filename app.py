@@ -270,7 +270,7 @@ if training_cmd and st.button("Train"):
         logging.info(training_cmd)
 
         if platform.system() == "Linux":
-            with Chroot(os.getcwd(), logging.getLogger(), skip_chdir=False):
+            with Chroot(temp_dir_path, logging.getLogger(), skip_chdir=False):
                 print("chroot", os.getcwd())
                 result = subprocess.run(
                     training_cmd,
