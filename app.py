@@ -269,8 +269,16 @@ if training_cmd and st.button("Train"):
     with st.spinner():
         logging.info(training_cmd)
 
-        with Chroot(os.getcwd(), logging.getLogger(), skip_chdir=True):
-            print("chroot", os.getcwd())
+        if platform.system() == "Linux":
+            with Chroot(os.getcwd(), logging.getLogger(), skip_chdir=False):
+                print("chroot", os.getcwd())
+                result = subprocess.run(
+                    training_cmd,
+                    # cwd=temp_dir_path,
+                    capture_output=True,
+                    encoding="UTF-8",
+                )
+        else:
             result = subprocess.run(
                 training_cmd,
                 cwd=temp_dir_path,
