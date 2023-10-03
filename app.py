@@ -1,4 +1,5 @@
 import logging
+import platform
 import shutil
 import subprocess
 import sys
@@ -7,7 +8,7 @@ import venv
 import zipfile
 from dataclasses import dataclass
 from typing import List
-import platform
+
 import streamlit as st
 from streamlit.commands.page_config import (
     REPORT_A_BUG_KEY,
@@ -198,10 +199,11 @@ else:
     logging.info("created venv dir")
 
     match platform.system():
-        case  "Windows":
-            python_repl = os.path.join(venv_dir, "Scripts","python.exe")
+        case "Windows":
+            python_repl = os.path.join(venv_dir, "Scripts", "python.exe")
         case _:
-            python_repl = os.path.join(venv_dir, "bin","python3") 
+            python_repl = os.path.join(venv_dir, "bin", "python3")
+
 driver_scripts = find_driver_scripts(temp_dir_path)
 starter_script = st.selectbox("Training Script:", driver_scripts)
 training_cmd: List[str] = None
@@ -220,8 +222,8 @@ if starter_script:
                 "Select dependencies to install",
                 available_requirement_files,
             )
-            #if not requirements and not app.demo:
-                #requirements = os.path.join(os.getcwd(), "requirements-ml.txt")
+            # if not requirements and not app.demo:
+            # requirements = os.path.join(os.getcwd(), "requirements-ml.txt")
 
             if requirements:
                 with st.spinner("Installing dependencies in progress"):
@@ -249,7 +251,7 @@ if starter_script:
                     python_repl,
                     "./requirements-ml.txt",
                 )
-            #python_repl = sys.executable  # FIXME: Dinesh remove
+            # python_repl = sys.executable  # FIXME: Dinesh remove
 
             training_cmd = get_notebook_cmd(starter_script, python_repl)
 
@@ -264,7 +266,7 @@ if training_cmd and st.button("Train"):
     EXECUTION_SUCCESS = True
     # command = ['jupyter', 'nbconvert', '--to', 'notebook', '--execute', f'{temp_dir}/{starter_notebook}', '--no-browser', '--notebook-dir', temp_dir]
     with st.spinner():
-        #print(temp_dir_path, training_cmd)
+        # print(temp_dir_path, training_cmd)
         result = subprocess.run(
             training_cmd,
             cwd=temp_dir_path,
