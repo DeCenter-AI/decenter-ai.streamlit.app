@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from typing import List
 
 import streamlit as st
+from pychroot import Chroot
 from streamlit.commands.page_config import (
     REPORT_A_BUG_KEY,
     ABOUT_KEY,
@@ -267,12 +268,15 @@ if training_cmd and st.button("Train"):
     # command = ['jupyter', 'nbconvert', '--to', 'notebook', '--execute', f'{temp_dir}/{starter_notebook}', '--no-browser', '--notebook-dir', temp_dir]
     with st.spinner():
         logging.info(training_cmd)
-        result = subprocess.run(
-            training_cmd,
-            cwd=temp_dir_path,
-            capture_output=True,
-            encoding="UTF-8",
-        )
+
+        with Chroot(os.getcwd(), logging.getLogger(), skip_chdir=True):
+            print("chroot", os.getcwd())
+            result = subprocess.run(
+                training_cmd,
+                cwd=temp_dir_path,
+                capture_output=True,
+                encoding="UTF-8",
+            )
 
         logging.info(result.stdout)  # TODO: logs trace
         logging.info(result.stderr)
