@@ -16,7 +16,7 @@ jobs:
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
           target: patch # Merge patch updates
-          github-token: ${{ secrets.WORKFLOW_TOKEN }}
+          github-token: ${{ github.token }}
           config: ''
 
   auto-merge-minor:
@@ -26,7 +26,7 @@ jobs:
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
           target: minor # Merge minor updates
-          github-token: ${{ secrets.WORKFLOW_TOKEN }}
+          github-token: ${{ github.token }}
           config: ''
 
   auto-merge-config:
@@ -36,7 +36,7 @@ jobs:
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
           target: all # Merge minor updates
-          github-token: ${{ secrets.WORKFLOW_TOKEN }}
+          github-token: ${{ github.token }}
           config: '.github/dependabot-merge.yml'
 
   # auto-merge-dev:
@@ -46,4 +46,4 @@ jobs:
   #     - uses: ahmadnassri/action-dependabot-auto-merge@v2
   #       with:
   #         # target: minor  # Merge minor updates can be major
-  #         github-token: ${{ secrets.WORKFLOW_TOKEN }}
+  #         github-token: ${{ github.token }}
