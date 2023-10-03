@@ -247,9 +247,9 @@ if starter_script:
             # )
             # if not app.demo and MODE != DEVELOPMENT:
             #     logging.info("installing  deps venv for nb")
-            # install_dependencies(
-            #     python_repl,
-            #     "./requirements-ml.txt",
+            #     install_dependencies(
+            #         python_repl,
+            #        "./requirements-ml.txt",
             # )
             # python_repl = sys.executable  # FIXME: remove once stable
 
