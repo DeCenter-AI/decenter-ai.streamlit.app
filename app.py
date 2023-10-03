@@ -222,8 +222,6 @@ if starter_script:
                 "Select dependencies to install",
                 available_requirement_files,
             )
-            # if not requirements and not app.demo:
-            # requirements = os.path.join(os.getcwd(), "requirements-ml.txt")
 
             if requirements:
                 with st.spinner("Installing dependencies in progress"):
