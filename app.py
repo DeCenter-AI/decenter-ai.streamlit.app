@@ -70,6 +70,12 @@ class App:
     exec_mode: EXECUTION_TEMPLATE = None
     starter_script: str = None
     requirements_path: str = None
+    work_dir: str = None  # equivalent to temp_dir_path now
+    temp_dir: tempfile.TemporaryDirectory = None
+    models_archive_dir = tempfile.TemporaryDirectory(
+        prefix="decenter-ai-",
+        suffix="-models-zip-dir",
+    ).name  # TODO: refactor temp_zip_dir
 
     # EXECUTION_TEMPLATE= TypeVar('EXECUTION_TEMPLATE',TRAINER_PYTHON, TRAINER_PYTHON_NB)
 
