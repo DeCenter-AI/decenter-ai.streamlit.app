@@ -247,10 +247,10 @@ if starter_script:
             # )
             if not app.demo and MODE != DEVELOPMENT:
                 logging.info("installing  deps venv for nb")
-                install_dependencies(
-                    python_repl,
-                    "./requirements-ml.txt",
-                )
+                # install_dependencies(
+                #     python_repl,
+                #     "./requirements-ml.txt",
+                # )
             # python_repl = sys.executable  # FIXME: Dinesh remove
 
             training_cmd = get_notebook_cmd(starter_script, python_repl)
@@ -266,7 +266,7 @@ if training_cmd and st.button("Train"):
     EXECUTION_SUCCESS = True
     # command = ['jupyter', 'nbconvert', '--to', 'notebook', '--execute', f'{temp_dir}/{starter_notebook}', '--no-browser', '--notebook-dir', temp_dir]
     with st.spinner():
-        # print(temp_dir_path, training_cmd)
+        logging.info(training_cmd)
         result = subprocess.run(
             training_cmd,
             cwd=temp_dir_path,
