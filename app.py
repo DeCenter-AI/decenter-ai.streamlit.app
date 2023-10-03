@@ -269,7 +269,7 @@ if training_cmd and st.button("Train"):
     st.snow()
 
     EXECUTION_SUCCESS = True
-    # command = ['jupyter', 'nbconvert', '--to', 'notebook', '--execute', f'{temp_dir}/{starter_notebook}', '--no-browser', '--notebook-dir', temp_dir]
+
     with st.spinner("Training in progress"):
         result = subprocess.run(
             training_cmd,
