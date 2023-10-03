@@ -10,7 +10,6 @@ from dataclasses import dataclass
 from typing import List
 
 import streamlit as st
-from pychroot import Chroot
 from streamlit.commands.page_config import (
     REPORT_A_BUG_KEY,
     ABOUT_KEY,
@@ -246,12 +245,12 @@ if starter_script:
             #     python_repl, requirements="""
             #     """.strip().split(' '), cwd=temp_dir_path,
             # )
-            if not app.demo and MODE != DEVELOPMENT:
-                logging.info("installing  deps venv for nb")
-                # install_dependencies(
-                #     python_repl,
-                #     "./requirements-ml.txt",
-                # )
+            # if not app.demo and MODE != DEVELOPMENT:
+            #     logging.info("installing  deps venv for nb")
+            # install_dependencies(
+            #     python_repl,
+            #     "./requirements-ml.txt",
+            # )
             # python_repl = sys.executable  # FIXME: remove once stable
 
             training_cmd = get_notebook_cmd(starter_script, python_repl)
@@ -267,29 +266,12 @@ if training_cmd and st.button("Train"):
     EXECUTION_SUCCESS = True
     # command = ['jupyter', 'nbconvert', '--to', 'notebook', '--execute', f'{temp_dir}/{starter_notebook}', '--no-browser', '--notebook-dir', temp_dir]
     with st.spinner():
-        logging.info(training_cmd)
-
-        if platform.system() == "Linux":
-            if python_repl is not sys.executable:
-                training_cmd[0] = os.path.relpath(
-                    training_cmd[0], temp_dir_path
-                )
-
-            with Chroot(temp_dir_path, logging.getLogger(), skip_chdir=False):
-                print("chroot", os.getcwd())
-                result = subprocess.run(
-                    training_cmd,
-                    # cwd=temp_dir_path,
-                    capture_output=True,
-                    encoding="UTF-8",
-                )
-        else:
-            result = subprocess.run(
-                training_cmd,
-                cwd=temp_dir_path,
-                capture_output=True,
-                encoding="UTF-8",
-            )
+        result = subprocess.run(
+            training_cmd,
+            cwd=temp_dir_path,
+            capture_output=True,
+            encoding="UTF-8",
+        )
 
         logging.info(result.stdout)  # TODO: logs trace
         logging.info(result.stderr)
