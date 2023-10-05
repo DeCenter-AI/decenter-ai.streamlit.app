@@ -4,14 +4,6 @@
 
 - match:
     dependency_type: all
-    update_type: semver:${TARGET}
-
-- match:
-    dependency_type: all
-    update_type: 'security:*'
-
-- match:
-    dependency_type: all
     update_type: '*:minor'
 
 - match:
