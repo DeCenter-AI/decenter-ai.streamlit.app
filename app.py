@@ -66,6 +66,7 @@ class App:
     model_name: str = "decenter-model-linear-reg-sample_v3"
     model_name_changed: bool = False
 
+    # TODO: Dinesh Refactor the existing code
     exec_mode: EXECUTION_TEMPLATE = None
     starter_script: str = None
     requirements_path: str = None
@@ -74,8 +75,7 @@ class App:
     models_archive_dir = tempfile.TemporaryDirectory(
         prefix="decenter-ai-",
         suffix="-models-zip-dir",
-    ).name
-    #done
+    ).name  
     # EXECUTION_TEMPLATE= TypeVar('EXECUTION_TEMPLATE',TRAINER_PYTHON, TRAINER_PYTHON_NB)
 
     def set_model_name(self, model_name: str):
@@ -148,9 +148,9 @@ if not app.model_name_changed and input_archive:
     print("streamlit rerun")
     st.experimental_rerun()
     print("rerun complete")  # know this
-starter_script: str  # notebook or python_script
+app.starter_script: str  # notebook or python_script
 
-temp_dir: str | tempfile.TemporaryDirectory
+app.temp_dir: str | tempfile.TemporaryDirectory
 
 venv_dir: str = None
 
@@ -164,19 +164,19 @@ if app.demo:
     st.warning("input archive not found: demo:on")
     model_name = "decenter-model-linear-reg-sample_v3"
     input_archive = "samples/sample_v3"
-    temp_dir = "samples/sample_v3"
-    temp_dir_path = temp_dir
+    app.temp_dir = "samples/sample_v3"
+    temp_dir_path = app.temp_dir
 else:
-    temp_dir = tempfile.TemporaryDirectory(
+    app.temp_dir = tempfile.TemporaryDirectory(
         prefix="decenter-ai-",
         suffix=model_name,
     )
 
-    temp_dir_path = temp_dir.name
+    temp_dir_path = app.temp_dir.name
 
     print("temp dir", temp_dir_path)
 
-    temp_file_path = f"{temp_dir.name}/input_archive.zip"
+    temp_file_path = f"{app.temp_dir.name}/input_archive.zip"
 
     print("temp file path", temp_file_path)
 
@@ -194,7 +194,7 @@ else:
     extracted_files = os.listdir(temp_dir_path)
     print("extracted:", extracted_files)
 
-    print("temp_dir is ", temp_dir)
+    print("temp_dir is ", app.temp_dir)
     temp_dir_contents = os.listdir(temp_dir_path)
     print("temp_dir contains", temp_dir_contents)  # FIXME error
 
@@ -215,15 +215,15 @@ else:
             python_repl = os.path.join(venv_dir, "bin", "python3")
 
 driver_scripts = find_driver_scripts(temp_dir_path)
-starter_script = st.selectbox("Training Script:", driver_scripts)
+app.starter_script = st.selectbox("Training Script:", driver_scripts)
 training_cmd: List[str] = None
 
-if starter_script:
-    script_ext = os.path.splitext(starter_script)[1]
+if app.starter_script:
+    script_ext = os.path.splitext(app.starter_script)[1]
 
     match script_ext:
         case ".py":
-            EXECUTION_LANG: str = TRAINER_PYTHON
+            app.exec_mode = TRAINER_PYTHON
 
             available_requirement_files = find_requirements_txt_files(
                 temp_dir_path,
@@ -235,20 +235,20 @@ if starter_script:
 
             if requirements:
                 with st.spinner("Installing dependencies in progress"):
-                    requirements_path = os.path.join(
+                    app.requirements_path = os.path.join(
                         temp_dir_path,
                         requirements,
                     )
                     install_dependencies(
                         python_repl,
-                        requirements_path,
+                        app.requirements_path,
                         cwd=temp_dir_path,
                     )
 
-            training_cmd = [python_repl, starter_script]
+            training_cmd = [python_repl, app.starter_script]
 
         case ".ipynb":
-            EXECUTION_LANG: str = TRAINER_PYTHON_NB
+            app.exec_mode = TRAINER_PYTHON_NB
             # install_deps(
             #     python_repl, requirements="""
             #     """.strip().split(' '), cwd=temp_dir_path,
@@ -261,13 +261,13 @@ if starter_script:
             # )
             # python_repl = sys.executable  # FIXME: remove once stable
 
-            training_cmd = get_notebook_cmd(starter_script, python_repl)
+            training_cmd = get_notebook_cmd(app.starter_script, python_repl)
 
         case _:
             raise Exception(f"invalid script-{script_ext}")
 
 if training_cmd and st.button("Train"):
-    print(starter_script)
+    print(app.starter_script)
 
     st.snow()
 
@@ -290,10 +290,10 @@ if training_cmd and st.button("Train"):
         if result.stderr:
             st.warning(result.stderr)
 
-        if EXECUTION_LANG is TRAINER_PYTHON_NB:
-            out = f"{starter_script}.html"
+        if app.exec_mode is TRAINER_PYTHON_NB:
+            out = f"{app.starter_script}.html"
             if os.path.exists(
-                os.path.join(temp_dir_path, f"{starter_script}.html"),
+                os.path.join(temp_dir_path, f"{app.starter_script}.html"),
             ):
                 st.info(f"notebook: output generated at {out}")
                 print(f"notebook: output generated at {out}")
@@ -326,6 +326,6 @@ if training_cmd and st.button("Train"):
             )
 
         st.balloons()
-        if isinstance(temp_dir, tempfile.TemporaryDirectory):
+        if isinstance(app.temp_dir, tempfile.TemporaryDirectory):
             st.toast("cleaning up the temp dirctory")
-            temp_dir.cleanup()
+            app.temp_dir.cleanup()
