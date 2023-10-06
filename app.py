@@ -148,9 +148,9 @@ if not app.model_name_changed and input_archive:
     print("streamlit rerun")
     st.experimental_rerun()
     print("rerun complete")  # know this
-app.starter_script: str  # notebook or python_script
+starter_script: str  # notebook or python_script
 
-app.temp_dir: str | tempfile.TemporaryDirectory
+temp_dir: str | tempfile.TemporaryDirectory
 
 venv_dir: str = None
 
@@ -164,8 +164,8 @@ if app.demo:
     st.warning("input archive not found: demo:on")
     model_name = "decenter-model-linear-reg-sample_v3"
     input_archive = "samples/sample_v3"
-    app.temp_dir = "samples/sample_v3"
-    temp_dir_path = app.temp_dir
+    app.work_dir = "samples/sample_v3"
+    temp_dir_path = app.work_dir
 else:
     app.temp_dir = tempfile.TemporaryDirectory(
         prefix="decenter-ai-",
@@ -214,7 +214,7 @@ else:
         case _:
             python_repl = os.path.join(venv_dir, "bin", "python3")
 
-driver_scripts = find_driver_scripts(temp_dir_path)
+driver_scripts = []
 app.starter_script = st.selectbox("Training Script:", driver_scripts)
 training_cmd: List[str] = None
 
