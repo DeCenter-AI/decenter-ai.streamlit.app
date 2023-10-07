@@ -1,10 +1,7 @@
 import logging
-import platform
 import shutil
 import subprocess
-import sys
 import tempfile
-import venv
 import zipfile
 from typing import List
 
@@ -58,7 +55,7 @@ load_dotenv()
 
 head_v3()
 
-app = st.session_state.get("app")
+app: App = st.session_state.get("app")
 # app = None if MODE == DEVELOPMENT else app  # DEV: when testing
 if not app:
     app = App()
@@ -105,10 +102,6 @@ if not app.model_name_changed and input_archive:
 
 starter_script: str  # notebook or python_script #TODO: refactor
 
-venv_dir: str = None
-
-python_repl: str = sys.executable  # TODO: refactor
-
 app.demo = (
     input_archive is None
 )  # TODO: refactor app.demo after app.input_archive
@@ -149,21 +142,7 @@ else:
     temp_dir_contents = os.listdir(app.work_dir)
     print("temp_dir contains", temp_dir_contents)  # FIXME error
 
-    venv_dir = os.path.join(app.work_dir, ".venv")
-    venv.create(
-        venv_dir,
-        system_site_packages=True,
-        with_pip=True,
-        symlinks=True,
-    )
-
-    logging.info("created venv dir")
-
-    match platform.system():
-        case "Windows":
-            python_repl = os.path.join(venv_dir, "Scripts", "python.exe")
-        case _:
-            python_repl = os.path.join(venv_dir, "bin", "python3")
+    app.create_venv()
 
 driver_scripts = find_driver_scripts(app.work_dir)
 app.starter_script = st.selectbox("Training Script:", driver_scripts)
@@ -191,33 +170,28 @@ if app.starter_script:
                         requirements,
                     )
                     install_dependencies(
-                        python_repl,
+                        app.python_repl,
                         app.requirements_path,
                         cwd=app.work_dir,
                     )
 
-            training_cmd = [python_repl, app.starter_script]
+            training_cmd = [app.python_repl, app.starter_script]
 
         case ".ipynb":
             app.exec_mode = TRAINER_PYTHON_NB
-            # install_deps(
-            #     python_repl, requirements="""
-            #     """.strip().split(' '), cwd=app.work_dir,
-            # )
-            # if not app.demo and MODE != DEVELOPMENT:
-            #     logging.info("installing  deps venv for nb")
-            #     install_dependencies(
-            #         python_repl,
-            #        "./requirements-ml.txt",
-            # )
-            # python_repl = sys.executable  # FIXME: remove once stable
 
-            training_cmd = get_notebook_cmd(app.starter_script, python_repl)
+            training_cmd = get_notebook_cmd(
+                app.starter_script,
+                app.python_repl,
+            )
 
         case _:
             raise Exception(f"invalid script-{script_ext}")
 
-if training_cmd and st.button("Train"):
+if not training_cmd:
+    st.stop()
+
+if st.button("Train"):
     print(app.starter_script)
 
     st.snow()
@@ -261,6 +235,7 @@ if training_cmd and st.button("Train"):
                 print("notebook:", "execution failed")
 
     if EXECUTION_SUCCESS:
+        venv_dir = app.venv_dir
         if venv_dir:
             shutil.rmtree(venv_dir)
 

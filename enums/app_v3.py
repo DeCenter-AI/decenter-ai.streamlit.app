@@ -1,5 +1,9 @@
 import logging
+import os
+import platform
+import sys
 import tempfile
+import venv
 from dataclasses import dataclass
 
 import streamlit as st
@@ -23,6 +27,9 @@ class App:
         prefix="decenter-ai-",
         suffix="-models-zip-dir",
     ).name
+
+    python_repl: str = sys.executable
+    venv_dir: str = None
 
     @property
     def work_dir(self):
@@ -57,3 +64,24 @@ class App:
         if self.model_name_changed:
             self._model_name = model_name
             st.toast(f"model name updated to {model_name}", icon="👌")
+
+    def create_venv(self, venv_dir=".venv"):
+        venv_dir = os.path.join(self.work_dir, venv_dir)
+        self.venv_dir = venv_dir
+
+        venv.create(
+            venv_dir,
+            system_site_packages=True,
+            with_pip=True,
+            symlinks=True,  # TODO: disable in the future
+        )
+
+        logging.info("created venv dir")
+
+        match platform.system():
+            case "Windows":
+                python_repl = os.path.join(venv_dir, "Scripts", "python.exe")
+            case _:
+                python_repl = os.path.join(venv_dir, "bin", "python3")
+
+        self.python_repl = python_repl
