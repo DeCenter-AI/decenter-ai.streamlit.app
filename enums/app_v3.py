@@ -31,6 +31,7 @@ class App:
 
     python_repl: str = sys.executable
     venv_dir: str = None
+    exit_code: bool = True
 
     @property
     def work_dir(self):

@@ -195,8 +195,6 @@ if st.button("Train"):
 
     st.snow()
 
-    EXECUTION_SUCCESS = True
-
     with st.spinner("Training in progress"):
         result = subprocess.run(
             training_cmd,
@@ -229,11 +227,11 @@ if st.button("Train"):
                 st.info(f"notebook: output generated at {out}")
                 print(f"notebook: output generated at {out}")
             else:
-                EXECUTION_SUCCESS = False
+                app.exit_code = False
                 st.error("notebook: execution failed")
                 print("notebook:", "execution failed")
 
-    if EXECUTION_SUCCESS:
+    if app.exit_code:
         venv_dir = app.venv_dir
         if venv_dir:
             shutil.rmtree(venv_dir)
