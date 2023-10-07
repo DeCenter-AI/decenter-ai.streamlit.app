@@ -235,8 +235,9 @@ if training_cmd and st.button("Train"):
         logging.info(result.stdout)  # TODO: logs trace
         logging.info(result.stderr)
 
-        with open(os.path.join(app.work_dir, "stdout")) as stdout, open(
+        with open(os.path.join(app.work_dir, "stdout"), "w") as stdout, open(
             os.path.join(app.work_dir, "stderr"),
+            "w",
         ) as stderr:
             stdout.write(result.stdout)
             stderr.write(result.stderr)
