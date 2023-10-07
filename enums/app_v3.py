@@ -11,7 +11,7 @@ from config.constants import EXECUTION_TEMPLATE
 class App:
     version: str = "v3"
     demo: bool = True
-    model_name: str = "decenter-model-linear-reg-sample_v3"
+    _model_name: str = "decenter-model-linear-reg-sample_v3"
     model_name_changed: bool = False
 
     exec_mode: EXECUTION_TEMPLATE = None
@@ -39,13 +39,21 @@ class App:
         self.model_name = model_name
         self.model_name_changed = True
 
-    def validate_model_name(self):
-        if not self.model_name:
-            self.model_name_changed = False
-            self.model_name = "decenter-model-linear-reg-sample_v3"
-            st.toast(f"model name reverted to {self.model_name}", icon="👎")
-        elif not self.model_name == "decenter-model-linear-reg-sample_v3":
-            self.model_name_changed = True
-            st.toast(f"model name updated to {self.model_name}", icon="👌")
+    @property
+    def model_name(self):
+        return self._model_name
 
-        logging.info(self.model_name)
+    @model_name.setter
+    def model_name(self, model_name: str):
+        if not model_name:
+            st.toast("model name not changed")
+            logging.debug("model_name: invalid")
+            return
+
+        self.model_name_changed = (
+            model_name != "decenter-model-linear-reg-sample_v3"
+        )
+
+        if self.model_name_changed:
+            self._model_name = model_name
+            st.toast(f"model name updated to {model_name}", icon="👌")

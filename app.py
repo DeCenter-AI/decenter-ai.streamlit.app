@@ -86,14 +86,7 @@ app.model_name = st.text_input(
     placeholder="decenter-model",
     key="model_name",
     value=app.model_name,
-    on_change=app.validate_model_name,
-    # on_change=app.set_model_name,
-    # args=(),
-    # kwargs=(),
-    # value=f'decenter-model-{dt.datetime.now().strftime("%d-%m-%Y-%H:%M:%S")}',
 )
-app.validate_model_name()
-logging.info(f"model-name:{app.model_name}")
 
 model_name = app.model_name
 
