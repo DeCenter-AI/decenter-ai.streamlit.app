@@ -70,10 +70,7 @@ class App:
     starter_script: str = None
     requirements_path: str = None
     _work_dir: str = None
-    temp_dir: tempfile.TemporaryDirectory = tempfile.TemporaryDirectory(
-        prefix="decenter-ai-",
-        suffix=model_name,
-    )
+    temp_dir: tempfile.TemporaryDirectory = None
     models_archive_dir = tempfile.TemporaryDirectory(
         prefix="decenter-ai-",
         suffix="-models-zip-dir",
@@ -178,7 +175,13 @@ if app.demo:
     input_archive = "samples/sample_v3"
     app.work_dir = "samples/sample_v3"
 else:
-    temp_file_path = f"{app.temp_dir.name}/input_archive.zip"
+    app.temp_dir = tempfile.TemporaryDirectory(
+        prefix="decenter-ai-",
+        suffix=model_name,
+    )
+
+    app.work_dir = app.temp_dir.name
+    temp_file_path = f"{app.work_dir}/input_archive.zip"
 
     print("temp file path", temp_file_path)
 
@@ -329,5 +332,5 @@ if training_cmd and st.button("Train"):
 
         st.balloons()
         if isinstance(app.temp_dir, tempfile.TemporaryDirectory):
-            st.toast("cleaning up the temp dirctory")
+            st.toast("cleaning up the temp directory")
             app.temp_dir.cleanup()
