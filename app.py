@@ -99,12 +99,7 @@ if not app.model_name_changed and input_archive:
     st.experimental_rerun()
     print("dead code: won't run")  # know this
 
-starter_script: str  # notebook or python_script #TODO: refactor
-
-app.demo = (
-    input_archive is None
-)  # TODO: refactor app.demo after app.input_archive
-
+app.demo = input_archive is None
 # app.demo = st.checkbox('demo') #TODO: wip
 
 if app.demo:
@@ -139,7 +134,7 @@ else:
 
     print("temp_dir is ", app.temp_dir)
     temp_dir_contents = os.listdir(app.work_dir)
-    print("temp_dir contains", temp_dir_contents)  # FIXME error
+    print("temp_dir contains", temp_dir_contents)
 
     app.create_venv()
 
@@ -203,7 +198,7 @@ if st.button("Train"):
             encoding="UTF-8",
         )
 
-        logging.info(result.stdout)  # TODO: logs trace
+        logging.info(result.stdout)
         logging.info(result.stderr)
 
         with open(os.path.join(app.work_dir, "stdout"), "w") as stdout, open(
