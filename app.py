@@ -107,8 +107,6 @@ if not app.model_name_changed and input_archive:
     print("rerun complete")  # know this
 starter_script: str  # notebook or python_script
 
-app.temp_dir: str | tempfile.TemporaryDirectory
-
 venv_dir: str = None
 
 python_repl: str = sys.executable
