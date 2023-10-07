@@ -15,6 +15,6 @@ updates:
     rebase-strategy: auto
     labels:
       - 'dependabot'
-      - 'pip dependencies'
+      # - 'python dependencies'
     # pull-request-branch-name:
     #   separator: "-"
