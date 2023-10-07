@@ -72,10 +72,6 @@ if option != app.version:  # don't redirect if in the same page
     )
 
 
-def setDemoMode(val: bool = False):
-    app.demo = val
-
-
 app.model_name = st.text_input(
     "Model Name",
     max_chars=50,
@@ -87,7 +83,6 @@ app.model_name = st.text_input(
 input_archive = st.file_uploader(
     "Upload working directory of notebook",
     type=["zip"],
-    on_change=lambda: setDemoMode(False),
 )
 
 if not app.model_name_changed and input_archive:
