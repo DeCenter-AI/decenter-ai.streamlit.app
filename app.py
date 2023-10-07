@@ -21,7 +21,7 @@ from config.log import setup_log
 from public import report_request_buttons_html, button_styles_css
 from utils.archive import archive_directory
 from utils.exec_commands import get_notebook_cmd
-from utils.helper_find import find_requirements_txt_files
+from utils.helper_find import find_requirements_txt_files, find_driver_scripts
 from utils.install_deps import install_dependencies
 from views.head import head_v3
 
@@ -70,13 +70,24 @@ class App:
     exec_mode: EXECUTION_TEMPLATE = None
     starter_script: str = None
     requirements_path: str = None
-    work_dir: str = None
+    _work_dir: str = None
     temp_dir: tempfile.TemporaryDirectory = None
     models_archive_dir = tempfile.TemporaryDirectory(
         prefix="decenter-ai-",
         suffix="-models-zip-dir",
     ).name
     # EXECUTION_TEMPLATE= TypeVar('EXECUTION_TEMPLATE',TRAINER_PYTHON, TRAINER_PYTHON_NB)
+
+    @property
+    def work_dir(self):
+        return self._work_dir
+
+    @work_dir.setter
+    def work_dir(self, _work_dir: str):
+        if not _work_dir:
+            logging.warning("no work_dir found")
+            return
+        self._work_dir = _work_dir
 
     def set_model_name(self, model_name: str):
         app.model_name = model_name
@@ -209,7 +220,7 @@ else:
         case _:
             python_repl = os.path.join(venv_dir, "bin", "python3")
 
-driver_scripts = []
+driver_scripts = find_driver_scripts(app.work_dir)
 app.starter_script = st.selectbox("Training Script:", driver_scripts)
 training_cmd: List[str] = None
 
