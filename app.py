@@ -16,7 +16,6 @@ from config.constants import *
 from config.log import setup_log
 from enums.app_v3 import App
 from public import report_request_buttons_html, button_styles_css
-from utils.archive import archive_directory
 from utils.exec_commands import get_notebook_cmd
 from utils.helper_find import find_requirements_txt_files, find_driver_scripts
 from utils.install_deps import install_dependencies
@@ -146,7 +145,7 @@ else:
 
 driver_scripts = find_driver_scripts(app.work_dir)
 app.starter_script = st.selectbox("Training Script:", driver_scripts)
-training_cmd: List[str] = None
+training_cmd: List[str] = []
 
 if app.starter_script:
     script_ext = os.path.splitext(app.starter_script)[1]
@@ -239,11 +238,7 @@ if st.button("Train"):
         if venv_dir:
             shutil.rmtree(venv_dir)
 
-        zipfile_ = archive_directory(
-            f"{app.models_archive_dir}/{app.model_name}",
-            app.work_dir,
-        )
-        # zipfile_ = archive_directory_in_memory(app.work_dir)
+        zipfile_ = app.export_working_dir()
 
         st.toast("Executed the notebook successfully", icon="🧤")
 

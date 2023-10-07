@@ -9,6 +9,7 @@ from dataclasses import dataclass
 import streamlit as st
 
 from config.constants import EXECUTION_TEMPLATE
+from utils.archive import archive_directory
 
 
 @dataclass
@@ -85,3 +86,11 @@ class App:
                 python_repl = os.path.join(venv_dir, "bin", "python3")
 
         self.python_repl = python_repl
+
+    def export_working_dir(self) -> str:
+        zipfile_ = archive_directory(
+            f"{self.models_archive_dir}/{self.model_name}",
+            self.work_dir,
+        )
+        # zipfile_ = archive_directory_in_memory(app.work_dir)
+        return zipfile_
