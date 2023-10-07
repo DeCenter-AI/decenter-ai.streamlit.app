@@ -71,7 +71,6 @@ if option != app.version:  # don't redirect if in the same page
         unsafe_allow_html=True,
     )
 
-
 app.model_name = st.text_input(
     "Model Name",
     max_chars=50,
