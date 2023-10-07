@@ -21,7 +21,7 @@ from config.log import setup_log
 from public import report_request_buttons_html, button_styles_css
 from utils.archive import archive_directory
 from utils.exec_commands import get_notebook_cmd
-from utils.helper_find import find_requirements_txt_files, find_driver_scripts
+from utils.helper_find import find_requirements_txt_files
 from utils.install_deps import install_dependencies
 from views.head import head_v3
 
@@ -70,12 +70,12 @@ class App:
     exec_mode: EXECUTION_TEMPLATE = None
     starter_script: str = None
     requirements_path: str = None
-    work_dir: str = None  # equivalent to temp_dir_path now
+    work_dir: str = None
     temp_dir: tempfile.TemporaryDirectory = None
     models_archive_dir = tempfile.TemporaryDirectory(
         prefix="decenter-ai-",
         suffix="-models-zip-dir",
-    ).name  
+    ).name
     # EXECUTION_TEMPLATE= TypeVar('EXECUTION_TEMPLATE',TRAINER_PYTHON, TRAINER_PYTHON_NB)
 
     def set_model_name(self, model_name: str):
@@ -165,16 +165,11 @@ if app.demo:
     model_name = "decenter-model-linear-reg-sample_v3"
     input_archive = "samples/sample_v3"
     app.work_dir = "samples/sample_v3"
-    temp_dir_path = app.work_dir
 else:
     app.temp_dir = tempfile.TemporaryDirectory(
         prefix="decenter-ai-",
         suffix=model_name,
     )
-
-    temp_dir_path = app.temp_dir.name
-
-    print("temp dir", temp_dir_path)
 
     temp_file_path = f"{app.temp_dir.name}/input_archive.zip"
 
@@ -185,20 +180,20 @@ else:
 
     # Extract the contents of the archive to the temporary directory
     with zipfile.ZipFile(temp_file_path, "r") as zip_ref:
-        zip_ref.extractall(temp_dir_path)
+        zip_ref.extractall(app.work_dir)
 
     # At this point, the contents of the archive are extracted to the temporary directory
     # You can access the extracted files using the 'temp_dir' path
 
     # Example: Print the list of extracted files
-    extracted_files = os.listdir(temp_dir_path)
+    extracted_files = os.listdir(app.work_dir)
     print("extracted:", extracted_files)
 
     print("temp_dir is ", app.temp_dir)
-    temp_dir_contents = os.listdir(temp_dir_path)
+    temp_dir_contents = os.listdir(app.work_dir)
     print("temp_dir contains", temp_dir_contents)  # FIXME error
 
-    venv_dir = os.path.join(temp_dir_path, ".venv")
+    venv_dir = os.path.join(app.work_dir, ".venv")
     venv.create(
         venv_dir,
         system_site_packages=True,
@@ -226,7 +221,7 @@ if app.starter_script:
             app.exec_mode = TRAINER_PYTHON
 
             available_requirement_files = find_requirements_txt_files(
-                temp_dir_path,
+                app.work_dir,
             )
             requirements = st.selectbox(
                 "Select dependencies to install",
@@ -236,13 +231,13 @@ if app.starter_script:
             if requirements:
                 with st.spinner("Installing dependencies in progress"):
                     app.requirements_path = os.path.join(
-                        temp_dir_path,
+                        app.work_dir,
                         requirements,
                     )
                     install_dependencies(
                         python_repl,
                         app.requirements_path,
-                        cwd=temp_dir_path,
+                        cwd=app.work_dir,
                     )
 
             training_cmd = [python_repl, app.starter_script]
@@ -251,7 +246,7 @@ if app.starter_script:
             app.exec_mode = TRAINER_PYTHON_NB
             # install_deps(
             #     python_repl, requirements="""
-            #     """.strip().split(' '), cwd=temp_dir_path,
+            #     """.strip().split(' '), cwd=app.work_dir,
             # )
             # if not app.demo and MODE != DEVELOPMENT:
             #     logging.info("installing  deps venv for nb")
@@ -276,7 +271,7 @@ if training_cmd and st.button("Train"):
     with st.spinner("Training in progress"):
         result = subprocess.run(
             training_cmd,
-            cwd=temp_dir_path,
+            cwd=app.work_dir,
             capture_output=True,
             encoding="UTF-8",
         )
@@ -293,7 +288,7 @@ if training_cmd and st.button("Train"):
         if app.exec_mode is TRAINER_PYTHON_NB:
             out = f"{app.starter_script}.html"
             if os.path.exists(
-                os.path.join(temp_dir_path, f"{app.starter_script}.html"),
+                os.path.join(app.work_dir, f"{app.starter_script}.html"),
             ):
                 st.info(f"notebook: output generated at {out}")
                 print(f"notebook: output generated at {out}")
@@ -308,9 +303,9 @@ if training_cmd and st.button("Train"):
 
         zipfile_ = archive_directory(
             f"{app.models_archive_dir}/{model_name}",
-            temp_dir_path,
+            app.work_dir,
         )
-        # zipfile_ = archive_directory_in_memory(temp_dir_path)
+        # zipfile_ = archive_directory_in_memory(app.work_dir)
 
         st.toast("Executed the notebook successfully", icon="🧤")
 
