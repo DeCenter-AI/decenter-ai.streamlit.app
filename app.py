@@ -103,13 +103,15 @@ if not app.model_name_changed and input_archive:
     st.experimental_rerun()
     print("dead code: won't run")  # know this
 
-starter_script: str  # notebook or python_script
+starter_script: str  # notebook or python_script #TODO: refactor
 
 venv_dir: str = None
 
-python_repl: str = sys.executable
+python_repl: str = sys.executable  # TODO: refactor
 
-app.demo = input_archive is None
+app.demo = (
+    input_archive is None
+)  # TODO: refactor app.demo after app.input_archive
 
 # app.demo = st.checkbox('demo') #TODO: wip
 
@@ -232,6 +234,12 @@ if training_cmd and st.button("Train"):
 
         logging.info(result.stdout)  # TODO: logs trace
         logging.info(result.stderr)
+
+        with open(os.path.join(app.work_dir, "stdout")) as stdout, open(
+            os.path.join(app.work_dir, "stderr"),
+        ) as stderr:
+            stdout.write(result.stdout)
+            stderr.write(result.stderr)
 
         if result.stdout:
             st.info(result.stdout)
