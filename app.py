@@ -66,7 +66,6 @@ class App:
     model_name: str = "decenter-model-linear-reg-sample_v3"
     model_name_changed: bool = False
 
-    # TODO: Dinesh Refactor the existing code
     exec_mode: EXECUTION_TEMPLATE = None
     starter_script: str = None
     requirements_path: str = None
@@ -76,7 +75,6 @@ class App:
         prefix="decenter-ai-",
         suffix="-models-zip-dir",
     ).name
-    # EXECUTION_TEMPLATE= TypeVar('EXECUTION_TEMPLATE',TRAINER_PYTHON, TRAINER_PYTHON_NB)
 
     @property
     def work_dir(self):
