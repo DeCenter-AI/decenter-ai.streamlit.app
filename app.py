@@ -6,7 +6,6 @@ import sys
 import tempfile
 import venv
 import zipfile
-from dataclasses import dataclass
 from typing import List
 
 import streamlit as st
@@ -18,6 +17,7 @@ from streamlit.commands.page_config import (
 
 from config.constants import *
 from config.log import setup_log
+from enums.app_v3 import App
 from public import report_request_buttons_html, button_styles_css
 from utils.archive import archive_directory
 from utils.exec_commands import get_notebook_cmd
@@ -57,51 +57,6 @@ st.sidebar.markdown(report_request_buttons_html, unsafe_allow_html=True)
 load_dotenv()
 
 head_v3()
-
-
-@dataclass
-class App:
-    version: str = "v3"
-    demo: bool = True
-    model_name: str = "decenter-model-linear-reg-sample_v3"
-    model_name_changed: bool = False
-
-    exec_mode: EXECUTION_TEMPLATE = None
-    starter_script: str = None
-    requirements_path: str = None
-    _work_dir: str = None
-    temp_dir: tempfile.TemporaryDirectory = None
-    models_archive_dir = tempfile.TemporaryDirectory(
-        prefix="decenter-ai-",
-        suffix="-models-zip-dir",
-    ).name
-
-    @property
-    def work_dir(self):
-        return self._work_dir
-
-    @work_dir.setter
-    def work_dir(self, _work_dir: str):
-        if not _work_dir:
-            logging.warning("no work_dir found")
-            return
-        self._work_dir = _work_dir
-
-    def set_model_name(self, model_name: str):
-        app.model_name = model_name
-        app.model_name_changed = True
-
-    def validate_model_name(self):
-        if not self.model_name:
-            self.model_name_changed = False
-            self.model_name = "decenter-model-linear-reg-sample_v3"
-            st.toast(f"model name reverted to {self.model_name}", icon="👎")
-        elif not self.model_name == "decenter-model-linear-reg-sample_v3":
-            self.model_name_changed = True
-            st.toast(f"model name updated to {self.model_name}", icon="👌")
-
-        logging.info(self.model_name)
-
 
 app = st.session_state.get("app")
 # app = None if MODE == DEVELOPMENT else app  # DEV: when testing
