@@ -88,8 +88,6 @@ app.model_name = st.text_input(
     value=app.model_name,
 )
 
-model_name = app.model_name
-
 input_archive = st.file_uploader(
     "Upload working directory of notebook",
     type=["zip"],
@@ -97,14 +95,14 @@ input_archive = st.file_uploader(
 )
 
 if not app.model_name_changed and input_archive:
-    model_name = (
+    app.model_name = (
         "decenter-model-"
         + os.path.splitext(os.path.basename(input_archive.name))[0]
     )
-    app.set_model_name(model_name)
     print("streamlit rerun")
     st.experimental_rerun()
-    print("rerun complete")  # know this
+    print("dead code: won't run")  # know this
+
 starter_script: str  # notebook or python_script
 
 venv_dir: str = None
@@ -117,13 +115,13 @@ app.demo = input_archive is None
 
 if app.demo:
     st.warning("input archive not found: demo:on")
-    model_name = "decenter-model-linear-reg-sample_v3"
+    app.model_name = "decenter-model-linear-reg-sample_v3"
     input_archive = "samples/sample_v3"
     app.work_dir = "samples/sample_v3"
 else:
     app.temp_dir = tempfile.TemporaryDirectory(
         prefix="decenter-ai-",
-        suffix=model_name,
+        suffix=app.model_name,
     )
 
     app.work_dir = app.temp_dir.name
@@ -258,7 +256,7 @@ if training_cmd and st.button("Train"):
             shutil.rmtree(venv_dir)
 
         zipfile_ = archive_directory(
-            f"{app.models_archive_dir}/{model_name}",
+            f"{app.models_archive_dir}/{app.model_name}",
             app.work_dir,
         )
         # zipfile_ = archive_directory_in_memory(app.work_dir)
