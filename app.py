@@ -1,12 +1,8 @@
 import logging
-import platform
 import shutil
 import subprocess
-import sys
 import tempfile
-import venv
 import zipfile
-from dataclasses import dataclass
 from typing import List
 
 import streamlit as st
@@ -18,8 +14,8 @@ from streamlit.commands.page_config import (
 
 from config.constants import *
 from config.log import setup_log
+from enums.app_v3 import App
 from public import report_request_buttons_html, button_styles_css
-from utils.archive import archive_directory
 from utils.exec_commands import get_notebook_cmd
 from utils.helper_find import find_requirements_txt_files, find_driver_scripts
 from utils.install_deps import install_dependencies
@@ -58,52 +54,7 @@ load_dotenv()
 
 head_v3()
 
-
-@dataclass
-class App:
-    version: str = "v3"
-    demo: bool = True
-    model_name: str = "decenter-model-linear-reg-sample_v3"
-    model_name_changed: bool = False
-
-    exec_mode: EXECUTION_TEMPLATE = None
-    starter_script: str = None
-    requirements_path: str = None
-    _work_dir: str = None
-    temp_dir: tempfile.TemporaryDirectory = None
-    models_archive_dir = tempfile.TemporaryDirectory(
-        prefix="decenter-ai-",
-        suffix="-models-zip-dir",
-    ).name
-
-    @property
-    def work_dir(self):
-        return self._work_dir
-
-    @work_dir.setter
-    def work_dir(self, _work_dir: str):
-        if not _work_dir:
-            logging.warning("no work_dir found")
-            return
-        self._work_dir = _work_dir
-
-    def set_model_name(self, model_name: str):
-        app.model_name = model_name
-        app.model_name_changed = True
-
-    def validate_model_name(self):
-        if not self.model_name:
-            self.model_name_changed = False
-            self.model_name = "decenter-model-linear-reg-sample_v3"
-            st.toast(f"model name reverted to {self.model_name}", icon="👎")
-        elif not self.model_name == "decenter-model-linear-reg-sample_v3":
-            self.model_name_changed = True
-            st.toast(f"model name updated to {self.model_name}", icon="👌")
-
-        logging.info(self.model_name)
-
-
-app = st.session_state.get("app")
+app: App = st.session_state.get("app")
 # app = None if MODE == DEVELOPMENT else app  # DEV: when testing
 if not app:
     app = App()
@@ -131,16 +82,7 @@ app.model_name = st.text_input(
     placeholder="decenter-model",
     key="model_name",
     value=app.model_name,
-    on_change=app.validate_model_name,
-    # on_change=app.set_model_name,
-    # args=(),
-    # kwargs=(),
-    # value=f'decenter-model-{dt.datetime.now().strftime("%d-%m-%Y-%H:%M:%S")}',
 )
-app.validate_model_name()
-logging.info(f"model-name:{app.model_name}")
-
-model_name = app.model_name
 
 input_archive = st.file_uploader(
     "Upload working directory of notebook",
@@ -149,35 +91,26 @@ input_archive = st.file_uploader(
 )
 
 if not app.model_name_changed and input_archive:
-    model_name = (
+    app.model_name = (
         "decenter-model-"
         + os.path.splitext(os.path.basename(input_archive.name))[0]
     )
-    app.set_model_name(model_name)
     print("streamlit rerun")
     st.experimental_rerun()
-    print("rerun complete")  # know this
-starter_script: str  # notebook or python_script
-
-app.temp_dir: str | tempfile.TemporaryDirectory
-
-venv_dir: str = None
-
-python_repl: str = sys.executable
+    print("dead code: won't run")  # know this
 
 app.demo = input_archive is None
-
 # app.demo = st.checkbox('demo') #TODO: wip
 
 if app.demo:
     st.warning("input archive not found: demo:on")
-    model_name = "decenter-model-linear-reg-sample_v3"
+    app.model_name = "decenter-model-linear-reg-sample_v3"
     input_archive = "samples/sample_v3"
     app.work_dir = "samples/sample_v3"
 else:
     app.temp_dir = tempfile.TemporaryDirectory(
         prefix="decenter-ai-",
-        suffix=model_name,
+        suffix=app.model_name,
     )
 
     app.work_dir = app.temp_dir.name
@@ -201,27 +134,13 @@ else:
 
     print("temp_dir is ", app.temp_dir)
     temp_dir_contents = os.listdir(app.work_dir)
-    print("temp_dir contains", temp_dir_contents)  # FIXME error
+    print("temp_dir contains", temp_dir_contents)
 
-    venv_dir = os.path.join(app.work_dir, ".venv")
-    venv.create(
-        venv_dir,
-        system_site_packages=True,
-        with_pip=True,
-        symlinks=True,
-    )
-
-    logging.info("created venv dir")
-
-    match platform.system():
-        case "Windows":
-            python_repl = os.path.join(venv_dir, "Scripts", "python.exe")
-        case _:
-            python_repl = os.path.join(venv_dir, "bin", "python3")
+    app.create_venv()
 
 driver_scripts = find_driver_scripts(app.work_dir)
 app.starter_script = st.selectbox("Training Script:", driver_scripts)
-training_cmd: List[str] = None
+training_cmd: List[str] = []
 
 if app.starter_script:
     script_ext = os.path.splitext(app.starter_script)[1]
@@ -245,38 +164,31 @@ if app.starter_script:
                         requirements,
                     )
                     install_dependencies(
-                        python_repl,
+                        app.python_repl,
                         app.requirements_path,
                         cwd=app.work_dir,
                     )
 
-            training_cmd = [python_repl, app.starter_script]
+            training_cmd = [app.python_repl, app.starter_script]
 
         case ".ipynb":
             app.exec_mode = TRAINER_PYTHON_NB
-            # install_deps(
-            #     python_repl, requirements="""
-            #     """.strip().split(' '), cwd=app.work_dir,
-            # )
-            # if not app.demo and MODE != DEVELOPMENT:
-            #     logging.info("installing  deps venv for nb")
-            #     install_dependencies(
-            #         python_repl,
-            #        "./requirements-ml.txt",
-            # )
-            # python_repl = sys.executable  # FIXME: remove once stable
 
-            training_cmd = get_notebook_cmd(app.starter_script, python_repl)
+            training_cmd = get_notebook_cmd(
+                app.starter_script,
+                app.python_repl,
+            )
 
         case _:
             raise Exception(f"invalid script-{script_ext}")
 
-if training_cmd and st.button("Train"):
+if not training_cmd:
+    st.stop()
+
+if st.button("Train"):
     print(app.starter_script)
 
     st.snow()
-
-    EXECUTION_SUCCESS = True
 
     with st.spinner("Training in progress"):
         result = subprocess.run(
@@ -286,8 +198,15 @@ if training_cmd and st.button("Train"):
             encoding="UTF-8",
         )
 
-        logging.info(result.stdout)  # TODO: logs trace
+        logging.info(result.stdout)
         logging.info(result.stderr)
+
+        with open(os.path.join(app.work_dir, "stdout"), "w") as stdout, open(
+            os.path.join(app.work_dir, "stderr"),
+            "w",
+        ) as stderr:
+            stdout.write(result.stdout)
+            stderr.write(result.stderr)
 
         if result.stdout:
             st.info(result.stdout)
@@ -303,19 +222,16 @@ if training_cmd and st.button("Train"):
                 st.info(f"notebook: output generated at {out}")
                 print(f"notebook: output generated at {out}")
             else:
-                EXECUTION_SUCCESS = False
+                app.exit_code = False
                 st.error("notebook: execution failed")
                 print("notebook:", "execution failed")
 
-    if EXECUTION_SUCCESS:
+    if app.exit_code:
+        venv_dir = app.venv_dir
         if venv_dir:
             shutil.rmtree(venv_dir)
 
-        zipfile_ = archive_directory(
-            f"{app.models_archive_dir}/{model_name}",
-            app.work_dir,
-        )
-        # zipfile_ = archive_directory_in_memory(app.work_dir)
+        zipfile_ = app.export_working_dir()
 
         st.toast("Executed the notebook successfully", icon="🧤")
 
