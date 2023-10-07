@@ -70,7 +70,10 @@ class App:
     starter_script: str = None
     requirements_path: str = None
     _work_dir: str = None
-    temp_dir: tempfile.TemporaryDirectory = None
+    temp_dir: tempfile.TemporaryDirectory = tempfile.TemporaryDirectory(
+        prefix="decenter-ai-",
+        suffix=model_name,
+    )
     models_archive_dir = tempfile.TemporaryDirectory(
         prefix="decenter-ai-",
         suffix="-models-zip-dir",
@@ -159,7 +162,7 @@ if not app.model_name_changed and input_archive:
     print("rerun complete")  # know this
 starter_script: str  # notebook or python_script
 
-temp_dir: str | tempfile.TemporaryDirectory
+app.temp_dir: str | tempfile.TemporaryDirectory
 
 venv_dir: str = None
 
@@ -175,11 +178,6 @@ if app.demo:
     input_archive = "samples/sample_v3"
     app.work_dir = "samples/sample_v3"
 else:
-    app.temp_dir = tempfile.TemporaryDirectory(
-        prefix="decenter-ai-",
-        suffix=model_name,
-    )
-
     temp_file_path = f"{app.temp_dir.name}/input_archive.zip"
 
     print("temp file path", temp_file_path)
