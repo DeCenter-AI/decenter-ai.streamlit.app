@@ -195,27 +195,49 @@ if st.button("Train"):
                     app.work_dir,
                 )
 
-            training_cmd[0] = python_repl
+                training_cmd[0] = python_repl
 
+            mountpoints = {
+                os.path.dirname(sys.executable): {
+                    "create": True,
+                },
+                os.path.dirname(app.work_dir) : {
+                    "create":True
+                }
+            }
+            shutil.copyfile(sys.executable,f'{app.work_dir}/python3' )
+
+            python_executable_permissions = os.stat(sys.executable).st_mode
+
+            # Set the permissions of the copied Python executable file to the same permissions as the original file
+            os.chmod(f'{app.work_dir}/python3', python_executable_permissions)
+            
+            # def preexec_fn():
+            #     os.chroot("/tmp/chroot")
+            #     os.mount("--bind", "/dev", "/dev")
+            #     os.mount("--bind", "/proc", "/proc")
+            # subprocess.run(["python3"], preexec_fn=preexec_fn)
+
+            
             with Chroot(
                 app.work_dir,
                 logging.getLogger(),
-                mountpoints={
-                    os.path.dirname(sys.executable): os.path.dirname(
-                        sys.executable,
-                    ),
-                },
-                skip_chdir=False,
+                mountpoints=mountpoints,
+                skip_chdir=True,
             ):
                 print("chroot:", os.getcwd())
                 print("training_cmd:", training_cmd)
                 print("ls:", os.listdir())
+
                 result = subprocess.run(
-                    training_cmd,
+                    ['pwd'],
                     # cwd=app.work_dir,
                     capture_output=True,
                     encoding="UTF-8",
                 )
+                print('res')
+                print(result.stderr)
+                print(result.stdout)
         else:
             result = subprocess.run(
                 training_cmd,
