@@ -203,13 +203,13 @@ if st.button("Train"):
                     capture_output=True,
                     encoding="UTF-8",
                 )
-
-        result = subprocess.run(
-            training_cmd,
-            cwd=app.work_dir,
-            capture_output=True,
-            encoding="UTF-8",
-        )
+        else:
+            result = subprocess.run(
+                training_cmd,
+                cwd=app.work_dir,
+                capture_output=True,
+                encoding="UTF-8",
+            )
 
         logging.info(result.stdout)
         logging.info(result.stderr)
