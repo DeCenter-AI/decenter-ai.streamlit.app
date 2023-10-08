@@ -14,24 +14,24 @@ affordably through decentralized parallel training mechanisms.
 
 - [decenter-ai.streamlit.app](#decenter-aistreamlitapp)
 - [DeCenter AI](#decenter-ai)
-  - [Description](#description)
-  - [Table of Contents](#table-of-contents)
-  - [Prerequisites](#prerequisites)
-  - [How to Run with Python3](#how-to-run-with-python3)
-  - [How to Run via Docker](#how-to-run-via-docker)
-  - [Overview](#overview)
-    - [Features](#features)
-    - [Target Customers](#target-customers)
-    - [Benefits](#benefits)
-  - [Hackathon](#hackathon)
-  - [How to use the demo](#how-to-use-the-demo)
-  - [Backend Workflow](#backend-workflow)
-  - [How to Contribute](#how-to-contribute)
-  - [License](#license)
-  - [Authors](#authors)
-  - [Acknowledgments](#acknowledgments)
-  - [Support](#support)
-  - [Links](#links)
+    - [Description](#description)
+    - [Table of Contents](#table-of-contents)
+    - [Prerequisites](#prerequisites)
+    - [How to Run with Python3](#how-to-run-with-python3)
+    - [How to Run via Docker](#how-to-run-via-docker)
+    - [Overview](#overview)
+        - [Features](#features)
+        - [Target Customers](#target-customers)
+        - [Benefits](#benefits)
+    - [Hackathon](#hackathon)
+    - [How to use the demo](#how-to-use-the-demo)
+    - [Backend Workflow](#backend-workflow)
+    - [How to Contribute](#how-to-contribute)
+    - [License](#license)
+    - [Authors](#authors)
+    - [Acknowledgments](#acknowledgments)
+    - [Support](#support)
+    - [Links](#links)
 
 ## Prerequisites
 
@@ -48,7 +48,7 @@ To run project, you need to have the following prerequisites:
 To run using `Python` and `make`, follow these steps:
 
 ```shell
-   git clone <repository_url> decenter.app
+   git clone https://github.com/DeCenter-AI/decenter-ai.streamlit.app decenter.app
    cd decenter.app
    make install
 #   create .env file and fill in the environment variables
@@ -111,11 +111,14 @@ and participants but also encourages them to undertake tasks such as reviewing, 
 
 ## Hackathon
 
-For the hackathon, we built the Demo for project which is a distributed parallel training platform leveraging FVM and filecoin for storage and Bacalhau for compute over data. We also worked on the website,
+For the hackathon, we built the Demo for project which is a distributed parallel training platform leveraging FVM and
+filecoin for storage and Bacalhau for compute over data. We also worked on the website,
 Pitch deck, Customer profiles, Demo videos, market research, competitive analysis among others.
 
 ## How to use the demo
+
 ![image](https://github.com/DeCenter-AI/decenter-ai.streamlit.app/assets/131058062/95dad140-a127-4fc5-9a49-ef38885a19af)
+
 1. Visit https://decenterai.vercel.app/demo
 2. Enter model name
 3. Upload training dataset ( this gets uploaded using lighthouse)
@@ -128,6 +131,7 @@ Pitch deck, Customer profiles, Demo videos, market research, competitive analysi
 10. NFT certficates are created as license for the model
 
 ## Backend Workflow
+
 ![Open Data Hackathon  (1)](https://github.com/DeCenter-AI/decenter-ai.streamlit.app/assets/131058062/77755a15-72ca-433a-846e-81ca7ff7dfc8)
 
 ## How to Contribute
@@ -147,12 +151,12 @@ Please make sure to follow the [Code of Conduct](./CODE_OF_CONDUCT.md) when cont
 
 DeCenter AI is released under the [MIT License](https://opensource.org/licenses/MIT).
 
-## Authors
+## Contributors
 
 - Victor Kaycee [Email](victorkaycee17@gmail.com).  [Linkedln](https://www.linkedin.com/in/victor-kaycee).
-- Hiro Hamada  [Email](laciferin@gmail.com).  [Linkedln](http://linkedin.com/in/laciferin/).
-- Abhay Upadhyay  [Email](abhay281103@gmail.com).  [Linkedln](https://www.linkedin.com/in/au2811/).
+- Hiro @Nasfame [Email](laciferin@gmail.com).  [Linkedln](http://linkedin.com/in/laciferin/).
 - William Ikeji  [Email](williamikeji@gmail.com).  [Linkedln](https://www.linkedin.com/in/codypharm/).
+- Dinesh @Dineshjnld
 
 ## Acknowledgments
 
@@ -169,4 +173,3 @@ our [website](https://decenterai.com/).
 ## Links
 
 [Deck](https://www.canva.com/design/DAFvisezgFA/GCYskdQ4GaltJ2v6YGIgjQ/view?utm_content=DAFvisezgFA&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink ).
-

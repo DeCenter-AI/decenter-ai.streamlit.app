@@ -68,12 +68,16 @@ jupyter = "^1.0.0"
 matplotlib = "^3.8.0"
 ipykernel = "^6.25.2"
 beautifulsoup4 = "^4.12.2"
-seaborn = "^0.12.2"
+seaborn = "^0.13.0"
 spacy = "^3.6.1"
 statsmodels = "^0.14.0"
 pillow = "9"
 tensorflow-addons = "^0.21.0"
 regex = "^2023.8.8"
+
+
+[tool.poetry.group.tensorflow-addons.dependencies]
+regex = "^2023.10.3"
 
 [build-system]
 # requires = ["python>=3.10", "setuptools", "wheel"]
