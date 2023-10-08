@@ -190,16 +190,29 @@ if st.button("Train"):
     with st.spinner("Training in progress"):
         if platform.system() == "Linux":
             if app.python_repl is not sys.executable:
-                training_cmd[0] = os.path.relpath(
+                python_repl = os.path.relpath(
                     app.python_repl,
                     app.work_dir,
                 )
 
-            with Chroot(app.work_dir, logging.getLogger(), skip_chdir=False):
+            training_cmd[0] = python_repl
+
+            with Chroot(
+                app.work_dir,
+                logging.getLogger(),
+                mountpoints={
+                    os.path.dirname(sys.executable): os.path.dirname(
+                        sys.executable,
+                    ),
+                },
+                skip_chdir=False,
+            ):
                 print("chroot:", os.getcwd())
+                print("training_cmd:", training_cmd)
+                print("ls:", os.listdir())
                 result = subprocess.run(
                     training_cmd,
-                    cwd=app.work_dir,
+                    # cwd=app.work_dir,
                     capture_output=True,
                     encoding="UTF-8",
                 )
