@@ -1,6 +1,7 @@
 import logging
 import shutil
 import subprocess
+import sys
 import tempfile
 import zipfile
 from typing import List
@@ -101,6 +102,7 @@ if app.demo:
     app.model_name = "decenter-model-linear-reg-sample_v3"
     input_archive = "samples/sample_v3"
     app.work_dir = "samples/sample_v3"
+    app.python_repl = sys.executable
 else:
     app.temp_dir = tempfile.TemporaryDirectory(
         prefix="decenter-ai-",

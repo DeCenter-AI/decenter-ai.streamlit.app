@@ -7,6 +7,7 @@ import venv
 from dataclasses import dataclass
 
 import streamlit as st
+from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 from config.constants import EXECUTION_TEMPLATE
 from utils.archive import archive_directory
@@ -32,6 +33,24 @@ class App:
     python_repl: str = sys.executable
     venv_dir: str = None
     exit_code: bool = True
+
+    _input_archive: UploadedFile | str = None
+
+    @property
+    def input_archive(self):
+        return self._input_archive
+
+    @input_archive.setter
+    def input_archive(self, input_archive: UploadedFile | str):
+        if not self._input_archive:
+            logging.debug("input_archive: not found")
+            self._input_archive = "samples/sample_v3"
+            self.work_dir = "samples/sample_v3"
+            self.demo = True
+            return
+        self.demo = False
+        self._input_archive = input_archive
+        logging.info(f"set input_archive: {input_archive}")
 
     @property
     def work_dir(self):
