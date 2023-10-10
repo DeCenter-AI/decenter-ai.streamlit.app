@@ -13,7 +13,7 @@ from config.constants import EXECUTION_TEMPLATE
 from utils.archive import archive_directory
 
 
-@dataclass
+@dataclass(slots=True)
 class App:
     version: str = "v3"
     demo: bool = True
