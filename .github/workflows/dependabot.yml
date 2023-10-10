@@ -8,6 +8,9 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  WORKFLOW_TOKEN: ${{secrets.WORKFLOW_TOKEN}}
+
 jobs:
   auto-merge-patch:
     runs-on: ubuntu-latest
@@ -16,7 +19,7 @@ jobs:
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
           target: patch # Merge patch updates
-          github-token: ${{ github.token }}
+          github-token: ${{ env.WORKFLOW_TOKEN }}
           config: ''
 
   auto-merge-minor:
@@ -26,7 +29,7 @@ jobs:
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
           target: minor # Merge minor updates
-          github-token: ${{ github.token }}
+          github-token: ${{ env.WORKFLOW_TOKEN }}
           config: ''
 
   auto-merge-config:
@@ -36,7 +39,7 @@ jobs:
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
           target: all # Merge minor updates
-          github-token: ${{ github.token }}
+          github-token: ${{ env.WORKFLOW_TOKEN }}
           config: '.github/dependabot-merge.yml'
 
   # auto-merge-dev:
@@ -46,4 +49,4 @@ jobs:
   #     - uses: ahmadnassri/action-dependabot-auto-merge@v2
   #       with:
   #         # target: minor  # Merge minor updates can be major
-  #         github-token: ${{ github.token }}
+  #         github-token: ${{ env.WORKFLOW_TOKEN }}
