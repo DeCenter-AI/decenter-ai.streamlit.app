@@ -687,13 +687,13 @@ files = [
 
 [[package]]
 name = "clarifai"
-version = "9.9.0"
+version = "9.9.2"
 description = "Clarifai Python SDK"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "clarifai-9.9.0-py3-none-any.whl", hash = "sha256:61a73921594e342c2370ae635d0916df189443857c4dafbbe05e06e1389a0fcf"},
-    {file = "clarifai-9.9.0.tar.gz", hash = "sha256:a5ba61631f5f8ea56361c1a51a2131c135ca2d4d22a89533a95043b60b77389c"},
+    {file = "clarifai-9.9.2-py3-none-any.whl", hash = "sha256:9b6a7ae65ccc30a9b0497d0726be123da708ff330b3c47a6a4c903e9ced853db"},
+    {file = "clarifai-9.9.2.tar.gz", hash = "sha256:b742761aaff6100a268b004b0ead6b652a774b50d7abc4a2bcea6da73e5e09f6"},
 ]
 
 [package.dependencies]
@@ -5443,4 +5443,4 @@ ml = []
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f7a09c5fba0d246699d5f12917185f2abb0ab9fa8f87813db177afc620a98199"
+content-hash = "cd9b4ddc376e18129d829d0e9b6ca240f47a4a8478eff5eb8c8ca2434ac0c7ea"
