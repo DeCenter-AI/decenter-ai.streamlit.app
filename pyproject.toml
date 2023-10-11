@@ -42,7 +42,7 @@ clarifai = "^9.9.0"
 clarifai-grpc = "^9.8.2"
 colorama = "^0.4.6"
 colored = "^2.2.3"
-gtts = ">=2.3.2,<2.4.0"
+gtts = ">=2.3.2,<2.5.0"
 icecream = "^2.1.3"
 joblib = "^1.3.2"
 

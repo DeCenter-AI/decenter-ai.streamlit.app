@@ -1416,13 +1416,13 @@ protobuf = ["grpcio-tools (>=1.58.0)"]
 
 [[package]]
 name = "gtts"
-version = "2.3.2"
+version = "2.4.0"
 description = "gTTS (Google Text-to-Speech), a Python library and CLI tool to interface with Google Translate text-to-speech API"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "gTTS-2.3.2-py3-none-any.whl", hash = "sha256:9132e409603f34d5023458e3e10ce2f5df55498d7a2ee781c9adbe616fbd4152"},
-    {file = "gTTS-2.3.2.tar.gz", hash = "sha256:5314f7dedb4230889ff4773edd37e101408497e166982027b8d9582a4585eb4f"},
+    {file = "gTTS-2.4.0-py3-none-any.whl", hash = "sha256:08719f4f75c9d09921fa4fd994a372fd4020e2798234a153523da01a4fa53244"},
+    {file = "gTTS-2.4.0.tar.gz", hash = "sha256:dabc62a57e81befe21c37476e084a72d5dc8f0d90be380b3236ad681d815cd4e"},
 ]
 
 [package.dependencies]
@@ -5443,4 +5443,4 @@ ml = []
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f7a09c5fba0d246699d5f12917185f2abb0ab9fa8f87813db177afc620a98199"
+content-hash = "3f1f64e8366944760e401211479187f7acfb5ed6b1d638bd8b4709c446e627fd"
