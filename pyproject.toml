@@ -51,6 +51,7 @@ pinecone-client = "^2.2.2"
 pytest = ">=7.4.0,<7.5.0"
 python-dotenv = "1.0.0"
 pychroot = "0.9.18"
+dataclasses-json = "^0.6.1"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.1.0"

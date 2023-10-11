@@ -12,7 +12,7 @@ from streamlit.runtime.uploaded_file_manager import UploadedFile
 from config.constants import EXECUTION_TEMPLATE
 from utils.archive import archive_directory
 
-
+@dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass(slots=True)
 class App:
     version: str = "v3"
