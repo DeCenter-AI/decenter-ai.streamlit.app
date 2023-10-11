@@ -11,6 +11,8 @@ from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 from config.constants import EXECUTION_TEMPLATE
 from utils.archive import archive_directory
+from dataclasses_json import dataclass_json, LetterCase
+
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass(slots=True)
