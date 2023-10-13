@@ -218,26 +218,44 @@ if st.button("Train"):
             #     os.mount("--bind", "/proc", "/proc")
             # subprocess.run(["python3"], preexec_fn=preexec_fn)
 
-            
+            mountpoints = {
+                # '/dev': {'recursive': True}, //doc
+                # 'proc:/proc': {},
+                # 'sysfs:/sys': {},
+                # 'tmpfs:/dev/shm': {},
+                # '/etc/resolv.conf': {},
+                # '/',
+                # f'{os.path.dirname(sys.executable)}': {'recursive':True},
+                f'{os.path.dirname(sys.executable)}': {'recursive':True},
+            }
+
+            print("mountpoints", mountpoints)
+                    
             with Chroot(
                 app.work_dir,
-                logging.getLogger(),
+                log=logging.getLogger(),
                 mountpoints=mountpoints,
-                skip_chdir=True,
+                skip_chdir=False, 
             ):
                 print("chroot:", os.getcwd())
-                print("training_cmd:", training_cmd)
                 print("ls:", os.listdir())
+                print("ls: .venv", os.listdir('.venv/bin'))
 
-                result = subprocess.run(
-                    ['pwd'],
-                    # cwd=app.work_dir,
-                    capture_output=True,
-                    encoding="UTF-8",
-                )
-                print('res')
-                print(result.stderr)
-                print(result.stdout)
+                print("training_cmd:", training_cmd)
+
+                os.system(' '.join(training_cmd))
+
+                # result = subprocess.run(
+                #     # ['pwd'],
+                #     # training_cmd,
+                #     # cwd=app.work_dir,
+                #     [''],
+                #     capture_output=True,
+                #     encoding="UTF-8",
+                # )
+                # print('res')
+                # print(result.stderr)
+                # print(result.stdout)
         else:
             result = subprocess.run(
                 training_cmd,
@@ -246,6 +264,13 @@ if st.button("Train"):
                 encoding="UTF-8",
             )
 
+        result = subprocess.run(
+                ['echo','bypassing','for','the','chroot'],
+                cwd=app.work_dir,
+                capture_output=True,
+                encoding="UTF-8",
+        )
+        
         logging.info(result.stdout)
         logging.info(result.stderr)
 
