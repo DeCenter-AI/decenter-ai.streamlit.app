@@ -239,20 +239,22 @@ if st.button("Train"):
             ):
                 print("chroot:", os.getcwd())
                 print("ls:", os.listdir())
+                print("ls: getting the same directory", os.listdir('..'))
                 print("ls: .venv", os.listdir('.venv/bin'))
 
                 print("training_cmd:", training_cmd)
 
-                os.system(' '.join(training_cmd))
+                print("sys.exectable inside chroot", os.listdir(os.path.dirname(sys.executable)))
 
-                # result = subprocess.run(
-                #     # ['pwd'],
-                #     # training_cmd,
-                #     # cwd=app.work_dir,
-                #     [''],
-                #     capture_output=True,
-                #     encoding="UTF-8",
-                # )
+                # os.system(' '.join(training_cmd)) doesn't work
+
+                result = subprocess.run(
+                    # ['pwd'], #doesn't work cuz the binary is not mounted
+                    training_cmd,
+                    # cwd=app.work_dir,
+                    capture_output=True,
+                    encoding="UTF-8",
+                )
                 # print('res')
                 # print(result.stderr)
                 # print(result.stdout)
@@ -270,7 +272,7 @@ if st.button("Train"):
                 capture_output=True,
                 encoding="UTF-8",
         )
-        
+
         logging.info(result.stdout)
         logging.info(result.stderr)
 
