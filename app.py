@@ -60,7 +60,7 @@ app: App = st.session_state.get("app")
 if not app:
     app = App()
     st.session_state.app = app
-
+    
 option = st.selectbox(
     "App Version",
     ("v3", "v2", "v1"),
@@ -94,14 +94,29 @@ if not app.model_name_changed and input_archive:
     st.experimental_rerun()
     print("dead code: won't run")  # know this
 
+samples_demo=st.selectbox(
+    'Demo',
+    ('Headbrain', 'Winequality','Simple-linear-regression','Multiple-linear-regression','Boston-house-price-prediction'))
+
+if samples_demo == 'Headbrain':
+    appw="samples\demos\headbrain"
+elif samples_demo == 'Winequality':
+    appw="samples\demos\winequality-red"
+elif samples_demo == 'Multiple-linear-regression':
+    appw="samples\demos\multiple-linear-regression"  
+elif samples_demo=='Simple-linear-regression':
+    appw="samples\demos\simple-linear-regression"
+else:
+    appw="samples\demos\boston-house-price-prediction"
 app.demo = input_archive is None
 # app.demo = st.checkbox('demo') #TODO: wip
 
 if app.demo:
     st.warning("input archive not found: demo:on")
     app.model_name = "decenter-model-linear-reg-sample_v3"
-    input_archive = "samples/sample_v3"
-    app.work_dir = "samples/sample_v3"
+    
+    input_archive = appw
+    app.work_dir = appw
     app.python_repl = sys.executable
 else:
     app.temp_dir = tempfile.TemporaryDirectory(
