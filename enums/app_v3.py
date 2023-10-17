@@ -7,11 +7,11 @@ import venv
 from dataclasses import dataclass
 
 import streamlit as st
+from dataclasses_json import dataclass_json, LetterCase
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 from config.constants import EXECUTION_TEMPLATE
 from utils.archive import archive_directory
-from dataclasses_json import dataclass_json, LetterCase
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
@@ -64,10 +64,6 @@ class App:
             logging.warning("no work_dir found")
             return
         self._work_dir = _work_dir
-
-    def set_model_name(self, model_name: str):
-        self.model_name = model_name
-        self.model_name_changed = True
 
     @property
     def model_name(self):

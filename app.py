@@ -13,12 +13,17 @@ from streamlit.commands.page_config import (
     GET_HELP_KEY,
 )
 
+from config import DEMO_DIR
 from config.constants import *
 from config.log import setup_log
 from enums.app_v3 import App
 from public import report_request_buttons_html, button_styles_css
 from utils.exec_commands import get_notebook_cmd
-from utils.helper_find import find_requirements_txt_files, find_driver_scripts
+from utils.helper_find import (
+    find_requirements_txt_files,
+    find_driver_scripts,
+    find_demos,
+)
 from utils.install_deps import install_dependencies
 from views.head import head_v3
 
@@ -60,7 +65,7 @@ app: App = st.session_state.get("app")
 if not app:
     app = App()
     st.session_state.app = app
-    
+
 option = st.selectbox(
     "App Version",
     ("v3", "v2", "v1"),
@@ -72,11 +77,12 @@ if option != app.version:  # don't redirect if in the same page
         unsafe_allow_html=True,
     )
 
-directory_path = 'samples/demos'
-file_list = os.listdir(directory_path)
-
-selected_item = st.selectbox('Demo', file_list)
-model_name= selected_item
+selected_demo = st.selectbox(
+    "Demo",
+    find_demos(),
+    help="enabled when no input archive is uploaded",
+    disabled=not app.demo,
+)
 
 app.model_name = st.text_input(
     "Model Name",
@@ -92,10 +98,7 @@ input_archive = st.file_uploader(
 )
 
 if not app.model_name_changed and input_archive:
-    app.model_name = (
-        "decenter-model-"
-        + os.path.splitext(os.path.basename(input_archive.name))[0]
-    )
+    app.model_name = os.path.splitext(os.path.basename(input_archive.name))[0]
     print("streamlit rerun")
     st.experimental_rerun()
     print("dead code: won't run")  # know this
@@ -104,23 +107,30 @@ app.demo = input_archive is None
 # app.demo = st.checkbox('demo') #TODO: wip
 
 if app.demo:
-    
     st.warning("input archive not found: demo:on")
-    
-    if selected_item.endswith('.zip'):
+
+    if selected_demo.endswith(".zip"):
+        cur_model_name = app.model_name
+
+        app.model_name = os.path.splitext(os.path.basename(selected_demo))[0]
+        print("demo model_name", app.model_name)
+
+        if cur_model_name != app.model_name:
+            print("streamlit: rerun")
+            st.experimental_rerun()
+
         app.temp_dir = tempfile.TemporaryDirectory(
             prefix="decenter-ai-",
-            suffix=selected_item,
-    )
+            suffix=selected_demo,
+        )
 
         app.work_dir = app.temp_dir.name
-        temp_file_path = os.path.join(directory_path, selected_item)
-        #app.model_name = f"decenter-model-{os.path.splitext(selected_item)[0]}"
+        temp_file_path = os.path.join(DEMO_DIR, selected_demo)
 
         with zipfile.ZipFile(temp_file_path, "r") as zip_ref:
-                zip_ref.extractall(app.work_dir)        
+            zip_ref.extractall(app.work_dir)
         extracted_files = os.listdir(app.work_dir)
-        
+
         app.python_repl = sys.executable
 
 else:
@@ -259,7 +269,7 @@ if st.button("Train"):
             st.download_button(
                 label="Download Working Directory",
                 data=f1,
-                file_name=f"{os.path.basename(zipfile_)}",
+                file_name=f"decenter-model-{app.model_name}",
             )
 
         st.balloons()
