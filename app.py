@@ -95,21 +95,33 @@ app.model_name = st.text_input(
 input_archive = st.file_uploader(
     "Upload working directory of notebook",
     type=["zip"],
-)
+)  # know this
+
+if app.demo and input_archive:
+    app.demo = False
+    print("streamlit rerun: app.demo and input_archive")
+    st.experimental_rerun()
+elif not app.demo and not input_archive:
+    app._prev_model_name = None
+    app.demo = True
+    print("streamlit rerun: app.demo")
+    st.experimental_rerun()
+
+# app.demo = st.checkbox('demo') #TODO: wip
 
 if not app.model_name_changed and input_archive:
     app.model_name = os.path.splitext(os.path.basename(input_archive.name))[0]
-    print("streamlit rerun")
+    print("streamlit rerun: input_archive")
     st.experimental_rerun()
-    print("dead code: won't run")  # know this
+    print("dead code: won't run")
 
-app.demo = input_archive is None
-# app.demo = st.checkbox('demo') #TODO: wip
+
+app.create_temporary_dir()
 
 if app.demo:
     st.warning("input archive not found: demo:on")
 
-    if selected_demo.endswith(".zip"):
+    if selected_demo:
         cur_model_name = app.model_name
 
         app.model_name = os.path.splitext(os.path.basename(selected_demo))[0]
@@ -119,27 +131,16 @@ if app.demo:
             print("streamlit: rerun")
             st.experimental_rerun()
 
-        app.temp_dir = tempfile.TemporaryDirectory(
-            prefix="decenter-ai-",
-            suffix=selected_demo,
-        )
-
-        app.work_dir = app.temp_dir.name
         temp_file_path = os.path.join(DEMO_DIR, selected_demo)
 
         with zipfile.ZipFile(temp_file_path, "r") as zip_ref:
             zip_ref.extractall(app.work_dir)
-        extracted_files = os.listdir(app.work_dir)
 
         app.python_repl = sys.executable
 
 else:
-    app.temp_dir = tempfile.TemporaryDirectory(
-        prefix="decenter-ai-",
-        suffix=app.model_name,
-    )
+    selected_demo = None
 
-    app.work_dir = app.temp_dir.name
     temp_file_path = f"{app.work_dir}/input_archive.zip"
 
     print("temp file path", temp_file_path)

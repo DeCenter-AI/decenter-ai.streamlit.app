@@ -20,6 +20,7 @@ class App:
     version: str = "v3"
     demo: bool = True
     _model_name: str = "decenter-model-linear-reg-sample_v3"
+    _prev_model_name: str = None
     model_name_changed: bool = False
 
     exec_mode: EXECUTION_TEMPLATE = None
@@ -37,6 +38,8 @@ class App:
     exit_code: bool = True
 
     _input_archive: UploadedFile | str = None
+
+    _selected_demo: str = None
 
     @property
     def input_archive(self):
@@ -69,16 +72,20 @@ class App:
     def model_name(self):
         return self._model_name
 
+    @property
+    def model_name_changed(self) -> bool:
+        if self._prev_model_name is None:
+            return True
+        return self.model_name != self._prev_model_name
+
     @model_name.setter
     def model_name(self, model_name: str):
         if not model_name:
             st.toast("model name not changed")
             logging.debug("model_name: invalid")
             return
-
-        self.model_name_changed = (
-            model_name != "decenter-model-linear-reg-sample_v3"
-        )
+        self._prev_model_name = self._model_name
+        self._model_name = model_name
 
         if self.model_name_changed:
             self._model_name = model_name
@@ -112,3 +119,20 @@ class App:
         )
         # zipfile_ = archive_directory_in_memory(app.work_dir)
         return zipfile_
+
+    def create_temporary_dir(self):
+        self.temp_dir = tempfile.TemporaryDirectory(
+            prefix="decenter-ai-",
+            suffix=self.model_name,
+        )
+        self.work_dir = self.temp_dir.name
+
+    @property
+    def selected_demo(self):
+        return self._selected_demo
+
+    @selected_demo.setter
+    def selected_demo(self, demo: str):
+        self._selected_demo = demo
+        if not demo:
+            return
