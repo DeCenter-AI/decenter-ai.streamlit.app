@@ -74,9 +74,11 @@ class App:
 
     @property
     def model_name_changed(self) -> bool:
-        if self._prev_model_name is None:
+        if self._prev_model_name is None and self.model_name:
+            print("prev: model_name is None")
             return True
-        return self.model_name != self._prev_model_name
+
+        return self.model_name.strip() != self._prev_model_name.strip()
 
     @model_name.setter
     def model_name(self, model_name: str):
@@ -88,8 +90,10 @@ class App:
         self._model_name = model_name
 
         if self.model_name_changed:
-            self._model_name = model_name
-            st.toast(f"model name updated to {model_name}", icon="👌")
+            st.toast(
+                f"model name updated from {self._prev_model_name} to {model_name}",
+                icon="👌",
+            )
 
     def create_venv(self, venv_dir=".venv"):
         venv_dir = os.path.join(self.work_dir, venv_dir)

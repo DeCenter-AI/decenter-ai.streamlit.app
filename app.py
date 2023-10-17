@@ -61,7 +61,7 @@ load_dotenv()
 head_v3()
 
 app: App = st.session_state.get("app")
-# app = None if MODE == DEVELOPMENT else app  # DEV: when testing
+app = None if MODE == DEVELOPMENT else app  # FIXME: DEV: when testing
 if not app:
     app = App()
     st.session_state.app = app
@@ -98,6 +98,7 @@ input_archive = st.file_uploader(
 )  # know this
 
 if app.demo and input_archive:
+    app._prev_model_name = None
     app.demo = False
     print("streamlit rerun: app.demo and input_archive")
     st.experimental_rerun()
@@ -122,13 +123,13 @@ if app.demo:
     st.warning("input archive not found: demo:on")
 
     if selected_demo:
-        cur_model_name = app.model_name
+        # cur_model_name = app.model_name
 
         app.model_name = os.path.splitext(os.path.basename(selected_demo))[0]
         print("demo model_name", app.model_name)
 
-        if cur_model_name != app.model_name:
-            print("streamlit: rerun")
+        if app.model_name_changed:
+            print("streamlit: rerun: cur_model_name")
             st.experimental_rerun()
 
         temp_file_path = os.path.join(DEMO_DIR, selected_demo)
