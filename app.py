@@ -216,21 +216,25 @@ if st.button("Train"):
                 st.error("notebook: execution failed")
                 print("notebook:", "execution failed")
 
-    if app.exit_success:
-        if app.venv_dir:
-            shutil.rmtree(app.venv_dir)
+    if not app.exit_success:
+        logging.critical(f"env:{app.environment}:failed")
+        st.error("app execution failed")
+        st.stop()
 
-        model_output = app.export_working_dir()
+    if app.venv_dir:
+        shutil.rmtree(app.venv_dir)
 
-        st.toast("Model Trained successfully!", icon="🧤")
+    model_output = app.export_working_dir()
 
-        st.success("Model Training Request completed successfully!", icon="✅")
+    st.toast("Model Trained successfully!", icon="🧤")
 
-        st.balloons()
+    st.success("Model Training Request completed successfully!", icon="✅")
 
-        with open(model_output, "rb") as f1:
-            st.download_button(
-                label="Download Model",
-                data=f1,
-                file_name=f"decenter-model-{app.model_name}",
-            )
+    st.balloons()
+
+    with open(model_output, "rb") as f1:
+        st.download_button(
+            label="Download Model",
+            data=f1,
+            file_name=f"decenter-model-{app.model_name}",
+        )
