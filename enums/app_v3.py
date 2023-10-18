@@ -35,7 +35,7 @@ class App:
 
     python_repl: str = sys.executable
     venv_dir: str = None
-    exit_code: bool = True
+    exit_success: bool = True
 
     _input_archive: UploadedFile | str = None
 

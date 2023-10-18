@@ -173,7 +173,7 @@ if not training_cmd:
     st.stop()
 
 if st.button("Train"):
-    print(app.starter_script)
+    logging.info(f"starter_script - {app.starter_script}")
 
     st.snow()
 
@@ -209,26 +209,26 @@ if st.button("Train"):
                 st.info(f"notebook: output generated at {out}")
                 print(f"notebook: output generated at {out}")
             else:
-                app.exit_code = False
+                app.exit_success = False
                 st.error("notebook: execution failed")
                 print("notebook:", "execution failed")
 
-    if app.exit_code:
+    if app.exit_success:
         venv_dir = app.venv_dir
         if venv_dir:
             shutil.rmtree(venv_dir)
 
         model_output = app.export_working_dir()
 
-        st.toast("Executed the notebook successfully", icon="🧤")
+        st.toast("Model Trained successfully!", icon="🧤")
 
-        st.success("Execution completed successfully!", icon="✅")
+        st.success("Model Training Request completed successfully!", icon="✅")
 
         st.balloons()
 
         with open(model_output, "rb") as f1:
             st.download_button(
-                label="Download Working Directory",
+                label="Download Model",
                 data=f1,
                 file_name=f"decenter-model-{app.model_name}",
             )
