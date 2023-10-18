@@ -24,7 +24,7 @@ class App:
     _prev_model_name: str = ""
 
     environment: EXECUTION_ENVIRONMENT = JUPYTER_NOTEBOOK
-    starter_script: str = None
+    training_script: str = None
     requirements_path: str = None
     _work_dir: str = None
     temp_dir: tempfile.TemporaryDirectory = None

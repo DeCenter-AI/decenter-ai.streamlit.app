@@ -123,19 +123,18 @@ else:
 
     app.create_venv()
 
-app.starter_script = st.selectbox(
+app.training_script = st.selectbox(
     "Training Script:",
     find_driver_scripts(app.work_dir),
 )
 
-if not app.starter_script:
+if not app.training_script:
     print("starter_script:not found")
     st.error("starter_script:not found; app exiting")
     st.stop()
 
-execution_environment: str = os.path.splitext(app.starter_script)[1]
+execution_environment: str = os.path.splitext(app.training_script)[1]
 training_cmd: List[str]
-print(execution_environment)
 
 match execution_environment:
     case ".py":
@@ -158,18 +157,19 @@ match execution_environment:
                     app.requirements_path,
                     cwd=app.work_dir,
                 )
-        training_cmd = [app.python_repl, app.starter_script]
+        training_cmd = [app.python_repl, app.training_script]
 
     case ".ipynb":
         app.environment = JUPYTER_NOTEBOOK
 
         training_cmd = get_notebook_cmd(
-            app.starter_script,
+            app.training_script,
             app.python_repl,
         )
 
     case _:
         st.error("invalid trainer script-Raise issue")
+        logging.critical(f"invalid trainer script- {app.training_script}")
         st.stop()
 
 if not training_cmd:
@@ -177,7 +177,7 @@ if not training_cmd:
     st.stop()
 
 if st.button("Train", key="train"):
-    logging.info(f"starter_script - {app.starter_script}")
+    logging.info(f"starter_script - {app.training_script}")
     st.snow()
 
     with st.spinner("Training in progress"):
@@ -205,9 +205,9 @@ if st.button("Train", key="train"):
             st.warning(result.stderr)
 
         if app.environment is JUPYTER_NOTEBOOK:
-            out = f"{app.starter_script}.html"
+            out = f"{app.training_script}.html"
             if os.path.exists(
-                os.path.join(app.work_dir, f"{app.starter_script}.html"),
+                os.path.join(app.work_dir, f"{app.training_script}.html"),
             ):
                 st.info(f"notebook: output generated at {out}")
                 print(f"notebook: output generated at {out}")
