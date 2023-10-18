@@ -125,56 +125,61 @@ else:
 
     app.create_venv()
 
-driver_scripts = find_driver_scripts(app.work_dir)
-app.starter_script = st.selectbox("Training Script:", driver_scripts)
-training_cmd: List[str] = []
+app.starter_script = st.selectbox(
+    "Training Script:",
+    find_driver_scripts(app.work_dir),
+)
 
-if app.starter_script:
-    script_ext = os.path.splitext(app.starter_script)[1]
+if not app.starter_script:
+    print("starter_script:not found")
+    st.error("starter_script:not found; app exiting")
+    st.stop()
 
-    match script_ext:
-        case ".py":
-            app.exec_mode = TRAINER_PYTHON
+execution_environment: str = os.path.splitext(app.starter_script)[1]
+training_cmd: List[str]
+print(execution_environment)
 
-            available_requirement_files = find_requirements_txt_files(
+match execution_environment:
+    case ".py":
+        app.environment = PYTHON
+        requirements = st.selectbox(
+            "Select dependencies to install",
+            find_requirements_txt_files(
                 app.work_dir,
-            )
-            requirements = st.selectbox(
-                "Select dependencies to install",
-                available_requirement_files,
-            )
+            ),
+        )
 
-            if requirements:
-                with st.spinner("Installing dependencies in progress"):
-                    app.requirements_path = os.path.join(
-                        app.work_dir,
-                        requirements,
-                    )
-                    install_dependencies(
-                        app.python_repl,
-                        app.requirements_path,
-                        cwd=app.work_dir,
-                    )
+        if requirements:
+            with st.spinner("Installing dependencies in progress"):
+                app.requirements_path = os.path.join(
+                    app.work_dir,
+                    requirements,
+                )
+                install_dependencies(
+                    app.python_repl,
+                    app.requirements_path,
+                    cwd=app.work_dir,
+                )
+        training_cmd = [app.python_repl, app.starter_script]
 
-            training_cmd = [app.python_repl, app.starter_script]
+    case ".ipynb":
+        app.environment = JUPYTER_NOTEBOOK
 
-        case ".ipynb":
-            app.exec_mode = TRAINER_PYTHON_NB
+        training_cmd = get_notebook_cmd(
+            app.starter_script,
+            app.python_repl,
+        )
 
-            training_cmd = get_notebook_cmd(
-                app.starter_script,
-                app.python_repl,
-            )
-
-        case _:
-            raise Exception(f"invalid script-{script_ext}")
+    case _:
+        st.error("invalid trainer script-Raise issue")
+        st.stop()
 
 if not training_cmd:
+    st.error("invalid training_cmd-Raise Issue")
     st.stop()
 
 if st.button("Train"):
     logging.info(f"starter_script - {app.starter_script}")
-
     st.snow()
 
     with st.spinner("Training in progress"):
@@ -201,7 +206,7 @@ if st.button("Train"):
         if result.stderr:
             st.warning(result.stderr)
 
-        if app.exec_mode is TRAINER_PYTHON_NB:
+        if app.environment is JUPYTER_NOTEBOOK:
             out = f"{app.starter_script}.html"
             if os.path.exists(
                 os.path.join(app.work_dir, f"{app.starter_script}.html"),
@@ -214,9 +219,8 @@ if st.button("Train"):
                 print("notebook:", "execution failed")
 
     if app.exit_success:
-        venv_dir = app.venv_dir
-        if venv_dir:
-            shutil.rmtree(venv_dir)
+        if app.venv_dir:
+            shutil.rmtree(app.venv_dir)
 
         model_output = app.export_working_dir()
 

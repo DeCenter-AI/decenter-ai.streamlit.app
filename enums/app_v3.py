@@ -11,7 +11,7 @@ from dataclasses_json import dataclass_json, LetterCase
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 from config import DEMO_DIR
-from config.constants import EXECUTION_TEMPLATE
+from config.constants import EXECUTION_ENVIRONMENT, JUPYTER_NOTEBOOK
 from utils.archive import archive_directory
 
 
@@ -23,7 +23,7 @@ class App:
     _model_name: str = ""
     _prev_model_name: str = ""
 
-    exec_mode: EXECUTION_TEMPLATE = None
+    environment: EXECUTION_ENVIRONMENT = JUPYTER_NOTEBOOK
     starter_script: str = None
     requirements_path: str = None
     _work_dir: str = None
