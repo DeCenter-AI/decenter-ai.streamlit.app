@@ -7,7 +7,6 @@ from typing import List
 
 import streamlit as st
 
-from config import DEMO_DIR
 from config.constants import *
 from config.log import setup_log
 from enums.app_v3 import App
@@ -45,13 +44,13 @@ if option != app.version:  # don't redirect if in the same page
         unsafe_allow_html=True,
     )
 
-# TODO: checkbox-button for "demo" , if enabled then show the selectbox that's what is app.demo
 
 app.selected_demo = st.selectbox(
     "Demo",
     find_demos(),
     help="enabled when no input archive is uploaded",
     disabled=not app.demo,
+    key="selected_demo",
 )
 
 model_name = st.text_input(
@@ -66,6 +65,7 @@ model_name = st.text_input(
 input_archive = st.file_uploader(
     "Upload Training Workspace Archive with Datasets",
     type=["zip"],
+    key="input_archive",
 )
 
 demo = input_archive is None
@@ -79,15 +79,18 @@ if demo != app.demo:
 
 # app.demo = st.checkbox('demo') #TODO: wip
 
+# model-name re-renders
 if not app.demo and model_name and model_name != app.model_name:
     app.model_name = model_name
     print("streamlit rerun: model name changed")
     st.experimental_rerun()
-elif input_archive and not app.demo and not model_name:
+elif not app.demo and not model_name and input_archive:
     model_name = os.path.splitext(os.path.basename(input_archive.name))[0]
     app.model_name = model_name
     print("streamlit rerun: model name updated based on input archive")
     st.experimental_rerun()
+
+app.recycle_temp_dir()
 
 if app.demo:
     st.warning("demo mode:on")
@@ -97,36 +100,28 @@ if app.demo:
         logging.critical("demo: not found")
         st.stop()
 
-    temp_file_path = os.path.join(DEMO_DIR, app.selected_demo)
-
-    with zipfile.ZipFile(temp_file_path, "r") as zip_ref:
+    with zipfile.ZipFile(app.selected_demo_path, "r") as zip_ref:
         zip_ref.extractall(app.work_dir)
 
     app.python_repl = sys.executable
 else:
-    app.selected_demo = None
+    # temp_file_path = os.path.join(app.work_dir, "input_archive.zip")
+    #
+    # print("temp file path", temp_file_path)
+    #
+    # with open(temp_file_path, "wb") as temp_file:
+    #     temp_file.write(input_archive.read())
+    #
+    # with zipfile.ZipFile(temp_file_path, "r") as zip_ref:
+    #     zip_ref.extractall(app.work_dir)
 
-    temp_file_path = f"{app.work_dir}/input_archive.zip"
-
-    print("temp file path", temp_file_path)
-
-    with open(temp_file_path, "wb") as temp_file:
-        temp_file.write(input_archive.read())
-
-    # Extract the contents of the archive to the temporary directory
-    with zipfile.ZipFile(temp_file_path, "r") as zip_ref:
+    with zipfile.ZipFile(input_archive, "r") as zip_ref:
         zip_ref.extractall(app.work_dir)
-
-    # At this point, the contents of the archive are extracted to the temporary directory
-    # You can access the extracted files using the 'temp_dir' path
 
     # Example: Print the list of extracted files
     extracted_files = os.listdir(app.work_dir)
     print("extracted:", extracted_files)
-
-    print("temp_dir is ", app.temp_dir)
-    temp_dir_contents = os.listdir(app.work_dir)
-    print("temp_dir contains", temp_dir_contents)
+    print("work_dir: ", app.work_dir)
 
     app.create_venv()
 
@@ -223,7 +218,7 @@ if st.button("Train"):
         if venv_dir:
             shutil.rmtree(venv_dir)
 
-        zipfile_ = app.export_working_dir()
+        model_output = app.export_working_dir()
 
         st.toast("Executed the notebook successfully", icon="🧤")
 
@@ -231,12 +226,9 @@ if st.button("Train"):
 
         st.balloons()
 
-        with open(zipfile_, "rb") as f1:
+        with open(model_output, "rb") as f1:
             st.download_button(
                 label="Download Working Directory",
                 data=f1,
                 file_name=f"decenter-model-{app.model_name}",
             )
-
-        st.balloons()
-        app.recycle_temp_dir()

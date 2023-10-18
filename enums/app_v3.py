@@ -10,6 +10,7 @@ import streamlit as st
 from dataclasses_json import dataclass_json, LetterCase
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
+from config import DEMO_DIR
 from config.constants import EXECUTION_TEMPLATE
 from utils.archive import archive_directory
 
@@ -116,7 +117,7 @@ class App:
 
     def export_working_dir(self) -> str:
         zipfile_ = archive_directory(
-            f"{self.models_archive_dir}/{self.model_name}",
+            os.path.join(self.models_archive_dir, self.model_name),
             self.work_dir,
         )
         # zipfile_ = archive_directory_in_memory(app.work_dir)
@@ -148,3 +149,7 @@ class App:
             st.toast(f"cleaning up the app:temp directory: {self.temp_dir}")
             self.temp_dir.cleanup()
         self.create_temporary_dir()
+
+    @property
+    def selected_demo_path(self):
+        return os.path.join(DEMO_DIR, self.selected_demo)
