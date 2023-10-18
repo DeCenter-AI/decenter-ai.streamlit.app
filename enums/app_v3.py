@@ -5,6 +5,7 @@ import sys
 import tempfile
 import venv
 from dataclasses import dataclass
+from typing import Union
 
 import streamlit as st
 from dataclasses_json import dataclass_json, LetterCase
@@ -115,7 +116,7 @@ class App:
 
         self.python_repl = python_repl
 
-    def export_working_dir(self, archive_name=None) -> str:
+    def export_working_dir(self, archive_name=None) -> Union[os.PathLike, str]:
         archive_name = archive_name or self.model_name
 
         zipfile_ = archive_directory(
