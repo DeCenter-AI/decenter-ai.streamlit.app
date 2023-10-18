@@ -1,5 +1,8 @@
 import os
+import tempfile
 from functools import cache
+
+import streamlit as st
 
 from config import DEMO_DIR
 
@@ -55,3 +58,12 @@ def find_demos():
     """
     demo_list = os.listdir(DEMO_DIR)
     return demo_list
+
+
+@st.cache_resource
+def get_temp_zip_dir():
+    temp_dir = tempfile.TemporaryDirectory(
+        prefix="decenter-ai-",
+        suffix="-models-zip-dir",
+    )
+    return temp_dir.name

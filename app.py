@@ -7,17 +7,11 @@ import zipfile
 from typing import List
 
 import streamlit as st
-from streamlit.commands.page_config import (
-    REPORT_A_BUG_KEY,
-    ABOUT_KEY,
-    GET_HELP_KEY,
-)
 
 from config import DEMO_DIR
 from config.constants import *
 from config.log import setup_log
 from enums.app_v3 import App
-from public import report_request_buttons_html, button_styles_css
 from utils.exec_commands import get_notebook_cmd
 from utils.helper_find import (
     find_requirements_txt_files,
@@ -27,34 +21,7 @@ from utils.helper_find import (
 from utils.install_deps import install_dependencies
 from views.head import head_v3
 
-st.set_page_config(
-    page_title="Decenter AI",
-    page_icon="static/favicon.ico",
-    layout="centered",
-    menu_items={
-        REPORT_A_BUG_KEY: "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose",
-        ABOUT_KEY: "https://app.pitch.com/app/dashboard/0ba0eb40-0ffc-4970-91a5-64cec23d3457",
-        GET_HELP_KEY: "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose",
-    },
-)
-
-
-@st.cache_resource
-def get_temp_zip_dir():
-    temp_dir = tempfile.TemporaryDirectory(
-        prefix="decenter-ai-",
-        suffix="-models-zip-dir",
-    )
-    return temp_dir.name
-
-
 setup_log()
-
-st.sidebar.header("v3")
-
-st.markdown(button_styles_css, unsafe_allow_html=True)
-
-st.sidebar.markdown(report_request_buttons_html, unsafe_allow_html=True)
 
 load_dotenv()
 
@@ -77,7 +44,7 @@ if option != app.version:  # don't redirect if in the same page
         unsafe_allow_html=True,
     )
 
-selected_demo = st.selectbox(
+app.selected_demo = st.selectbox(
     "Demo",
     find_demos(),
     help="enabled when no input archive is uploaded",
@@ -95,7 +62,8 @@ app.model_name = st.text_input(
 input_archive = st.file_uploader(
     "Upload working directory of notebook",
     type=["zip"],
-)  # know this
+)
+
 
 if app.demo and input_archive:
     app._prev_model_name = None
@@ -122,17 +90,19 @@ app.create_temporary_dir()
 if app.demo:
     st.warning("input archive not found: demo:on")
 
-    if selected_demo:
+    if app.selected_demo:
         # cur_model_name = app.model_name
 
-        app.model_name = os.path.splitext(os.path.basename(selected_demo))[0]
+        app.model_name = os.path.splitext(os.path.basename(app.selected_demo))[
+            0
+        ]
         print("demo model_name", app.model_name)
 
         if app.model_name_changed:
             print("streamlit: rerun: cur_model_name")
             st.experimental_rerun()
 
-        temp_file_path = os.path.join(DEMO_DIR, selected_demo)
+        temp_file_path = os.path.join(DEMO_DIR, app.selected_demo)
 
         with zipfile.ZipFile(temp_file_path, "r") as zip_ref:
             zip_ref.extractall(app.work_dir)
@@ -140,7 +110,7 @@ if app.demo:
         app.python_repl = sys.executable
 
 else:
-    selected_demo = None
+    app.selected_demo = None
 
     temp_file_path = f"{app.work_dir}/input_archive.zip"
 

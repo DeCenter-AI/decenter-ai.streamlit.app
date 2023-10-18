@@ -21,7 +21,6 @@ class App:
     demo: bool = True
     _model_name: str = "decenter-model-linear-reg-sample_v3"
     _prev_model_name: str = None
-    model_name_changed: bool = False
 
     exec_mode: EXECUTION_TEMPLATE = None
     starter_script: str = None
@@ -138,5 +137,3 @@ class App:
     @selected_demo.setter
     def selected_demo(self, demo: str):
         self._selected_demo = demo
-        if not demo:
-            return
