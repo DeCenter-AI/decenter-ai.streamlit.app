@@ -40,6 +40,9 @@ class App:
 
     _selected_demo: str = None
 
+    def __post_init__(self):
+        self.create_temporary_dir()  # create a temporary directory always
+
     @property
     def input_archive(self):
         return self._input_archive
@@ -137,3 +140,9 @@ class App:
     @selected_demo.setter
     def selected_demo(self, demo: str):
         self._selected_demo = demo
+
+    def recycle_temp_dir(self):
+        if isinstance(self.temp_dir, tempfile.TemporaryDirectory):
+            st.toast(f"cleaning up the app:temp directory: {self.temp_dir}")
+            self.temp_dir.cleanup()
+        self.create_temporary_dir()

@@ -2,7 +2,6 @@ import logging
 import shutil
 import subprocess
 import sys
-import tempfile
 import zipfile
 from typing import List
 
@@ -29,8 +28,10 @@ head_v3()
 
 app: App = st.session_state.get("app")
 app = None if MODE == DEVELOPMENT else app  # FIXME: DEV: when testing
+
 if not app:
     app = App()
+    logging.info("creating new app instance")
     st.session_state.app = app
 
 option = st.selectbox(
@@ -43,6 +44,8 @@ if option != app.version:  # don't redirect if in the same page
         f'<meta http-equiv="refresh" content="0;URL=/{option}">',
         unsafe_allow_html=True,
     )
+
+# TODO: checkbox-button for "demo" , if enabled then show the selectbox that's what is app.demo
 
 app.selected_demo = st.selectbox(
     "Demo",
@@ -63,7 +66,6 @@ input_archive = st.file_uploader(
     "Upload working directory of notebook",
     type=["zip"],
 )
-
 
 if app.demo and input_archive:
     app._prev_model_name = None
@@ -90,24 +92,24 @@ app.create_temporary_dir()
 if app.demo:
     st.warning("input archive not found: demo:on")
 
-    if app.selected_demo:
-        # cur_model_name = app.model_name
+    if not app.selected_demo:
+        st.error("demo: not found")
+        logging.critical("demo: not found")
+        st.stop()
+    cur_model_name = app.model_name
+    app.model_name = os.path.splitext(os.path.basename(app.selected_demo))[0]
+    print("demo model_name", app.model_name)
 
-        app.model_name = os.path.splitext(os.path.basename(app.selected_demo))[
-            0
-        ]
-        print("demo model_name", app.model_name)
+    if cur_model_name != app.model_name:
+        print("streamlit: rerun: model_name_updated")
+        st.experimental_rerun()
 
-        if app.model_name_changed:
-            print("streamlit: rerun: cur_model_name")
-            st.experimental_rerun()
+    temp_file_path = os.path.join(DEMO_DIR, app.selected_demo)
 
-        temp_file_path = os.path.join(DEMO_DIR, app.selected_demo)
+    with zipfile.ZipFile(temp_file_path, "r") as zip_ref:
+        zip_ref.extractall(app.work_dir)
 
-        with zipfile.ZipFile(temp_file_path, "r") as zip_ref:
-            zip_ref.extractall(app.work_dir)
-
-        app.python_repl = sys.executable
+    app.python_repl = sys.executable
 
 else:
     app.selected_demo = None
@@ -245,6 +247,4 @@ if st.button("Train"):
             )
 
         st.balloons()
-        if isinstance(app.temp_dir, tempfile.TemporaryDirectory):
-            st.toast("cleaning up the temp directory")
-            app.temp_dir.cleanup()
+        app.recycle_temp_dir()
