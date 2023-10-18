@@ -54,12 +54,13 @@ app.selected_demo = st.selectbox(
     disabled=not app.demo,
 )
 
-app.model_name = st.text_input(
+model_name = st.text_input(
     "Model Name",
     max_chars=50,
     placeholder="decenter-model",
     key="model_name",
     value=app.model_name,
+    disabled=app.demo,
 )
 
 input_archive = st.file_uploader(
@@ -67,42 +68,34 @@ input_archive = st.file_uploader(
     type=["zip"],
 )
 
-if app.demo and input_archive:
-    app._prev_model_name = None
-    app.demo = False
-    print("streamlit rerun: app.demo and input_archive")
+demo = input_archive is None
+
+if demo != app.demo:
+    print(demo, app.demo)
+    app.demo = demo
+    print("demo mode un/set")
     st.experimental_rerun()
-elif not app.demo and not input_archive:
-    app._prev_model_name = None
-    app.demo = True
-    print("streamlit rerun: app.demo")
-    st.experimental_rerun()
+
 
 # app.demo = st.checkbox('demo') #TODO: wip
 
-if not app.model_name_changed and input_archive:
-    app.model_name = os.path.splitext(os.path.basename(input_archive.name))[0]
-    print("streamlit rerun: input_archive")
+if not app.demo and model_name and model_name != app.model_name:
+    app.model_name = model_name
+    print("streamlit rerun: model name changed")
     st.experimental_rerun()
-    print("dead code: won't run")
-
-
-app.create_temporary_dir()
+elif input_archive and not app.demo and not model_name:
+    model_name = os.path.splitext(os.path.basename(input_archive.name))[0]
+    app.model_name = model_name
+    print("streamlit rerun: model name updated based on input archive")
+    st.experimental_rerun()
 
 if app.demo:
-    st.warning("input archive not found: demo:on")
+    st.warning("demo mode:on")
 
     if not app.selected_demo:
         st.error("demo: not found")
         logging.critical("demo: not found")
         st.stop()
-    cur_model_name = app.model_name
-    app.model_name = os.path.splitext(os.path.basename(app.selected_demo))[0]
-    print("demo model_name", app.model_name)
-
-    if cur_model_name != app.model_name:
-        print("streamlit: rerun: model_name_updated")
-        st.experimental_rerun()
 
     temp_file_path = os.path.join(DEMO_DIR, app.selected_demo)
 
@@ -110,7 +103,6 @@ if app.demo:
         zip_ref.extractall(app.work_dir)
 
     app.python_repl = sys.executable
-
 else:
     app.selected_demo = None
 

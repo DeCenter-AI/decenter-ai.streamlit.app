@@ -19,8 +19,8 @@ from utils.archive import archive_directory
 class App:
     version: str = "v3"
     demo: bool = True
-    _model_name: str = "decenter-model-linear-reg-sample_v3"
-    _prev_model_name: str = None
+    _model_name: str = ""
+    _prev_model_name: str = ""
 
     exec_mode: EXECUTION_TEMPLATE = None
     starter_script: str = None
@@ -76,10 +76,6 @@ class App:
 
     @property
     def model_name_changed(self) -> bool:
-        if self._prev_model_name is None and self.model_name:
-            print("prev: model_name is None")
-            return True
-
         return self.model_name.strip() != self._prev_model_name.strip()
 
     @model_name.setter
@@ -140,6 +136,12 @@ class App:
     @selected_demo.setter
     def selected_demo(self, demo: str):
         self._selected_demo = demo
+        if demo is None:
+            return
+
+        self.model_name = os.path.splitext(
+            os.path.basename(self.selected_demo),
+        )[0]
 
     def recycle_temp_dir(self):
         if isinstance(self.temp_dir, tempfile.TemporaryDirectory):
