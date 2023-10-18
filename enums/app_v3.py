@@ -146,7 +146,9 @@ class App:
 
     def recycle_temp_dir(self):
         if isinstance(self.temp_dir, tempfile.TemporaryDirectory):
-            st.toast(f"cleaning up the app:temp directory: {self.temp_dir}")
+            logging.info(
+                f"cleaning up the app:temp directory: {self.temp_dir.name}",
+            )
             self.temp_dir.cleanup()
         self.create_temporary_dir()
 

@@ -93,8 +93,6 @@ elif not app.demo and not model_name and input_archive:
 app.recycle_temp_dir()
 
 if app.demo:
-    st.warning("demo mode:on")
-
     if not app.selected_demo:
         st.error("demo: not found")
         logging.critical("demo: not found")
