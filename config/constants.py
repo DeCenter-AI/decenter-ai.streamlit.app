@@ -22,8 +22,6 @@ MODE: Final[str] = os.getenv("mode", DEVELOPMENT)
 #     'OPENAI_CHAT_MODEL', 'gpt-3.5-turbo',
 # ).strip()
 
-TRAINER_PYTHON: Final[str] = ".py"
-TRAINER_PYTHON_NB: Final[str] = ".pynb"
-
-
-EXECUTION_TEMPLATE: TypeAlias = Literal[TRAINER_PYTHON, TRAINER_PYTHON_NB]
+PYTHON: Final = ".py"
+JUPYTER_NOTEBOOK: Final = ".ipynb"
+EXECUTION_ENVIRONMENT: TypeAlias = Literal[".py", ".ipynb"]
