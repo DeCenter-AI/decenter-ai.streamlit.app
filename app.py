@@ -26,7 +26,6 @@ load_dotenv()
 head_v3()
 
 app: App = st.session_state.get("app")
-# app = None if MODE == DEVELOPMENT else app  # FIXME: never un/set issue arises
 
 if not app:
     app = App()
