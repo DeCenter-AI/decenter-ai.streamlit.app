@@ -115,9 +115,11 @@ class App:
 
         self.python_repl = python_repl
 
-    def export_working_dir(self) -> str:
+    def export_working_dir(self, archive_name=None) -> str:
+        archive_name = archive_name or self.model_name
+
         zipfile_ = archive_directory(
-            os.path.join(self.models_archive_dir, self.model_name),
+            os.path.join(self.models_archive_dir, archive_name),
             self.work_dir,
         )
         # zipfile_ = archive_directory_in_memory(app.work_dir)

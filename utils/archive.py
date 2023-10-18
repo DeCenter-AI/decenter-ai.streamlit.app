@@ -22,7 +22,7 @@ def archive_directory(
         True,
         logger=logging.getLogger(),
     )
-
+    print("created-archive", created_archive_loc)
     return created_archive_loc
 
 

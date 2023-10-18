@@ -236,6 +236,6 @@ if st.button("Train", key="train"):
         st.download_button(
             label="Download Model",
             data=f1,
-            file_name=f"decenter-model-{app.model_name}",
+            file_name=f"decenter-model-{app.model_name}.zip",
             key="download_model",
         )
