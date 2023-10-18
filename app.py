@@ -64,7 +64,7 @@ model_name = st.text_input(
 )
 
 input_archive = st.file_uploader(
-    "Upload working directory of notebook",
+    "Upload Training Workspace Archive with Datasets",
     type=["zip"],
 )
 
