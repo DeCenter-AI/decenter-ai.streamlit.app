@@ -58,7 +58,7 @@ def head_v3():
 
     with col1:
         st.image(
-            "static/stand.png",
+            "static/cute_robo_avatar.png",
             caption="AI Infrastructure for Model training",
         )
         st.toast("Welcome to Decenter", icon="🙏")
@@ -81,7 +81,7 @@ def head_v4():
 
     with col1:
         st.image(
-            "static/stand.png",
+            "static/cute_robo_avatar.png",
             caption="AI Infrastructure for Model training",
         )
         st.toast("Welcome to Decenter", icon="🙏")
