@@ -25,6 +25,11 @@ load_dotenv()
 
 head_v3()
 
+option = st.selectbox(
+    "App Version",
+    ("v3", "v2", "v1"),
+)
+
 app: App = st.session_state.get("app")
 
 if not app:
@@ -32,10 +37,6 @@ if not app:
     logging.info("creating new app instance")
     st.session_state.app = app
 
-option = st.selectbox(
-    "App Version",
-    ("v3", "v2", "v1"),
-)
 
 if option != app.version:  # don't redirect if in the same page
     st.markdown(
@@ -175,7 +176,7 @@ if not training_cmd:
     st.error("invalid training_cmd-Raise Issue")
     st.stop()
 
-if st.button("Train"):
+if st.button("Train", key="train"):
     logging.info(f"starter_script - {app.starter_script}")
     st.snow()
 
@@ -236,4 +237,5 @@ if st.button("Train"):
             label="Download Model",
             data=f1,
             file_name=f"decenter-model-{app.model_name}",
+            key="download_model",
         )
