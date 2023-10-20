@@ -8,6 +8,7 @@ from streamlit.commands.page_config import (
 )
 
 import public
+from config.constants import GITHUB_REPORT_BUG, APP_ABOUT, GITHUB_DISCUSSION_QA
 
 
 def head():
@@ -38,9 +39,9 @@ def head_v3():
         page_icon="static/favicon.ico",
         layout="centered",
         menu_items={
-            REPORT_A_BUG_KEY: "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose",
-            ABOUT_KEY: "https://app.pitch.com/app/dashboard/0ba0eb40-0ffc-4970-91a5-64cec23d3457",
-            GET_HELP_KEY: "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose",
+            REPORT_A_BUG_KEY: GITHUB_REPORT_BUG,
+            ABOUT_KEY: APP_ABOUT,
+            GET_HELP_KEY: GITHUB_DISCUSSION_QA,
         },
     )
     st.sidebar.header("v3")
