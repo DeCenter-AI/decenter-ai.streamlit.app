@@ -14,24 +14,16 @@ affordably through decentralized parallel training mechanisms.
 
 - [decenter-ai.streamlit.app](#decenter-aistreamlitapp)
 - [DeCenter AI](#decenter-ai)
-    - [Description](#description)
-    - [Table of Contents](#table-of-contents)
-    - [Prerequisites](#prerequisites)
-    - [How to Run with Python3](#how-to-run-with-python3)
-    - [How to Run via Docker](#how-to-run-via-docker)
-    - [Overview](#overview)
-        - [Features](#features)
-        - [Target Customers](#target-customers)
-        - [Benefits](#benefits)
-    - [Hackathon](#hackathon)
-    - [How to use the demo](#how-to-use-the-demo)
-    - [Backend Workflow](#backend-workflow)
-    - [How to Contribute](#how-to-contribute)
-    - [License](#license)
-    - [Authors](#authors)
-    - [Acknowledgments](#acknowledgments)
-    - [Support](#support)
-    - [Links](#links)
+- [Description](#description)
+- [Table of Contents](#table-of-contents)
+- [Prerequisites](#prerequisites)
+- [Overview](#overview)
+- [How to use the demo](#how-to-use-the-demo)
+- [How to Contribute](#how-to-contribute)
+- [License](#license)
+- [Contributors](#contributors)
+- [Support](#support)
+- [Links](#links)
 
 ## Prerequisites
 
@@ -109,30 +101,16 @@ and participants but also encourages them to undertake tasks such as reviewing, 
 - Seamless deployment
 - Automated resource management
 
-## Hackathon
-
-For the hackathon, we built the Demo for project which is a distributed parallel training platform leveraging FVM and
-filecoin for storage and Bacalhau for compute over data. We also worked on the website,
-Pitch deck, Customer profiles, Demo videos, market research, competitive analysis among others.
 
 ## How to use the demo
 
-![image](https://github.com/DeCenter-AI/decenter-ai.streamlit.app/assets/131058062/95dad140-a127-4fc5-9a49-ef38885a19af)
-
-1. Visit https://decenterai.vercel.app/demo
+1. Visit https://decenter-ai.streamlit.app
 2. Enter model name
-3. Upload training dataset ( this gets uploaded using lighthouse)
-4. sign deal transaction with fvm ( for data backup purposes)
-5. Select training script
-6. Click train
-7. Sign lilypad contract
-8. Model training commences
-9. After training is done , you can download your trained model
-10. NFT certficates are created as license for the model
-
-## Backend Workflow
-
-![Open Data Hackathon  (1)](https://github.com/DeCenter-AI/decenter-ai.streamlit.app/assets/131058062/77755a15-72ca-433a-846e-81ca7ff7dfc8)
+3. Upload training dataset
+4. Select training script
+5. Click train
+6. Model training commences
+7. After training is done , you can download your trained model
 
 ## How to Contribute
 
@@ -154,16 +132,10 @@ DeCenter AI is released under the [MIT License](https://opensource.org/licenses/
 ## Contributors
 
 - Victor Kaycee [Email](victorkaycee17@gmail.com).  [Linkedln](https://www.linkedin.com/in/victor-kaycee).
-- Hiro @Nasfame [Email](laciferin@gmail.com).  [Linkedln](http://linkedin.com/in/laciferin/).
+- Hiro Nasfame [Email](laciferin@gmail.com).  [Linkedln](http://linkedin.com/in/laciferin/).
 - William Ikeji  [Email](williamikeji@gmail.com).  [Linkedln](https://www.linkedin.com/in/codypharm/).
-- Dinesh @Dineshjnld
+- Dinesh  [Email](dineshjnld22@gmail.com).  [Linkedln](https://www.linkedin.com/in/-dinesh-7a83b2241).
 
-## Acknowledgments
-
-We would like to thank the following individuals and organizations for their contributions to DeCenter AI:
-
-- Dinesh for his support, contribution and encouragement
-- Our dedicated community developers for their valuable feedback and support.
 
 ## Support
 
@@ -172,4 +144,4 @@ our [website](https://decenterai.com/).
 
 ## Links
 
-[Deck](https://www.canva.com/design/DAFvisezgFA/GCYskdQ4GaltJ2v6YGIgjQ/view?utm_content=DAFvisezgFA&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink ).
+[Deck](https://bit.ly/decenterai).
