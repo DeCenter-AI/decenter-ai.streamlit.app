@@ -2,69 +2,41 @@ import logging
 import shutil
 import subprocess
 import sys
-import tempfile
 import zipfile
 from typing import List
 
 import streamlit as st
-from streamlit.commands.page_config import (
-    REPORT_A_BUG_KEY,
-    ABOUT_KEY,
-    GET_HELP_KEY,
-)
 
 from config.constants import *
 from config.log import setup_log
 from enums.app_v3 import App
-from public import report_request_buttons_html, button_styles_css
 from utils.exec_commands import get_notebook_cmd
-from utils.helper_find import find_requirements_txt_files, find_driver_scripts
+from utils.helper_find import (
+    find_requirements_txt_files,
+    find_driver_scripts,
+    find_demos,
+)
 from utils.install_deps import install_dependencies
 from views.head import head_v3
 
-st.set_page_config(
-    page_title="Decenter AI",
-    page_icon="static/favicon.ico",
-    layout="centered",
-    menu_items={
-        REPORT_A_BUG_KEY: "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose",
-        ABOUT_KEY: "https://app.pitch.com/app/dashboard/0ba0eb40-0ffc-4970-91a5-64cec23d3457",
-        GET_HELP_KEY: "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose",
-    },
-)
-
-
-@st.cache_resource
-def get_temp_zip_dir():
-    temp_dir = tempfile.TemporaryDirectory(
-        prefix="decenter-ai-",
-        suffix="-models-zip-dir",
-    )
-    return temp_dir.name
-
-
 setup_log()
-
-st.sidebar.header("v3")
-
-st.markdown(button_styles_css, unsafe_allow_html=True)
-
-st.sidebar.markdown(report_request_buttons_html, unsafe_allow_html=True)
 
 load_dotenv()
 
 head_v3()
 
-app: App = st.session_state.get("app")
-# app = None if MODE == DEVELOPMENT else app  # DEV: when testing
-if not app:
-    app = App()
-    st.session_state.app = app
-
 option = st.selectbox(
     "App Version",
     ("v3", "v2", "v1"),
 )
+
+app: App = st.session_state.get("app")
+
+if not app:
+    app = App()
+    logging.info("creating new app instance")
+    st.session_state.app = app
+
 
 if option != app.version:  # don't redirect if in the same page
     st.markdown(
@@ -72,118 +44,140 @@ if option != app.version:  # don't redirect if in the same page
         unsafe_allow_html=True,
     )
 
-app.model_name = st.text_input(
+
+app.selected_demo = st.selectbox(
+    "Demo",
+    find_demos(),
+    help="enabled when no input archive is uploaded",
+    disabled=not app.demo,
+    key="selected_demo",
+)
+
+model_name = st.text_input(
     "Model Name",
     max_chars=50,
     placeholder="decenter-model",
     key="model_name",
     value=app.model_name,
+    disabled=app.demo,
 )
 
 input_archive = st.file_uploader(
-    "Upload working directory of notebook",
+    "Upload Training Workspace Archive with Datasets",
     type=["zip"],
+    key="input_archive",
 )
 
-if not app.model_name_changed and input_archive:
-    app.model_name = (
-        "decenter-model-"
-        + os.path.splitext(os.path.basename(input_archive.name))[0]
-    )
-    print("streamlit rerun")
-    st.experimental_rerun()
-    print("dead code: won't run")  # know this
+demo = input_archive is None
 
-app.demo = input_archive is None
+if demo != app.demo:
+    print(demo, app.demo)
+    app.demo = demo
+    print("demo mode un/set")
+    st.experimental_rerun()
+
+
 # app.demo = st.checkbox('demo') #TODO: wip
 
+# model-name re-renders
+if not app.demo and model_name and model_name != app.model_name:
+    app.model_name = model_name
+    print("streamlit rerun: model name changed")
+    st.experimental_rerun()
+elif not app.demo and not model_name and input_archive:
+    model_name = os.path.splitext(os.path.basename(input_archive.name))[0]
+    app.model_name = model_name
+    print("streamlit rerun: model name updated based on input archive")
+    st.experimental_rerun()
+
+app.recycle_temp_dir()
+
 if app.demo:
-    st.warning("input archive not found: demo:on")
-    app.model_name = "decenter-model-linear-reg-sample_v3"
-    input_archive = "samples/sample_v3"
-    app.work_dir = "samples/sample_v3"
-    app.python_repl = sys.executable
-else:
-    app.temp_dir = tempfile.TemporaryDirectory(
-        prefix="decenter-ai-",
-        suffix=app.model_name,
-    )
+    if not app.selected_demo:
+        st.error("demo: not found")
+        logging.critical("demo: not found")
+        st.stop()
 
-    app.work_dir = app.temp_dir.name
-    temp_file_path = f"{app.work_dir}/input_archive.zip"
-
-    print("temp file path", temp_file_path)
-
-    with open(temp_file_path, "wb") as temp_file:
-        temp_file.write(input_archive.read())
-
-    # Extract the contents of the archive to the temporary directory
-    with zipfile.ZipFile(temp_file_path, "r") as zip_ref:
+    with zipfile.ZipFile(app.selected_demo_path, "r") as zip_ref:
         zip_ref.extractall(app.work_dir)
 
-    # At this point, the contents of the archive are extracted to the temporary directory
-    # You can access the extracted files using the 'temp_dir' path
+    app.python_repl = sys.executable
+else:
+    # temp_file_path = os.path.join(app.work_dir, "input_archive.zip")
+    #
+    # print("temp file path", temp_file_path)
+    #
+    # with open(temp_file_path, "wb") as temp_file:
+    #     temp_file.write(input_archive.read())
+    #
+    # with zipfile.ZipFile(temp_file_path, "r") as zip_ref:
+    #     zip_ref.extractall(app.work_dir)
+
+    with zipfile.ZipFile(input_archive, "r") as zip_ref:
+        zip_ref.extractall(app.work_dir)
 
     # Example: Print the list of extracted files
     extracted_files = os.listdir(app.work_dir)
     print("extracted:", extracted_files)
-
-    print("temp_dir is ", app.temp_dir)
-    temp_dir_contents = os.listdir(app.work_dir)
-    print("temp_dir contains", temp_dir_contents)
+    print("work_dir: ", app.work_dir)
 
     app.create_venv()
 
-driver_scripts = find_driver_scripts(app.work_dir)
-app.starter_script = st.selectbox("Training Script:", driver_scripts)
-training_cmd: List[str] = []
+app.training_script = st.selectbox(
+    "Training Script:",
+    find_driver_scripts(app.work_dir),
+)
 
-if app.starter_script:
-    script_ext = os.path.splitext(app.starter_script)[1]
-
-    match script_ext:
-        case ".py":
-            app.exec_mode = TRAINER_PYTHON
-
-            available_requirement_files = find_requirements_txt_files(
-                app.work_dir,
-            )
-            requirements = st.selectbox(
-                "Select dependencies to install",
-                available_requirement_files,
-            )
-
-            if requirements:
-                with st.spinner("Installing dependencies in progress"):
-                    app.requirements_path = os.path.join(
-                        app.work_dir,
-                        requirements,
-                    )
-                    install_dependencies(
-                        app.python_repl,
-                        app.requirements_path,
-                        cwd=app.work_dir,
-                    )
-
-            training_cmd = [app.python_repl, app.starter_script]
-
-        case ".ipynb":
-            app.exec_mode = TRAINER_PYTHON_NB
-
-            training_cmd = get_notebook_cmd(
-                app.starter_script,
-                app.python_repl,
-            )
-
-        case _:
-            raise Exception(f"invalid script-{script_ext}")
-
-if not training_cmd:
+if not app.training_script:
+    print("starter_script:not found")
+    st.error("starter_script:not found; app exiting")
     st.stop()
 
-if st.button("Train"):
-    print(app.starter_script)
+execution_environment: str = os.path.splitext(app.training_script)[1]
+training_cmd: List[str]
 
+match execution_environment:
+    case ".py":
+        app.environment = PYTHON
+        requirements = st.selectbox(
+            "Select dependencies to install",
+            find_requirements_txt_files(
+                app.work_dir,
+            ),
+        )
+
+        if requirements:
+            with st.spinner("Installing dependencies in progress"):
+                app.requirements_path = os.path.join(
+                    app.work_dir,
+                    requirements,
+                )
+                install_dependencies(
+                    app.python_repl,
+                    app.requirements_path,
+                    cwd=app.work_dir,
+                )
+        training_cmd = [app.python_repl, app.training_script]
+
+    case ".ipynb":
+        app.environment = JUPYTER_NOTEBOOK
+
+        training_cmd = get_notebook_cmd(
+            app.training_script,
+            app.python_repl,
+        )
+
+    case _:
+        st.error("invalid trainer script-Raise issue")
+        logging.critical(f"invalid trainer script- {app.training_script}")
+        st.stop()
+
+if not training_cmd:
+    st.error("invalid training_cmd-Raise Issue")
+    st.stop()
+
+if st.button("Train", key="train"):
+    logging.info(f"starter_script - {app.training_script}")
     st.snow()
 
     with st.spinner("Training in progress"):
@@ -210,39 +204,38 @@ if st.button("Train"):
         if result.stderr:
             st.warning(result.stderr)
 
-        if app.exec_mode is TRAINER_PYTHON_NB:
-            out = f"{app.starter_script}.html"
+        if app.environment is JUPYTER_NOTEBOOK:
+            out = f"{app.training_script}.html"
             if os.path.exists(
-                os.path.join(app.work_dir, f"{app.starter_script}.html"),
+                os.path.join(app.work_dir, f"{app.training_script}.html"),
             ):
                 st.info(f"notebook: output generated at {out}")
                 print(f"notebook: output generated at {out}")
             else:
-                app.exit_code = False
+                app.exit_success = False
                 st.error("notebook: execution failed")
                 print("notebook:", "execution failed")
 
-    if app.exit_code:
-        venv_dir = app.venv_dir
-        if venv_dir:
-            shutil.rmtree(venv_dir)
+    if not app.exit_success:
+        logging.critical(f"env:{app.environment}:failed")
+        st.error("app execution failed")
+        st.stop()
 
-        zipfile_ = app.export_working_dir()
+    if app.venv_dir:
+        shutil.rmtree(app.venv_dir)
 
-        st.toast("Executed the notebook successfully", icon="🧤")
+    model_output = app.export_working_dir()
 
-        st.success("Execution completed successfully!", icon="✅")
+    st.toast("Model Trained successfully!", icon="🧤")
 
-        st.balloons()
+    st.success("Model Training Request completed successfully!", icon="✅")
 
-        with open(zipfile_, "rb") as f1:
-            st.download_button(
-                label="Download Working Directory",
-                data=f1,
-                file_name=f"{os.path.basename(zipfile_)}",
-            )
+    st.balloons()
 
-        st.balloons()
-        if isinstance(app.temp_dir, tempfile.TemporaryDirectory):
-            st.toast("cleaning up the temp directory")
-            app.temp_dir.cleanup()
+    with open(model_output, "rb") as f1:
+        st.download_button(
+            label="Download Model",
+            data=f1,
+            file_name=f"decenter-model-{app.model_name}.zip",
+            key="download_model",
+        )
