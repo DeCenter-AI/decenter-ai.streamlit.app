@@ -48,7 +48,7 @@ def head_v3():
 
     st.markdown(public.button_styles_css, unsafe_allow_html=True)
 
-    st.sidebar.markdown(
+    st.sidebar.write(
         public.report_request_buttons_html,
         unsafe_allow_html=True,
     )
