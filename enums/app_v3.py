@@ -5,13 +5,15 @@ import sys
 import tempfile
 import venv
 from dataclasses import dataclass
+from typing import Union
 
 import streamlit as st
+from dataclasses_json import dataclass_json, LetterCase
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
-from config.constants import EXECUTION_TEMPLATE
+from config import DEMO_DIR
+from config.constants import EXECUTION_ENVIRONMENT, JUPYTER_NOTEBOOK
 from utils.archive import archive_directory
-from dataclasses_json import dataclass_json, LetterCase
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
@@ -19,11 +21,11 @@ from dataclasses_json import dataclass_json, LetterCase
 class App:
     version: str = "v3"
     demo: bool = True
-    _model_name: str = "decenter-model-linear-reg-sample_v3"
-    model_name_changed: bool = False
+    _model_name: str = ""
+    _prev_model_name: str = ""
 
-    exec_mode: EXECUTION_TEMPLATE = None
-    starter_script: str = None
+    environment: EXECUTION_ENVIRONMENT = JUPYTER_NOTEBOOK
+    training_script: str = None
     requirements_path: str = None
     _work_dir: str = None
     temp_dir: tempfile.TemporaryDirectory = None
@@ -34,9 +36,14 @@ class App:
 
     python_repl: str = sys.executable
     venv_dir: str = None
-    exit_code: bool = True
+    exit_success: bool = True
 
     _input_archive: UploadedFile | str = None
+
+    _selected_demo: str = None
+
+    def __post_init__(self):
+        self.create_temporary_dir()  # create a temporary directory always
 
     @property
     def input_archive(self):
@@ -65,13 +72,13 @@ class App:
             return
         self._work_dir = _work_dir
 
-    def set_model_name(self, model_name: str):
-        self.model_name = model_name
-        self.model_name_changed = True
-
     @property
     def model_name(self):
         return self._model_name
+
+    @property
+    def model_name_changed(self) -> bool:
+        return self.model_name.strip() != self._prev_model_name.strip()
 
     @model_name.setter
     def model_name(self, model_name: str):
@@ -79,14 +86,14 @@ class App:
             st.toast("model name not changed")
             logging.debug("model_name: invalid")
             return
-
-        self.model_name_changed = (
-            model_name != "decenter-model-linear-reg-sample_v3"
-        )
+        self._prev_model_name = self._model_name
+        self._model_name = model_name
 
         if self.model_name_changed:
-            self._model_name = model_name
-            st.toast(f"model name updated to {model_name}", icon="👌")
+            st.toast(
+                f"model name updated from {self._prev_model_name} to {model_name}",
+                icon="👌",
+            )
 
     def create_venv(self, venv_dir=".venv"):
         venv_dir = os.path.join(self.work_dir, venv_dir)
@@ -109,10 +116,45 @@ class App:
 
         self.python_repl = python_repl
 
-    def export_working_dir(self) -> str:
+    def export_working_dir(self, archive_name=None) -> Union[os.PathLike, str]:
+        archive_name = archive_name or self.model_name
+
         zipfile_ = archive_directory(
-            f"{self.models_archive_dir}/{self.model_name}",
+            os.path.join(self.models_archive_dir, archive_name),
             self.work_dir,
         )
         # zipfile_ = archive_directory_in_memory(app.work_dir)
         return zipfile_
+
+    def create_temporary_dir(self):
+        self.temp_dir = tempfile.TemporaryDirectory(
+            prefix="decenter-ai-",
+            suffix=self.model_name,
+        )
+        self.work_dir = self.temp_dir.name
+
+    @property
+    def selected_demo(self):
+        return self._selected_demo
+
+    @selected_demo.setter
+    def selected_demo(self, demo: str):
+        self._selected_demo = demo
+        if demo is None:
+            return
+
+        self.model_name = os.path.splitext(
+            os.path.basename(self.selected_demo),
+        )[0]
+
+    def recycle_temp_dir(self):
+        if isinstance(self.temp_dir, tempfile.TemporaryDirectory):
+            logging.info(
+                f"cleaning up the app:temp directory: {self.temp_dir.name}",
+            )
+            self.temp_dir.cleanup()
+        self.create_temporary_dir()
+
+    @property
+    def selected_demo_path(self):
+        return os.path.join(DEMO_DIR, self.selected_demo)
