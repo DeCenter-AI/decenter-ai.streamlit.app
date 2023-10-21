@@ -103,7 +103,7 @@ class App:
             venv_dir,
             system_site_packages=True,
             with_pip=True,
-            symlinks=True,  # TODO: disable in the future
+            symlinks=False,  # TODO: disable in the future
         )
 
         logging.info("created venv dir")
