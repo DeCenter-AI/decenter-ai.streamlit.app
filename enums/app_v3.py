@@ -152,6 +152,7 @@ class App:
             logging.info(
                 f"cleaning up the app:temp directory: {self.temp_dir.name}",
             )
+            self.venv_dir = None
             self.temp_dir.cleanup()
         self.create_temporary_dir()
 
