@@ -61,9 +61,8 @@ input_archive = st.file_uploader(
 demo = input_archive is None
 
 if demo != app.demo:
-    print(demo, app.demo)
     app.demo = demo
-    print("demo mode un/set")
+    logging.info(f"demo mode set {app.demo}->{demo}")
     st.experimental_rerun()
 
 if not app.demo and input_archive:
@@ -82,7 +81,9 @@ if not app.demo:
     if model_name and app.model_name != model_name:
         app.model_name = model_name
 
-app.recycle_temp_dir()
+if app.model_name not in app.work_dir:
+    logging.info("creating new app.work_dir")
+    app.recycle_temp_dir()
 
 if app.demo:
     if not app.selected_demo:
@@ -98,10 +99,9 @@ else:
     with zipfile.ZipFile(input_archive, "r") as zip_ref:
         zip_ref.extractall(app.work_dir)
 
-    # Example: Print the list of extracted files
     extracted_files = os.listdir(app.work_dir)
-    print("extracted:", extracted_files)
-    print("work_dir: ", app.work_dir)
+    logging.info(f"extracted: {extracted_files}")
+    logging.info(f"work_dir: {app.work_dir}")
 
     app.create_venv()
 
@@ -111,7 +111,7 @@ app.training_script = st.selectbox(
 )
 
 if not app.training_script:
-    print("starter_script:not found")
+    logging.critical("starter_script:not found")
     st.error("starter_script:not found; app exiting")
     st.stop()
 
@@ -192,11 +192,11 @@ if st.button("Train", key="train"):
                 os.path.join(app.work_dir, f"{app.training_script}.html"),
             ):
                 st.info(f"notebook: output generated at {out}")
-                print(f"notebook: output generated at {out}")
+                logging.info(f"notebook: output generated at {out}")
             else:
                 app.exit_success = False
                 st.error("notebook: execution failed")
-                print("notebook:", "execution failed")
+                logging.error("notebook:", "execution failed")
 
     if not app.exit_success:
         logging.critical(f"env:{app.environment}:failed")
