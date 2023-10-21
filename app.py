@@ -44,8 +44,6 @@ if option != app.version:  # don't redirect if in the same page
         unsafe_allow_html=True,
     )
 
-app.recycle_temp_dir()
-
 app.selected_demo = st.selectbox(
     "Demo",
     find_demos(),
@@ -84,6 +82,7 @@ if not app.demo:
     if model_name and app.model_name != model_name:
         app.model_name = model_name
 
+app.recycle_temp_dir()
 
 if app.demo:
     if not app.selected_demo:
@@ -222,4 +221,4 @@ if st.button("Train", key="train"):
             file_name=f"decenter-model-{app.model_name}.zip",
             key="download_model",
         )
-    app.recycle_temp_dir()
+        app.recycle_temp_dir()
