@@ -28,6 +28,7 @@ head_v3()
 option = st.selectbox(
     "App Version",
     ("v3", "v2", "v1"),
+    help="versioning documentation with feature lists coming up soon",
 )
 
 app: App = st.session_state.get("app")
@@ -56,6 +57,7 @@ input_archive = st.file_uploader(
     "Upload Training Workspace Archive with Datasets",
     type=["zip"],
     key="input_archive",
+    help="Include trainscript[.py,ipynb] and datasets",
 )
 
 demo = input_archive is None
