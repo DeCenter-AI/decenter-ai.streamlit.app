@@ -198,7 +198,7 @@ if st.button("Train", key="train"):
             else:
                 app.exit_success = False
                 st.error("notebook: execution failed")
-                logging.error("notebook:", "execution failed")
+                logging.error("notebook: execution failed")
 
     if not app.exit_success:
         logging.critical(f"env:{app.environment}:failed")
