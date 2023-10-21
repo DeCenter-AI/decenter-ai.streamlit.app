@@ -12,8 +12,14 @@ from dataclasses_json import dataclass_json, LetterCase
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 from config import DEMO_DIR
-from config.constants import EXECUTION_ENVIRONMENT, JUPYTER_NOTEBOOK
+from config.constants import (
+    EXECUTION_ENVIRONMENT,
+    JUPYTER_NOTEBOOK,
+    MODE,
+    PRODUCTION,
+)
 from utils.archive import archive_directory
+import subprocess
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
@@ -115,6 +121,15 @@ class App:
                 python_repl = os.path.join(venv_dir, "bin", "python3")
 
         self.python_repl = python_repl
+
+        if MODE == PRODUCTION:
+            logging.info(
+                "installing jupyter",
+            )  # FIXME: why streamlit app needs manual installation of jupyter debug..
+            subprocess.run(
+                [python_repl, "-m", "pip", "install", "jupyter"],
+                cwd=self.work_dir,
+            )
 
     def export_working_dir(self, archive_name=None) -> Union[os.PathLike, str]:
         archive_name = archive_name or self.model_name
