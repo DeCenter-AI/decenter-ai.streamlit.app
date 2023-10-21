@@ -173,7 +173,7 @@ if st.button("Train", key="train"):
         )
 
         logging.info(result.stdout)
-        logging.info(result.stderr)
+        logging.error(result.stderr)
 
         with open(os.path.join(app.work_dir, "stdout"), "w") as stdout, open(
             os.path.join(app.work_dir, "stderr"),

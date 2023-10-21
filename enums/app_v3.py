@@ -122,14 +122,17 @@ class App:
 
         self.python_repl = python_repl
 
-        if MODE == PRODUCTION:
+        if MODE == PRODUCTION or True:
             logging.info(
                 "installing jupyter",
             )  # FIXME: why streamlit app needs manual installation of jupyter debug..
-            subprocess.run(
+            result = subprocess.run(
                 [python_repl, "-m", "pip", "install", "jupyter"],
                 cwd=self.work_dir,
+                capture_output=True,
             )
+            logging.info(result.stdout)
+            logging.error(result.stderr)
 
     def export_working_dir(self, archive_name=None) -> Union[os.PathLike, str]:
         archive_name = archive_name or self.model_name
