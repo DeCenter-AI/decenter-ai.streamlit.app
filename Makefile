@@ -14,6 +14,8 @@ install:
 	# @ pip install -r requirements.txt
 	@pip install poetry
 	@poetry install --no-root
+	#FIXME: having to manually install Selinium Library with pip
+	@pip install robotframework-SeleniumLibrary
 
 install-ml-deps:
 	poetry add --group ml $(cat requirements-ml.txt)
