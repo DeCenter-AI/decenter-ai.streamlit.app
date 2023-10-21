@@ -44,6 +44,7 @@ if option != app.version:  # don't redirect if in the same page
         unsafe_allow_html=True,
     )
 
+app.recycle_temp_dir()
 
 app.selected_demo = st.selectbox(
     "Demo",
@@ -51,15 +52,6 @@ app.selected_demo = st.selectbox(
     help="enabled when no input archive is uploaded",
     disabled=not app.demo,
     key="selected_demo",
-)
-
-model_name = st.text_input(
-    "Model Name",
-    max_chars=50,
-    placeholder="decenter-model",
-    key="model_name",
-    value=app.model_name,
-    disabled=app.demo,
 )
 
 input_archive = st.file_uploader(
@@ -76,21 +68,22 @@ if demo != app.demo:
     print("demo mode un/set")
     st.experimental_rerun()
 
-
-# app.demo = st.checkbox('demo') #TODO: wip
-
-# model-name re-renders
-if not app.demo and model_name and model_name != app.model_name:
-    app.model_name = model_name
-    print("streamlit rerun: model name changed")
-    st.experimental_rerun()
-elif not app.demo and not model_name and input_archive:
+if not app.demo and input_archive:
     model_name = os.path.splitext(os.path.basename(input_archive.name))[0]
     app.model_name = model_name
-    print("streamlit rerun: model name updated based on input archive")
-    st.experimental_rerun()
 
-app.recycle_temp_dir()
+if not app.demo:
+    model_name = st.text_input(
+        "Model Name",
+        max_chars=50,
+        placeholder="decenter-model",
+        key="model_name",
+        value=app.model_name,
+        disabled=app.demo,
+    )
+    if model_name and app.model_name != model_name:
+        app.model_name = model_name
+
 
 if app.demo:
     if not app.selected_demo:
@@ -103,16 +96,6 @@ if app.demo:
 
     app.python_repl = sys.executable
 else:
-    # temp_file_path = os.path.join(app.work_dir, "input_archive.zip")
-    #
-    # print("temp file path", temp_file_path)
-    #
-    # with open(temp_file_path, "wb") as temp_file:
-    #     temp_file.write(input_archive.read())
-    #
-    # with zipfile.ZipFile(temp_file_path, "r") as zip_ref:
-    #     zip_ref.extractall(app.work_dir)
-
     with zipfile.ZipFile(input_archive, "r") as zip_ref:
         zip_ref.extractall(app.work_dir)
 
@@ -239,3 +222,4 @@ if st.button("Train", key="train"):
             file_name=f"decenter-model-{app.model_name}.zip",
             key="download_model",
         )
+    app.recycle_temp_dir()
