@@ -1,14 +1,18 @@
 *** Settings ***
 Library           SeleniumLibrary
+Library           Process
 
 *** Variables ***
 ${URL}            http://localhost:8501
 ${BROWSER}        chrome
 
 *** Test Cases ***
+
 Test Head
+    Log To Console    streamlit run app.py
     Log To Console    test_head
     Open Browser    ${URL}    ${BROWSER}
+    Sleep    5
     Page Should Contain  Demo
     Sleep    2
     Page Should Contain  v3
