@@ -9,16 +9,28 @@ ${BROWSER}        chrome
 Test Head
     Log To Console    test_head
     Open Browser    ${URL}    ${BROWSER}
-#    Wait Until Page Contains Element    v3    timeout=5s FIXME not seing app
-#    Wait Until Page Contains Element    App    timeout=2
     Page Should Contain  Demo
     Sleep    2
     Page Should Contain  v3
     Page Should Contain  AI Infrastructure for Model training
 
-#    Wait Until Page Contains Element  Train //FIXME
+    Page Should Contain Button  Train
+    Click Button    Train     
+    Click Button    Train
+    Sleep    40
 
-#    Click Element    //*[contains(text(),'v2') or contains(text(),'v1')]
+    Page Should Contain    Model Training Request completed successfully!
+    Page Should Contain Button    Download Model
+    Click Button    Download Model
+    Sleep    10
+#    Click Element    //*[contains(text(),'v2') or contains(text(),'v1')]    
+
+
+# ||| FIXME error with locating X path 
+# From what I could tell, rbframework can detect the mainbody page, 
+# but fails to locate anything on the sidebar, hence the issue with locating app, v1 and v2 
+
+
 #    Sleep    1
 #    Page Should Contain    You didn't select comedy
     Close Browser
