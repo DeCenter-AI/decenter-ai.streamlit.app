@@ -9,7 +9,6 @@ ${BROWSER}        chrome
 *** Test Cases ***
 
 Test Head
-    Log To Console    streamlit run app.py
     Log To Console    test_head
     Open Browser    ${URL}    ${BROWSER}
     Sleep    5
