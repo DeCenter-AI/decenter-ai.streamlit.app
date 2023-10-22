@@ -22,7 +22,7 @@ Test Head
     Page Should Contain    Model Training Request completed successfully!
     Page Should Contain Button    Download Model
     Click Button    Download Model
-    Sleep    10
+    Sleep    5
 #    Click Element    //*[contains(text(),'v2') or contains(text(),'v1')]    
 
 
