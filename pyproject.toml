@@ -15,22 +15,21 @@ keywords = ["ai", "decenter", "ai-infra"]
 packages = []
 
 classifiers = [
-  "Topic :: Software Development :: Build Tools",
-  "Programming Language :: Python :: 3.x",
-
-  "Development Status :: 4 - Beta",
-  "Environment :: Web Environment",
-  "Framework :: Streamlit",
-  "Intended Audience :: Developers",
-  "Intended Audience :: Science/Research",
-  "License :: OSI Approved :: Your License Here",
-  "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3",
-  "Topic :: Scientific/Engineering :: Artificial Intelligence",
-  "Topic :: Internet :: WWW/HTTP",
-  "Topic :: Software Development :: Libraries :: Application Frameworks",
-  "Topic :: System :: Distributed Computing",
-  "Topic :: System :: Networking",
+    "Topic :: Software Development :: Build Tools",
+    "Programming Language :: Python :: 3.x",
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: Streamlit",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Your License Here",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: System :: Distributed Computing",
+    "Topic :: System :: Networking",
 ]
 
 
@@ -58,6 +57,10 @@ flake8 = "^6.1.0"
 pytest-benchmark = "^4.0.0"
 flake8-in-file-ignores = "^0.2.2"
 pre-commit = "^3.4.0"
+robotframework = "^6.1.1"
+robotframework-SeleniumLibrary = "^6.1.3"
+selenium = "^4.14.0"
+coverage = "^7.3.2"
 
 [tool.poetry.group.ml.dependencies]
 numpy = "^1.25.2"
@@ -90,15 +93,15 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.extras]
 dev = ['pytest']
 ml = [
-  "numpy",
-  "pandas",
-  "scikit-learn",
-  "matplotlib",
-  "seaborn",
-  "tensorflow",
-  "keras",
-  "pytorch",
-  "spacy",
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "matplotlib",
+    "seaborn",
+    "tensorflow",
+    "keras",
+    "pytorch",
+    "spacy",
 ]
 
 # A list of all of the optional dependencies, some of which are included in the
