@@ -17,7 +17,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.x
+          python-version: 3.10.0
+
+      - name: Install Robot Framework
+        run: |
+          pip install --upgrade robotframework
+        if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
 
       - name: Install Chrome WebDriver
         run: |
@@ -29,18 +34,13 @@ jobs:
           sudo chmod +x /usr/local/bin/chromedriver
         if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
 
-      - name: Install Robot Framework
-        run: |
-          pip install --upgrade robotframework
-        if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
-
       - name: Run Robot Framework Tests
         run: |
-          robot -d results tests/Test1.py
+          robot tests/Test1.py
         working-directory: ${{ github.workspace }}
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v2
         with:
           name: robot-test-results
-          path: results
+          path: .
