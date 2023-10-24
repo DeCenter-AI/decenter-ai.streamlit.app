@@ -58,6 +58,18 @@ jobs:
         continue-on-error: true
         working-directory: ${{ github.workspace }}
 
+      - name: Run Poetry Shell and Streamlit
+        run: echo "::group::Run Poetry Shell and Streamlit"
+        shell: bash
+        env:
+          data: Run Poetry Shell and Streamlit
+        command: |
+          echo "::workflow-command parameter1={data}::{data}"
+          poetry shell
+          streamlit run app.py
+        continue-on-error: true
+        working-directory: ${{ github.workspace }}
+
       - name: Run Poetry Shell and Robot Framework Tests
         run: echo "::group::Run Poetry Shell and Robot Framework Tests"
         shell: bash
