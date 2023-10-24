@@ -47,24 +47,9 @@ jobs:
           sudo chmod +x /usr/local/bin/chromedriver
         if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
 
-      - name: Set up Poetry
+      - name: Set up Poetry Shell and Run Commands
         run: |
-          poetry install
-        working-directory: ${{ github.workspace }}
-
-      - name: Run Poetry Shell
-        run: |
-          poetry shell
-        working-directory: ${{ github.workspace }}
-
-      - name: Run Streamlit
-        run: |
-          streamlit run app.py
-        working-directory: ${{ github.workspace }}
-
-      - name: Run Robot Framework Tests
-        run: |
-          robot tests/Test1.py
+          poetry shell && poetry install && streamlit run app.py && robot tests/Test1.py
         working-directory: ${{ github.workspace }}
 
       - name: Upload Test Results
