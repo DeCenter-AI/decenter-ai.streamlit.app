@@ -19,6 +19,11 @@ jobs:
         with:
           python-version: 3.x
 
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+        if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
+
       - name: Install Robot Framework
         run: |
           pip install --upgrade robotframework
@@ -38,6 +43,16 @@ jobs:
           sudo mv /tmp/chromedriver /usr/local/bin/chromedriver
           sudo chmod +x /usr/local/bin/chromedriver
         if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
+
+      - name: Set up Poetry
+        run: |
+          poetry install
+        working-directory: ${{ github.workspace }}
+        
+      - name: Run Poetry Shell
+        run: |
+          poetry shell
+        working-directory: ${{ github.workspace }}
 
       - name: Run Streamlit
         run: |
