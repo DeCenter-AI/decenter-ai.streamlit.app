@@ -24,6 +24,11 @@ jobs:
           pip install --upgrade robotframework
         if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
 
+      - name: Install Streamlit
+        run: |
+          pip install streamlit
+        if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
+
       - name: Install Chrome WebDriver
         run: |
           CHROME_VERSION=$(google-chrome-stable --version | awk '{print $3}')
@@ -33,6 +38,11 @@ jobs:
           sudo mv /tmp/chromedriver /usr/local/bin/chromedriver
           sudo chmod +x /usr/local/bin/chromedriver
         if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
+
+      - name: Run Streamlit
+        run: |
+          streamlit run app.py
+        working-directory: ${{ github.workspace }}
 
       - name: Run Robot Framework Tests
         run: |
