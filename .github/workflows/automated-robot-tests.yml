@@ -35,63 +35,38 @@ jobs:
         continue-on-error: true
         if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
 
-      - name: Install Robot Framework
-        run: echo "::group::Install Robot Framework"
+      - name: Install Poetry
+        run: echo "::group::Install Poetry"
         shell: bash
         env:
-          data: Install Robot Framework
+          data: Install Poetry
         command: |
           echo "::workflow-command parameter1={data}::{data}"
-          pip install --upgrade robotframework
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH=$HOME/.local/bin:$PATH
         continue-on-error: true
         if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
 
-      - name: Install Streamlit
-        run: echo "::group::Install Streamlit"
+      - name: Set up Poetry Virtual Environment
+        run: echo "::group::Set up Poetry Virtual Environment"
         shell: bash
         env:
-          data: Install Streamlit
+          data: Set up Poetry Virtual Environment
         command: |
           echo "::workflow-command parameter1={data}::{data}"
-          pip install streamlit
-        continue-on-error: true
-        if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
-
-      - name: Install Chrome WebDriver
-        run: echo "::group::Install Chrome WebDriver"
-        shell: bash
-        env:
-          data: Install Chrome WebDriver
-        command: |
-          echo "::workflow-command parameter1={data}::{data}"
-          CHROME_VERSION=$(google-chrome-stable --version | awk '{print $3}')
-          LATEST_CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-          curl -o /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/$LATEST_CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
-          unzip /tmp/chromedriver.zip -d /tmp
-          sudo mv /tmp/chromedriver /usr/local/bin/chromedriver
-          sudo chmod +x /usr/local/bin/chromedriver
-        continue-on-error: true
-        if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
-
-      - name: Run Streamlit
-        run: echo "::group::Run Streamlit"
-        shell: bash
-        env:
-          data: Run Streamlit
-        command: |
-          echo "::workflow-command parameter1={data}::{data}"
-          streamlit run app.py
+          poetry install
         continue-on-error: true
         working-directory: ${{ github.workspace }}
 
-      - name: Run Robot Framework Tests
-        run: echo "::group::Run Robot Framework Tests"
+      - name: Run Poetry Shell and Robot Framework Tests
+        run: echo "::group::Run Poetry Shell and Robot Framework Tests"
         shell: bash
         env:
-          data: Run Robot Framework Tests
+          data: Run Poetry Shell and Robot Framework Tests
         command: |
           echo "::workflow-command parameter1={data}::{data}"
-          robot tests/Test1.py
+          poetry shell
+          poetry run robot tests/Test1.py
         continue-on-error: true
         working-directory: ${{ github.workspace }}
 
