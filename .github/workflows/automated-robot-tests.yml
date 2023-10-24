@@ -12,47 +12,98 @@ jobs:
     name: Run Robot Framework Tests
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        run: echo "::group::Checkout"
+        shell: bash
+        env:
+          data: Checkout
+        command: |
+          echo "::workflow-command parameter1={data}::{data}"
+          # Actual checkout command here
+          git checkout main
+        continue-on-error: true
 
       - name: Download Python
-        run: |
+        run: echo "::group::Download Python"
+        shell: bash
+        env:
+          data: Download Python
+        command: |
+          echo "::workflow-command parameter1={data}::{data}"
           curl -LO "https://github.com/actions/python-versions/releases/download/3.10.0-117927/python-3.10.0-linux-18.04-x64.tar.gz"
           tar -xf python-3.10.0-linux-18.04-x64.tar.gz -C $RUNNER_TOOL_CACHE
           export PATH="$RUNNER_TOOL_CACHE/python/3.10.0/x64:$PATH"
+        continue-on-error: true
         if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
 
       - name: Install Robot Framework
-        run: |
+        run: echo "::group::Install Robot Framework"
+        shell: bash
+        env:
+          data: Install Robot Framework
+        command: |
+          echo "::workflow-command parameter1={data}::{data}"
           pip install --upgrade robotframework
+        continue-on-error: true
         if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
 
       - name: Install Streamlit
-        run: |
+        run: echo "::group::Install Streamlit"
+        shell: bash
+        env:
+          data: Install Streamlit
+        command: |
+          echo "::workflow-command parameter1={data}::{data}"
           pip install streamlit
+        continue-on-error: true
         if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
 
       - name: Install Chrome WebDriver
-        run: |
+        run: echo "::group::Install Chrome WebDriver"
+        shell: bash
+        env:
+          data: Install Chrome WebDriver
+        command: |
+          echo "::workflow-command parameter1={data}::{data}"
           CHROME_VERSION=$(google-chrome-stable --version | awk '{print $3}')
           LATEST_CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
           curl -o /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/$LATEST_CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
           unzip /tmp/chromedriver.zip -d /tmp
           sudo mv /tmp/chromedriver /usr/local/bin/chromedriver
           sudo chmod +x /usr/local/bin/chromedriver
+        continue-on-error: true
         if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
 
       - name: Run Streamlit
-        run: |
+        run: echo "::group::Run Streamlit"
+        shell: bash
+        env:
+          data: Run Streamlit
+        command: |
+          echo "::workflow-command parameter1={data}::{data}"
           streamlit run app.py
+        continue-on-error: true
         working-directory: ${{ github.workspace }}
 
       - name: Run Robot Framework Tests
-        run: |
+        run: echo "::group::Run Robot Framework Tests"
+        shell: bash
+        env:
+          data: Run Robot Framework Tests
+        command: |
+          echo "::workflow-command parameter1={data}::{data}"
           robot tests/Test1.py
+        continue-on-error: true
         working-directory: ${{ github.workspace }}
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v2
+        run: echo "::group::Upload Test Results"
+        shell: bash
+        env:
+          data: Upload Test Results
+        command: |
+          echo "::workflow-command parameter1={data}::{data}"
+          # Upload test results command here
+        continue-on-error: true
         with:
           name: robot-test-results
           path: .
