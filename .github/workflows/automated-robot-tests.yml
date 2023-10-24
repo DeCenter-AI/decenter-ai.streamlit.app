@@ -21,12 +21,6 @@ jobs:
           export PATH="$RUNNER_TOOL_CACHE/python/3.10.0/x64:$PATH"
         if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
 
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          export PATH=$HOME/.local/bin:$PATH
-        if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
-
       - name: Install Robot Framework
         run: |
           pip install --upgrade robotframework
@@ -47,15 +41,14 @@ jobs:
           sudo chmod +x /usr/local/bin/chromedriver
         if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
 
-      - name: Set up Poetry Virtual Environment
+      - name: Run Streamlit
         run: |
-          poetry install
+          streamlit run app.py
         working-directory: ${{ github.workspace }}
 
-      - name: Run Poetry and Robot Framework Tests
+      - name: Run Robot Framework Tests
         run: |
-          poetry run streamlit run app.py
-          poetry run robot tests/Test1.py
+          robot tests/Test1.py
         working-directory: ${{ github.workspace }}
 
       - name: Upload Test Results
