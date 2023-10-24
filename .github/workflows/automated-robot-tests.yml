@@ -1,0 +1,47 @@
+name: Automated Robot Framework Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  robot_test:
+    runs-on: ubuntu-latest
+    name: Run Robot Framework Tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install Chrome WebDriver
+        run: |
+          CHROME_VERSION=$(google-chrome-stable --version | awk '{print $3}')
+          LATEST_CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+          curl -o /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/$LATEST_CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
+          unzip /tmp/chromedriver.zip -d /tmp
+          sudo mv /tmp/chromedriver /usr/local/bin/chromedriver
+          sudo chmod +x /usr/local/bin/chromedriver
+        if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
+
+      - name: Install Robot Framework
+        run: |
+          pip install --upgrade robotframework
+          pip install --upgrade robotframework-seleniumlibrary
+        if: runner.os == 'Linux' && startsWith(runner.tool_cache_dir, '/opt/hostedtoolcache/Python/')
+
+      - name: Run Robot Framework Tests
+        run: |
+          robot -d results tests/Test1.py
+        working-directory: ${{ github.workspace }}
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: robot-test-results
+          path: results
