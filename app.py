@@ -28,6 +28,7 @@ head_v3()
 option = st.selectbox(
     "App Version",
     ("v3", "v2", "v1"),
+    help="versioning documentation with feature lists coming up soon",
 )
 
 app: App = st.session_state.get("app")
@@ -44,7 +45,6 @@ if option != app.version:  # don't redirect if in the same page
         unsafe_allow_html=True,
     )
 
-
 app.selected_demo = st.selectbox(
     "Demo",
     find_demos(),
@@ -53,44 +53,39 @@ app.selected_demo = st.selectbox(
     key="selected_demo",
 )
 
-model_name = st.text_input(
-    "Model Name",
-    max_chars=50,
-    placeholder="decenter-model",
-    key="model_name",
-    value=app.model_name,
-    disabled=app.demo,
-)
-
 input_archive = st.file_uploader(
     "Upload Training Workspace Archive with Datasets",
     type=["zip"],
     key="input_archive",
+    help="Include trainscript[.py,ipynb] and datasets",
 )
 
 demo = input_archive is None
 
 if demo != app.demo:
-    print(demo, app.demo)
     app.demo = demo
-    print("demo mode un/set")
+    logging.info(f"demo mode set {app.demo}->{demo}")
     st.experimental_rerun()
 
-
-# app.demo = st.checkbox('demo') #TODO: wip
-
-# model-name re-renders
-if not app.demo and model_name and model_name != app.model_name:
-    app.model_name = model_name
-    print("streamlit rerun: model name changed")
-    st.experimental_rerun()
-elif not app.demo and not model_name and input_archive:
+if not app.demo and input_archive:
     model_name = os.path.splitext(os.path.basename(input_archive.name))[0]
     app.model_name = model_name
-    print("streamlit rerun: model name updated based on input archive")
-    st.experimental_rerun()
 
-app.recycle_temp_dir()
+if not app.demo:
+    model_name = st.text_input(
+        "Model Name",
+        max_chars=50,
+        placeholder="decenter-model",
+        key="model_name",
+        value=app.model_name,
+        disabled=app.demo,
+    )
+    if model_name and app.model_name != model_name:
+        app.model_name = model_name
+
+if app.model_name not in app.work_dir:
+    logging.info("creating new app.work_dir")
+    app.recycle_temp_dir()
 
 if app.demo:
     if not app.selected_demo:
@@ -103,23 +98,12 @@ if app.demo:
 
     app.python_repl = sys.executable
 else:
-    # temp_file_path = os.path.join(app.work_dir, "input_archive.zip")
-    #
-    # print("temp file path", temp_file_path)
-    #
-    # with open(temp_file_path, "wb") as temp_file:
-    #     temp_file.write(input_archive.read())
-    #
-    # with zipfile.ZipFile(temp_file_path, "r") as zip_ref:
-    #     zip_ref.extractall(app.work_dir)
-
     with zipfile.ZipFile(input_archive, "r") as zip_ref:
         zip_ref.extractall(app.work_dir)
 
-    # Example: Print the list of extracted files
     extracted_files = os.listdir(app.work_dir)
-    print("extracted:", extracted_files)
-    print("work_dir: ", app.work_dir)
+    logging.info(f"extracted: {extracted_files}")
+    logging.info(f"work_dir: {app.work_dir}")
 
     app.create_venv()
 
@@ -129,7 +113,7 @@ app.training_script = st.selectbox(
 )
 
 if not app.training_script:
-    print("starter_script:not found")
+    logging.critical("starter_script:not found")
     st.error("starter_script:not found; app exiting")
     st.stop()
 
@@ -189,7 +173,7 @@ if st.button("Train", key="train"):
         )
 
         logging.info(result.stdout)
-        logging.info(result.stderr)
+        logging.error(result.stderr)
 
         with open(os.path.join(app.work_dir, "stdout"), "w") as stdout, open(
             os.path.join(app.work_dir, "stderr"),
@@ -210,11 +194,11 @@ if st.button("Train", key="train"):
                 os.path.join(app.work_dir, f"{app.training_script}.html"),
             ):
                 st.info(f"notebook: output generated at {out}")
-                print(f"notebook: output generated at {out}")
+                logging.info(f"notebook: output generated at {out}")
             else:
                 app.exit_success = False
                 st.error("notebook: execution failed")
-                print("notebook:", "execution failed")
+                logging.error("notebook: execution failed")
 
     if not app.exit_success:
         logging.critical(f"env:{app.environment}:failed")
@@ -239,3 +223,4 @@ if st.button("Train", key="train"):
             file_name=f"decenter-model-{app.model_name}.zip",
             key="download_model",
         )
+        app.recycle_temp_dir()

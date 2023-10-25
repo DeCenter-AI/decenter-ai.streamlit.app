@@ -25,3 +25,13 @@ MODE: Final[str] = os.getenv("mode", DEVELOPMENT)
 PYTHON: Final = ".py"
 JUPYTER_NOTEBOOK: Final = ".ipynb"
 EXECUTION_ENVIRONMENT: TypeAlias = Literal[".py", ".ipynb"]
+
+GITHUB_REPO: Final = (
+    "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/"
+)
+GITHUB_REPORT_BUG: Final = "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new?assignees=&labels=kind%2Fbug&projects=&template=1-bug_report.yml"
+GITHUB_ANY_ISSUE: Final = "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new/choose"
+GITHUB_DISCUSSION_QA: Final = "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/discussions/new?category=q-a"
+GITHUB_REQUEST_FEATURE: Final = "https://github.com/DeCenter-AI/decenter-ai.streamlit.app/issues/new?assignees=&labels=proposal%2C+enhancement&projects=&template=feature_request.md&title=feature-request%3A"
+
+APP_ABOUT: Final = "https://bit.ly/decenterai"

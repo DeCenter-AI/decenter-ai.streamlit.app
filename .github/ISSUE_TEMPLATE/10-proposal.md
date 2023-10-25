@@ -2,7 +2,7 @@
 name: Proposals
 about: Submit a proposal for consideration
 title: "proposal: "
-labels: proposal, enhancement
+labels: proposal
 ---
 
 # Proposal:

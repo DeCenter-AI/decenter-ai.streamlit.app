@@ -1,0 +1,29 @@
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for raising the questions, we are happy to help! 🙏 Please follow the sections in the template and provide as much information as possible about your problem
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: Provide a clear and concise description of the question you have or problem you want to discuss.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How to reproduce (optional)
+      description: If your question is regarding a bug you have unexpectedly encountered , tell us how to reproduce it.
+      value: |
+        <!--
+        1. Go to '...'
+        2. Change '....'
+        3. Run '....'
+        4. See error
+        -->
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior (optional)
+      description: A clear and concise description of what you expected to happen.
