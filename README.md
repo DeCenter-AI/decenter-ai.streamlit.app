@@ -134,7 +134,7 @@ DeCenter AI is released under the [MIT License](https://opensource.org/licenses/
 - Victor Kaycee [Email](victorkaycee17@gmail.com).  [Linkedln](https://www.linkedin.com/in/victor-kaycee).
 - Hiro Nasfame [Email](laciferin@gmail.com).  [Linkedln](http://linkedin.com/in/laciferin/).
 - William Ikeji  [Email](williamikeji@gmail.com).  [Linkedln](https://www.linkedin.com/in/codypharm/).
-- Dinesh  [Email](dineshjnld22@gmail.com).  [Linkedln](https://www.linkedin.com/in/-dinesh-7a83b2241).
+- Dinesh  [Email](dineshjnld22@gmail.com).  [Linkedln](https://www.linkedin.com/in/-dinesh-7a83b2241/).
 
 
 ## Support
