@@ -77,6 +77,10 @@ statsmodels = "^0.14.0"
 pillow = "9"
 tensorflow-addons = "^0.21.0"
 regex = "^2023.8.8"
+shap = "^0.43.0"
+xgboost = "^2.0.0"
+keras = "^2.14.0"
+
 
 [tool.poetry.group.tensorflow-addons.dependencies]
 regex = "^2023.10.3"
