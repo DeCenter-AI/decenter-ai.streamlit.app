@@ -34,7 +34,7 @@ classifiers = [
 
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<4"
 streamlit = "1.26.0"
 black = "^23.9.1"
 clarifai = "^9.9.0"

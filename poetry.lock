@@ -5840,5 +5840,5 @@ ml = []
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.10"
-content-hash = "09ae831ebe8589e31b2e5a1207e1d8caba5c32e277fbc94b17d796bd9b74d57e"
+python-versions = ">=3.10,<4"
+content-hash = "1c38b604ddd1f2bae45cf36c49af1355f3e2396fac42fb93335b31362655057e"
