@@ -57,6 +57,6 @@ zip_examples:
 	zip -r sample_v2 .
 
 robot:
-	robot tests/*
+	poetry run robot tests/*
 
 .PHONY: robot
