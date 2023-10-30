@@ -77,6 +77,19 @@ jobs:
           allowed_shared_memory: "1g"
           # robot_runner_image: "ppodgorsek/robot-framework:latest"
 
+      # - name: Tar files
+      #   run: tar -cvf my_files.tar /path/to/my/directory
+
+      - uses: vimtor/action-zip@v1.1
+        with:
+          files: tests/reports
+          recursive: true
+          dest: test-reports.zip
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: test-reports-zip
+          path: ${{ github.workspace }}/test-reports.zip
 
       - name: Upload
         uses: actions/upload-artifact@v3
