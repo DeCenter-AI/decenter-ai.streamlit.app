@@ -21,7 +21,7 @@ env:
   "POETRY_VIRTUALENVS_OPTIONS_NO_SETUPTOOLS": false
 
 jobs:
-  build:
+  robot:
     strategy:
       fail-fast: false
       max-parallel: 2
