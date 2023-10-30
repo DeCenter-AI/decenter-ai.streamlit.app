@@ -55,3 +55,8 @@ export:
 
 zip_examples:
 	zip -r sample_v2 .
+
+robot:
+	robot tests/*
+
+.PHONY: robot
