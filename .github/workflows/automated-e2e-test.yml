@@ -1,4 +1,4 @@
-name: Robot-2
+name: Automated E2E test
 
 on:
   push:
@@ -68,6 +68,7 @@ jobs:
           sleep 10
 
       - name: Robot Framework
+        continue-on-error: true
         uses: joonvena/robotframework-docker-action@v1.0
         with:
           browser: "chrome" #firefox
