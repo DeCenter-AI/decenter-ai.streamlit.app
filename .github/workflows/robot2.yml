@@ -84,6 +84,7 @@ jobs:
           name: test-reports
           path: |
             tests/reports
+          retention-days: 90
 
 # https://github.com/actions/setup-python/blob/v4/docs/advanced-usage.md#caching-packages
 # doc: poetry-config https://python-poetry.org/docs/configuration/
