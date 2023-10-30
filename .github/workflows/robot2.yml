@@ -72,7 +72,9 @@ jobs:
         with:
           browser: "chrome" #firefox
           robot_threads: 2
-          robot_tests_dir: "tests/reports"
+          robot_tests_dir: "tests"
+          robot_reports_dir	: "tests/reports"
+          allowed_shared_memory: "1g"
           # robot_runner_image: "ppodgorsek/robot-framework:latest"
 # https://github.com/actions/setup-python/blob/v4/docs/advanced-usage.md#caching-packages
 # doc: poetry-config https://python-poetry.org/docs/configuration/
