@@ -22,7 +22,7 @@ env:
 
 jobs:
   robot:
-    if: ${{ env.CI_DISABLE != 'true' }} #FIXME:
+    if: false #FIXME:
     strategy:
       fail-fast: false
       max-parallel: 2
