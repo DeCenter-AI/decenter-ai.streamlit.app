@@ -2,9 +2,9 @@ name: Automated E2E test
 
 on:
   push:
-    # branches: ["main"]
+  # branches: ["main"]
   pull_request:
-    # branches: ["main"]
+  # branches: ["main"]
 
   workflow_dispatch:
 
@@ -26,8 +26,8 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.10"] #TODO:, "3.11"]
+        os: [ ubuntu-latest ]
+        python-version: [ "3.10" ] #TODO:, "3.11"]
 
     runs-on: ${{matrix.os}}
 
@@ -74,12 +74,9 @@ jobs:
           browser: "chrome" #firefox
           robot_threads: 2
           robot_tests_dir: "tests"
-          robot_reports_dir	: "tests/reports"
+          robot_reports_dir: "tests/reports"
           allowed_shared_memory: "1g"
           # robot_runner_image: "ppodgorsek/robot-framework:latest"
-
-      # - name: Tar files
-      #   run: tar -cvf my_files.tar /path/to/my/directory
 
       - uses: vimtor/action-zip@v1.1
         with:
@@ -95,9 +92,9 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
-          name: test-reports
+          name: tests
           path: |
-            tests/reports
+            tests
           retention-days: 90
 
 # https://github.com/actions/setup-python/blob/v4/docs/advanced-usage.md#caching-packages
