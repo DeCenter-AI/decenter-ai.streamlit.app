@@ -2,9 +2,9 @@ name: Robot
 
 on:
   push:
-    # branches: ["main"]
+  # branches: ["main"]
   pull_request:
-    # branches: ["main"]
+  # branches: ["main"]
 
   workflow_dispatch:
 
@@ -22,12 +22,13 @@ env:
 
 jobs:
   robot:
+    if: ${{ env.CI_DISABLE != 'true' }} #FIXME:
     strategy:
       fail-fast: false
       max-parallel: 2
       matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.10"] #TODO:, "3.11"]
+        os: [ ubuntu-latest ]
+        python-version: [ "3.10" ] #TODO:, "3.11"]
 
     runs-on: ${{matrix.os}}
 
