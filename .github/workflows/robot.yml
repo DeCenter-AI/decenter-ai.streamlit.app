@@ -1,0 +1,78 @@
+name: Robot
+
+on:
+  push:
+  # branches: ["main"]
+  pull_request:
+  # branches: ["main"]
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  envfile: ${{ secrets.ENV }}
+  mode: testing
+  "POETRY_VIRTUALENVS_IN_PROJECT": false
+  "POETRY_VIRTUALENVS_OPTIONS_ALWAYS_COPY": true
+  "POETRY_VIRTUALENVS_OPTIONS_NO_PIP": false
+  "POETRY_VIRTUALENVS_OPTIONS_NO_SETUPTOOLS": false
+
+jobs:
+  robot:
+    if: false #FIXME:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ "3.10" ] #TODO:, "3.11"]
+
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: Set up Python ${{ matrix.python-version }} on ${{matrix.os}}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "poetry"
+          cache-dependency-path: |
+            **/setup.cfg
+            **/requirements*.txt
+            poetry.lock
+            pyproject.toml
+
+      - name: Write environment
+        run: |
+          echo $envfile > .env
+          sed -i 's/ /\n/g' .env
+          source .env
+
+      - name: Install dependencies
+        run: |
+          #make install
+          #make install-tests
+          # poetry config settings.virtualenvs.create false --local
+          poetry install --no-root
+          source $(poetry env info --path)/bin/activate
+
+      - name: Streamlit run
+        run: |
+          make run &
+          sleep 10
+
+      - uses: browser-actions/setup-chrome@latest
+      - run: chrome --version
+      - name: Robot CI
+        run: |
+          make robot
+
+# https://github.com/actions/setup-python/blob/v4/docs/advanced-usage.md#caching-packages
+# doc: poetry-config https://python-poetry.org/docs/configuration/

@@ -73,3 +73,5 @@ You can modify this file as per your specific requirements.
 /output.xml
 /report.html
 /selenium-screenshot*.png
+
+tests/reports
