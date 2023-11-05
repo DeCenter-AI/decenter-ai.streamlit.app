@@ -169,6 +169,11 @@ if st.button("Train", key="train"):
         while not app.installed_deps:
             logging.debug("waiting for deps installation to complete")
             time.sleep(2)
+        # if not app.installed_deps: //FIXME:
+        #     try:
+        #         app.installation_queue.get(block=True, timeout=1*60)
+        #     except Exception as e:
+        #         logging.error(f"error {e}")
 
         result = subprocess.run(
             training_cmd,

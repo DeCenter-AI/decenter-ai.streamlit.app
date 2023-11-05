@@ -6,6 +6,7 @@ import sys
 import tempfile
 import venv
 from dataclasses import dataclass
+from queue import Queue
 from typing import Union
 
 import streamlit as st
@@ -48,6 +49,10 @@ class App:
     installed_deps: bool = (
         True  # cuz, by default in demo mode, no deps to be installed
     )
+    installation_queue: Queue = (
+        Queue()
+    )  # TODO: make it finite, fix the bugs and queue full issue
+    # TODO: dinesh use asyncio.quesues
 
     exit_success: bool = True
 
@@ -156,6 +161,7 @@ class App:
         logging.error(result.stderr)
 
         self.installed_deps = True
+        self.installation_queue.put(True, block=False)
 
     def export_working_dir(self, archive_name=None) -> Union[os.PathLike, str]:
         archive_name = archive_name or self.model_name
