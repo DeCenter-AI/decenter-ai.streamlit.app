@@ -206,3 +206,9 @@ class App:
     @property
     def selected_demo_path(self):
         return os.path.join(DEMO_DIR, self.selected_demo)
+
+    def reset_on_new_model_train(self):
+        logging.info("app: cache reset")
+        logging.warning("todo: implementation")
+        # TODO: find the variables that needs to be changed to default on new model run
+        pass

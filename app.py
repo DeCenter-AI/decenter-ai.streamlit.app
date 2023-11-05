@@ -39,6 +39,7 @@ if not app:
     logging.info("creating new app instance")
     st.session_state.app = app
 
+app.reset_on_new_model_train()
 
 if option != app.version:  # don't redirect if in the same page
     st.markdown(
