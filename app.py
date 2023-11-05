@@ -203,6 +203,7 @@ if st.button("Train", key="train"):
             if os.path.exists(
                 os.path.join(app.work_dir, f"{app.training_script}.html"),
             ):
+                app.exit_success = True
                 st.info(f"notebook: output generated at {out}")
                 logging.info(f"notebook: output generated at {out}")
             else:
