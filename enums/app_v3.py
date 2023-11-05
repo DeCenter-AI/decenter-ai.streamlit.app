@@ -1,6 +1,7 @@
 import logging
 import os
 import platform
+import subprocess
 import sys
 import tempfile
 import venv
@@ -19,7 +20,6 @@ from config.constants import (
     PRODUCTION,
 )
 from utils.archive import archive_directory
-import subprocess
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
@@ -123,16 +123,19 @@ class App:
         self.python_repl = python_repl
 
         if MODE == PRODUCTION or True:
-            logging.info(
-                "installing jupyter",
-            )  # FIXME: why streamlit app needs manual installation of jupyter debug..
-            result = subprocess.run(
-                [python_repl, "-m", "pip", "install", "jupyter"],
-                cwd=self.work_dir,
-                capture_output=True,
-            )
-            logging.info(result.stdout)
-            logging.error(result.stderr)
+            self._install_deps()
+
+    def _install_deps(self):
+        logging.info(
+            "installing jupyter",
+        )
+        result = subprocess.run(
+            [self.python_repl, "-m", "pip", "install", "jupyter"],
+            cwd=self.work_dir,
+            capture_output=True,
+        )
+        logging.info(result.stdout)
+        logging.error(result.stderr)
 
     def export_working_dir(self, archive_name=None) -> Union[os.PathLike, str]:
         archive_name = archive_name or self.model_name
