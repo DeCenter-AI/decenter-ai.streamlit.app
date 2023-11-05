@@ -33,15 +33,21 @@ class App:
     environment: EXECUTION_ENVIRONMENT = JUPYTER_NOTEBOOK
     training_script: str = None
     requirements_path: str = None
+
     _work_dir: str = None
+
     temp_dir: tempfile.TemporaryDirectory = None
     models_archive_dir = tempfile.TemporaryDirectory(
         prefix="decenter-ai-",
         suffix="-models-zip-dir",
     ).name
 
-    python_repl: str = sys.executable
+    _python_repl: str = sys.executable
     venv_dir: str = None
+    installed_deps: bool = (
+        True  # cuz, by default in demo mode, no deps to be installed
+    )
+
     exit_success: bool = True
 
     _input_archive: UploadedFile | str = None
@@ -54,6 +60,15 @@ class App:
     @property
     def input_archive(self):
         return self._input_archive
+
+    @property
+    def python_repl(self):
+        return self._python_repl
+
+    @python_repl.setter
+    def python_repl(self, python_repl):
+        self._python_repl = python_repl
+        self.installed_deps = python_repl == sys.executable
 
     @input_archive.setter
     def input_archive(self, input_archive: UploadedFile | str):
@@ -123,6 +138,7 @@ class App:
         self.python_repl = python_repl
 
         if MODE == PRODUCTION or True:
+            self.installed_deps = False
             self._install_deps()
 
     def _install_deps(self):
@@ -136,6 +152,8 @@ class App:
         )
         logging.info(result.stdout)
         logging.error(result.stderr)
+
+        self.installed_deps = True
 
     def export_working_dir(self, archive_name=None) -> Union[os.PathLike, str]:
         archive_name = archive_name or self.model_name
