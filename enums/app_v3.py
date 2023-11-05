@@ -20,6 +20,7 @@ from config.constants import (
     PRODUCTION,
 )
 from utils.archive import archive_directory
+from utils.thread import keepAlive
 
 
 @dataclass_json(letter_case=LetterCase.CAMEL)
@@ -141,6 +142,7 @@ class App:
             self.installed_deps = False
             self._install_deps()
 
+    @keepAlive
     def _install_deps(self):
         logging.info(
             "installing jupyter",

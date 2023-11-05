@@ -2,6 +2,7 @@ import logging
 import shutil
 import subprocess
 import sys
+import time
 import zipfile
 from typing import List
 
@@ -165,6 +166,10 @@ if st.button("Train", key="train"):
     st.snow()
 
     with st.spinner("Training in progress"):
+        while not app.installed_deps:
+            logging.debug("waiting for deps installation to complete")
+            time.sleep(2)
+
         result = subprocess.run(
             training_cmd,
             cwd=app.work_dir,
