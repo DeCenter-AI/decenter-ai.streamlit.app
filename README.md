@@ -1,3 +1,16 @@
+---
+title: Decenter.streamlit.app
+emoji: 🏢
+colorFrom: pink
+colorTo: red
+sdk: streamlit
+sdk_version: 1.28.2
+app_file: app.py
+pinned: false
+license: mit
+---
+
+
 # decenter-ai.streamlit.app
 
 # DeCenter AI
