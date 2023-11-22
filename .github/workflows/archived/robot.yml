@@ -22,7 +22,7 @@ env:
 
 jobs:
   robot:
-    # if: false #FIXME:
+    # if: false #FIXME: automated-e2e-test.yml working
     strategy:
       fail-fast: false
       max-parallel: 2
