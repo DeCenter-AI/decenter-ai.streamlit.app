@@ -13,11 +13,10 @@ Test Head
     Log To Console    test_head
     Open Browser    ${URL}    ${BROWSER}
     Sleep    5
-
+    Go To    ${URL2}
     Page Should Contain  AI Infrastructure for Model training
 
     Page Should Contain Button  Train
-    Select From List by Label    id=option Select    v2
     Click Button    Train
     Sleep           5
     Click Button    Train
