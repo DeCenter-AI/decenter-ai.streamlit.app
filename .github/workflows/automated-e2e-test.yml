@@ -1,4 +1,4 @@
-name: Automated E2E test
+name: Automated E2E Robot test
 
 on:
   push:
